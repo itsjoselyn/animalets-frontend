@@ -1,0 +1,412 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* =====================
+   NAVBAR BASE
+===================== */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: transparent;
+  transform: translateY(-100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Syne', sans-serif;
+}
+
+.navbar.at-top {
+  transform: translateY(0);
+  background: transparent;
+}
+
+.navbar.visible {
+  transform: translateY(0);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 20px rgba(76, 175, 80, 0.08);
+}
+
+.navbar-left,
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-center {
+  flex: 0 0 auto;
+}
+
+/* =====================
+   LOGO
+===================== */
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.navbar-logo-img {
+  height: 52px;
+  width: 52px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+/* =====================
+   ADOPTA YA
+===================== */
+
+.adopt-btn {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  text-decoration: none;
+  padding: 6px 0;
+  position: relative;
+  transition: color 0.25s ease;
+}
+
+.adopt-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: #4caf50;
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.adopt-btn:hover {
+  color: #4caf50;
+}
+
+.adopt-btn:hover::after {
+  width: 100%;
+}
+
+/* =====================
+   DESKTOP NAV LINKS
+   (ocultos en mobile)
+===================== */
+
+.navbar-links {
+  display: none;
+}
+
+/* =====================
+   MOBILE: hamburguesa
+===================== */
+
+.nav-menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  padding: 6px 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.25s ease;
+}
+
+.nav-menu-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: #4caf50;
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-menu-btn:hover {
+  color: #4caf50;
+}
+
+.nav-menu-btn:hover::after {
+  width: 100%;
+}
+
+.hamburger-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 18px;
+}
+
+.hamburger-icon span {
+  display: block;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.hamburger-icon.open span:nth-child(1) {
+  transform: translateY(5.5px) rotate(45deg);
+}
+
+.hamburger-icon.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.hamburger-icon.open span:nth-child(3) {
+  transform: translateY(-5.5px) rotate(-45deg);
+}
+
+/* =====================
+   MOBILE MENU OVERLAY
+===================== */
+
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 80px 36px 48px;
+  transform: translateX(-100%);
+  transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1);
+  pointer-events: none;
+}
+
+.mobile-menu-overlay.open {
+  transform: translateX(0);
+  pointer-events: all;
+}
+
+.mobile-nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.mobile-nav-links li {
+  overflow: hidden;
+  border-bottom: 1px solid rgba(76, 175, 80, 0.15);
+}
+
+.mobile-nav-links li:first-child {
+  border-top: 1px solid rgba(76, 175, 80, 0.15);
+}
+
+.mobile-nav-links a {
+  display: block;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: clamp(24px, 6vw, 36px);
+  letter-spacing: -0.01em;
+  color: #1a1a1a;
+  text-decoration: none;
+  padding: 16px 0;
+  transform: translateY(40px);
+  opacity: 0;
+  transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1),
+    opacity 0.45s ease,
+    color 0.25s ease;
+}
+
+.mobile-nav-links a:hover {
+  color: #4caf50;
+}
+
+.mobile-menu-overlay.open .mobile-nav-links a {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.mobile-nav-links li:nth-child(1) a {
+  transition-delay: 0.05s;
+}
+
+.mobile-nav-links li:nth-child(2) a {
+  transition-delay: 0.10s;
+}
+
+.mobile-nav-links li:nth-child(3) a {
+  transition-delay: 0.15s;
+}
+
+.mobile-nav-links li:nth-child(4) a {
+  transition-delay: 0.20s;
+}
+
+.mobile-nav-links li:nth-child(5) a {
+  transition-delay: 0.25s;
+}
+
+.mobile-menu-footer {
+  margin-top: 40px;
+}
+
+.adopt-cta {
+  display: inline-block;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: #4caf50;
+  padding: 14px 28px;
+  border-radius: 2px;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.45s ease 0.3s,
+    transform 0.45s cubic-bezier(0.76, 0, 0.24, 1) 0.3s,
+    background 0.2s ease;
+}
+
+.mobile-menu-overlay.open .adopt-cta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.adopt-cta:hover {
+  background: #2e7d32;
+}
+
+.menu-bg-accent {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 220px;
+  height: 220px;
+  background: #e8f5e9;
+  border-radius: 50% 0 0 0;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* =====================
+   DESKTOP (768px+)
+===================== */
+
+@media (min-width: 1125px) {
+
+  .navbar {
+    padding: 12px 48px;
+  }
+
+  /* Ocultar hamburguesa */
+  .navbar-left {
+    display: none;
+  }
+
+  /* Logo a la izquierda */
+  .navbar-center {
+    flex: 0 0 auto;
+  }
+
+  /* Links visibles en el centro */
+  .navbar-links {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 36px;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .navbar-links li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    text-align: center;
+  }
+
+  .nav-link {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    text-decoration: none;
+    padding: 6px 0;
+    position: relative;
+    transition: color 0.25s ease;
+    line-height: 1.3;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1.5px;
+    background: #4caf50;
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .nav-link:hover {
+    color: #4caf50;
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
+  }
+
+  /* Adopta ya a la derecha */
+  .navbar-right {
+    flex: 0 0 auto;
+  }
+
+  .navbar-right .adopt-btn {
+    background: #4caf50;
+    color: #ffffff;
+    padding: 10px 22px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    transition: background 0.25s ease, transform 0.2s ease, color 0.25s ease;
+  }
+
+  .navbar-right .adopt-btn::after {
+    display: none;
+  }
+
+  .navbar-right .adopt-btn:hover {
+    background: #2e7d32;
+    color: #ffffff;
+    transform: scale(1.04);
+  }
+
+  /* Ocultar overlay en desktop */
+  .mobile-menu-overlay {
+    display: none;
+  }
+}
