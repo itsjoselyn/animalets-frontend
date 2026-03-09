@@ -1,0 +1,188 @@
+/* =====================
+   HOW IT WORKS
+===================== */
+
+.how-it-works {
+  background: #f5f5f5;
+  padding: 60px 0 48px;
+  overflow: hidden;
+}
+
+/* ---- HEADER ---- */
+.how-it-works-header {
+  padding: 0 28px;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.how-it-works-title {
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(32px, 8vw, 52px);
+  color: #4caf50;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.0;
+}
+
+/* ---- TRACK — scroll horizontal mobile ---- */
+.how-it-works-track {
+  display: flex;
+  gap: 16px;
+  padding: 0 28px 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 28px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.how-it-works-track::-webkit-scrollbar {
+  display: none;
+}
+
+.how-it-works-track-spacer {
+  display: none;
+}
+
+/* ---- STEP CARD ---- */
+.step-card {
+  flex-shrink: 0;
+  width: 75vw;
+  max-width: 300px;
+  background: #ffffff;
+  border: 1px solid rgba(76, 175, 80, 0.12);
+  border-radius: 4px;
+  padding: 24px 20px 20px;
+  scroll-snap-align: start;
+  scroll-margin-left: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* ---- TOP CONTENT ---- */
+.step-card-top {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ---- NÚMERO ---- */
+.step-number {
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(36px, 8vw, 52px);
+  color: #4caf50;
+  margin: 0;
+  line-height: 1.0;
+}
+
+/* ---- TÍTULO ---- */
+.step-title {
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(18px, 4vw, 24px);
+  color: #4caf50;
+  margin: 0;
+  text-transform: uppercase;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+}
+
+/* ---- DESCRIPCIÓN ---- */
+.step-description {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #555555;
+  margin: 0;
+  line-height: 1.6;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ---- ILUSTRACIÓN — siempre al fondo ---- */
+.step-illustration {
+  margin-top: 20px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  aspect-ratio: 4/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.step-emoji {
+  font-size: 52px;
+}
+
+/* ---- SCROLL HINT (solo mobile) ---- */
+.how-it-works-scroll-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 28px 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(76, 175, 80, 0.5);
+}
+
+.scroll-hint-arrow {
+  animation: nudgeRight 1.5s ease-in-out infinite;
+}
+
+@keyframes nudgeRight {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(5px);
+  }
+}
+
+/* =====================
+   DESKTOP (1125px+)
+===================== */
+
+@media (min-width: 1125px) {
+
+  .how-it-works {
+    padding: 80px 0 64px;
+  }
+
+  .how-it-works-header {
+    padding: 0 80px;
+    margin-bottom: 48px;
+  }
+
+  .how-it-works-track {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 0 80px;
+    overflow-x: visible;
+  }
+
+  .step-card {
+    width: auto;
+    max-width: none;
+  }
+
+  .how-it-works-scroll-hint {
+    display: none;
+  }
+
+  .step-title {
+    font-size: 20px;
+  }
+
+  .step-number {
+    font-size: 48px;
+  }
+}
