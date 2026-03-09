@@ -8,7 +8,8 @@
 
 .hero-mobile {
   margin-top: 3svh;
-  min-height: 100svh;
+  min-height: unset;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,7 +88,8 @@
     grid-template-rows: auto auto auto;
     min-height: 80svh;
     background: #ffffff;
-    padding: 72px 40px 40px;
+    /* padding : primero juega con el espacio entre navbar */
+    padding: 150px 40px 40px;
     position: relative;
     overflow: hidden;
     align-items: start;
@@ -101,6 +103,7 @@
     align-items: flex-start;
     padding-right: 10px;
     z-index: 2;
+    padding-top: 20px;
   }
 
   .hero-title-left {
@@ -165,6 +168,7 @@
     padding-left: 10px;
     gap: 12px;
     z-index: 2;
+    padding-bottom: 20px;
   }
 
   .hero-tagline-desktop {
@@ -198,7 +202,8 @@
     display: flex;
     gap: 12px;
     align-items: flex-end;
-    padding-bottom: 0;
+    align-self: end;
+    padding-bottom: 80px;
     z-index: 2;
   }
 
