@@ -7,6 +7,7 @@
 }
 
 .hero-mobile {
+  margin-top: 3svh;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -84,7 +85,7 @@
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     grid-template-rows: auto auto auto;
-    min-height: 100svh;
+    min-height: 80svh;
     background: #ffffff;
     padding: 72px 40px 40px;
     position: relative;
