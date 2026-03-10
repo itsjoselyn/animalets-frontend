@@ -12,7 +12,7 @@ const OPTIONS = [
   {
     id: 2,
     num: "02.",
-    title: "Apadrinar un gato",
+    title: "Apadrinar un Gato",
     link: "/como-ayudar",
     img: "https://placecats.com/millie/300/400",
   },
@@ -21,12 +21,12 @@ const OPTIONS = [
     num: "03.",
     title: "Hacerse Socio",
     link: "/como-ayudar",
-    img: "https://placecats.com/neo_2/300/400",
+    img: "https://placecats.com/bella/300/400",
   },
   {
     id: 4,
     num: "04.",
-    title: "Casa de acogida",
+    title: "Casa de Acogida",
     link: "/como-ayudar",
     img: "https://placecats.com/neo_2/300/400",
   },
@@ -35,7 +35,7 @@ const OPTIONS = [
     num: "\u00a0",
     title: "\u00a0",
     link: "/como-ayudar",
-    img: "https://placecats.com/bella/300/400",
+    img: "https://placecats.com/millie_neo/300/400",
     isMore: true,
   },
 ];
@@ -98,6 +98,11 @@ export default function HowToHelp() {
         <div className="hthelp-arrow-down">↓</div>
       </div>
 
+      {/* Título — ENCIMA de la foto, siempre mismo espacio */}
+      <div className="hthelp-info">
+        <span className="hthelp-option-title">{current.title}</span>
+      </div>
+
       {/* Stage: flechas + círculo */}
       <div className="hthelp-stage">
         <button className="hthelp-nav" onClick={prevSlide} aria-label="Anterior">←</button>
@@ -118,12 +123,6 @@ export default function HowToHelp() {
         <a href={current.link} className="hthelp-cta">
           {current.isMore ? "Ver más" : "Ayuda ahora"}
         </a>
-      </div>
-
-      {/* Número + título — siempre ocupa el mismo espacio */}
-      <div className="hthelp-info">
-        <span className="hthelp-option-title">{current.title}</span>
-        <span className="hthelp-option-num">{current.num}</span>
       </div>
 
       {/* Progress */}

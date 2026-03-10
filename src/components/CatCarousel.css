@@ -4,7 +4,7 @@
 
 .cat-carousel {
   background: #ffffff;
-  padding: 60px 0 48px;
+  padding: 80px 0 60px;
   overflow: hidden;
 }
 
@@ -226,7 +226,7 @@
 @media (min-width: 1125px) {
 
   .cat-carousel {
-    padding: 80px 0 64px;
+    padding: 80px 0 60px;
   }
 
   .cat-carousel-header {

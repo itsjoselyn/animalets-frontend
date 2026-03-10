@@ -1,0 +1,127 @@
+/* =====================
+   CONTACT BANNER
+===================== */
+
+.cbanner {
+  background: #ffffff;
+  padding: 60px 28px 0;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* ---- BLOQUE SUPERIOR ---- */
+.cbanner-top {
+  margin-bottom: 48px;
+}
+
+.cbanner-question {
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(36px, 10vw, 56px);
+  color: #4caf50;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.cbanner-contact {
+  display: inline-block;
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(28px, 8vw, 44px);
+  color: #4caf50;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-thickness: 2.5px;
+  text-underline-offset: 6px;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s ease;
+}
+
+.cbanner-contact:hover {
+  opacity: 0.7;
+}
+
+/* ---- IMAGEN + TEXTOS ---- */
+.cbanner-img-block {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.cbanner-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cbanner-img-text-left,
+.cbanner-img-text-right {
+  position: absolute;
+  top: 38%;
+  display: flex;
+  flex-direction: column;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #222;
+  line-height: 1.4;
+}
+
+.cbanner-img-text-left {
+  left: 4%;
+  text-align: left;
+}
+
+.cbanner-img-text-right {
+  right: 4%;
+  text-align: right;
+}
+
+/* ---- BLOQUE INFERIOR ---- */
+.cbanner-bottom {
+  padding: 32px 0 48px;
+}
+
+.cbanner-find {
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(22px, 6vw, 34px);
+  color: #4caf50;
+  text-transform: uppercase;
+  margin: 0 0 4px;
+  letter-spacing: 0.02em;
+}
+
+.cbanner-handle {
+  display: block;
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(18px, 5vw, 28px);
+  color: #4caf50;
+  text-transform: uppercase;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s ease;
+}
+
+.cbanner-handle:hover {
+  opacity: 0.7;
+}
+
+/* =====================
+   DESKTOP (1125px+)
+===================== */
+@media (min-width: 1125px) {
+  .cbanner {
+    padding: 80px 80px 0;
+  }
+
+  .cbanner-img-block {
+    max-width: 520px;
+  }
+
+  .cbanner-img-text-left,
+  .cbanner-img-text-right {
+    font-size: 13px;
+  }
+}
