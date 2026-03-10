@@ -1,0 +1,155 @@
+/* =====================
+   TESTIMONIALS
+===================== */
+
+.testi {
+  background: #ffffff;
+}
+
+.testi-body {
+  background: #f5f0e8;
+  border-radius: 40px 40px 0 0;
+  padding: 80px 28px 80px;
+}
+
+/* ---- TÍTULO ---- */
+.testi-title {
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(32px, 9vw, 52px);
+  color: #4caf50;
+  margin: 0 0 44px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+/* ---- TIMELINE ---- */
+.testi-timeline {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 120px;
+}
+
+.testi-line {
+  position: absolute;
+  top: 7px;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: #4caf50;
+  z-index: 0;
+}
+
+/* mobile: solo timeline de 3 visible */
+.testi-timeline-mobile {
+  display: block;
+}
+
+.testi-timeline-desktop {
+  display: none;
+}
+
+/* quitar regla antigua */
+.testi-node--desktop-only {
+  display: none;
+}
+
+.testi-node {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.testi-node-dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #4caf50;
+  display: block;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.testi-node--active .testi-node-dot {
+  background: #f5f0e8;
+  border: 2px solid #4caf50;
+  box-shadow: 0 0 0 2.5px #4caf50;
+  transform: scale(1.2);
+}
+
+.testi-node-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #4caf50;
+  white-space: nowrap;
+}
+
+/* ---- CONTENIDO ---- */
+.testi-content {
+  animation: testi-fade 0.35s ease;
+  text-align: center;
+}
+
+@keyframes testi-fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.testi-preview {
+  display: block;
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(22px, 6.5vw, 36px);
+  line-height: 1.25;
+  color: #4caf50;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  transition: opacity 0.2s ease;
+}
+
+.testi-preview:hover {
+  opacity: 0.7;
+}
+
+/* =====================
+   DESKTOP (1125px+)
+===================== */
+@media (min-width: 1125px) {
+  .testi-body {
+    border-radius: 60px 60px 0 0;
+    padding: 80px 80px 100px;
+  }
+
+  .testi-timeline-mobile {
+    display: none;
+  }
+
+  .testi-timeline-desktop {
+    display: block;
+  }
+
+  .testi-preview {
+    font-size: clamp(32px, 3.5vw, 52px);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+}

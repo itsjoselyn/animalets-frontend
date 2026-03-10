@@ -78,7 +78,6 @@ export default function CatCarousel() {
 
       {/* Header */}
       <div className="cat-carousel-header">
-        <span className="cat-carousel-paw">🐾</span>
         <h2 className="cat-carousel-title">Nuestros peludos</h2>
       </div>
 
