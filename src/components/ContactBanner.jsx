@@ -10,17 +10,19 @@ export default function ContactBanner() {
         <Link to="/contacto" className="cbanner-contact">Contáctanos</Link>
       </div>
 
-      <div className="cbanner-img-block">
-        <img
-          src="https://placecats.com/500/600"
-          alt="Gato"
-          className="cbanner-img"
-        />
-        <div className="cbanner-img-text-left">
+      <div className="cbanner-mid">
+        <div className="cbanner-mid-text">
           <span>Juntos</span>
           <span>podemos</span>
         </div>
-        <div className="cbanner-img-text-right">
+        <div className="cbanner-img-block">
+          <img
+            src="https://placecats.com/millie_neo/400/500"
+            alt="Gato"
+            className="cbanner-img"
+          />
+        </div>
+        <div className="cbanner-mid-text">
           <span>Cambiar</span>
           <span>vidas</span>
         </div>
@@ -29,7 +31,7 @@ export default function ContactBanner() {
       <div className="cbanner-bottom">
         <p className="cbanner-find">Encuéntranos en</p>
         <a
-          href="https://www.instagram.com/animalets_la_llagosta/"
+          href="https://instagram.com/animaletslallagosta"
           target="_blank"
           rel="noopener noreferrer"
           className="cbanner-handle"
