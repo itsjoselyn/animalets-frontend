@@ -6,19 +6,19 @@ const TESTIMONIALS = [
   {
     id: 1,
     name: "Juana",
-    preview: "Desde el primer día me sentí parte de algo especial. El equipo de Animalets me recibió con los brazos abiertos y los gatitos hicieron el resto. Nunca había experimentado una conexión tan bonita con los animales...",
+    preview: "Desde el primer día me sentí parte de algo especial. El equipo de Animalets me recibió con los brazos abiertos y los gatitos hicieron el resto...",
     full: "/testimonios/juana",
   },
   {
     id: 2,
     name: "Josep",
-    preview: "Apadrinar a Mochi cambió mi vida por completo. Cada visita es una alegría enorme, verle crecer y saber que mi aportación mensual le da una vida digna y llena de amor es algo que no tiene precio...",
+    preview: "Apadrinar a Mochi cambió mi vida por completo. Cada visita es una alegría enorme, verle crecer y saber que ...",
     full: "/testimonios/josep",
   },
   {
     id: 3,
     name: "Maria",
-    preview: "Nunca pensé que abrir mi casa temporalmente me daría tanto. Los gatitos llegan asustados y en pocas semanas se convierten en pequeños valientes. El apoyo de Animalets durante todo el proceso es increíble...",
+    preview: "Nunca pensé que abrir mi casa temporalmente me daría tanto. Los gatitos llegan asustados y en pocas ...",
     full: "/testimonios/maria",
   },
   {

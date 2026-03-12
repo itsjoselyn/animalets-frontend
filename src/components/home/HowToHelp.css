@@ -1,0 +1,194 @@
+/* =====================
+   HOW TO HELP
+===================== */
+
+.hthelp {
+  background: #ffffff;
+  padding: 60px 28px 48px;
+}
+
+/* ---- HEADER ---- */
+.hthelp-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 36px;
+}
+
+.hthelp-title {
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(28px, 7vw, 42px);
+  color: #4caf50;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.hthelp-arrow-down {
+  font-size: 22px;
+  color: #333;
+  animation: hthelp-bob 1.4s ease-in-out infinite;
+}
+
+@keyframes hthelp-bob {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+/* ---- GRID ---- */
+.hthelp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.hthelp-card--more {
+  grid-column: 1 / -1;
+}
+
+/* ---- CARD ---- */
+.hthelp-card {
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(76, 175, 80, 0.12);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hthelp-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(76, 175, 80, 0.14);
+}
+
+/* ---- IMAGEN + OVERLAY ---- */
+.hthelp-card-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+}
+
+.hthelp-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.hthelp-card:hover .hthelp-card-img {
+  transform: scale(1.05);
+}
+
+/* Overlay oscuro que aparece al hover */
+.hthelp-card-overlay,
+.hthelp-card-btn {
+  display: none;
+}
+
+/* ---- BODY ---- */
+.hthelp-card-body {
+  padding: 14px 14px 16px;
+  background: #fff;
+  flex: 1;
+}
+
+.hthelp-card-title {
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(14px, 3.5vw, 18px);
+  color: #4caf50;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 2px;
+}
+
+.hthelp-card-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: #4caf50;
+  transition: width 0.3s ease;
+}
+
+.hthelp-card:hover .hthelp-card-title::after {
+  width: 100%;
+}
+
+/* ---- CARD VER MÁS ---- */
+.hthelp-card--more {
+  border: 1.5px solid rgba(76, 175, 80, 0.25);
+  background: #fff;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hthelp-more-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hthelp-more-plus {
+  font-family: 'Lilita One', sans-serif;
+  font-size: 48px;
+  color: #4caf50;
+  line-height: 1;
+}
+
+.hthelp-more-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #4caf50;
+  line-height: 1.5;
+}
+
+/* =====================
+   DESKTOP (1125px+)
+===================== */
+@media (min-width: 1125px) {
+  .hthelp {
+    padding: 80px 80px 64px;
+  }
+
+  .hthelp-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  /* Ver más centrado debajo de las 4 cards en desktop */
+  .hthelp-card--more {
+    grid-column: 1 / -1;
+  }
+
+  .hthelp-card-body {
+    padding: 18px 18px 20px;
+  }
+
+  .hthelp-card-btn {
+    font-size: 13px;
+    padding: 10px 26px;
+  }
+}
