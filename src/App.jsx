@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navbar from './components/Navbar';
+import Navbar from './components/layout/Navbar';
 import Home from './pages/Home';
 import NuestrosPeludos from './pages/NuestrosPeludos';
 import ComoAyudar from "./pages/ComoAyudar";
 import Blog from "./pages/Blog";
 import Contacto from "./pages/Contacto";
-import SobreNosotros from "./pages/SobreNosotros";
+import SobreNosotros from "./pages/SobreNosotros"
+import Footer from "./components/layout/Footer";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/blog" element={< Blog />} />
         <Route path="/contacto" element={< Contacto />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }
