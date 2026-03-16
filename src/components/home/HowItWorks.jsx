@@ -33,7 +33,7 @@ export default function HowItWorks() {
 
       {/* Título */}
       <div className="how-it-works-header">
-        <h2 className="how-it-works-title">¿Cómo funciona?</h2>
+        <h2 className="how-it-works-title">¿Quieres adoptar?</h2>
       </div>
 
       {/* Cards */}
