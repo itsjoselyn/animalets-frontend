@@ -1,5 +1,5 @@
-import AboutIntro from "../components/nuestrosPeludos/AboutIntro";
-import AboutMission from "../components/nuestrosPeludos/AboutMission";
+import AboutIntro from "../components/about-us/AboutIntro";
+import AboutMission from "../components/about-us/AboutMission";
 
 export default function SobreNosotros() {
     return (
