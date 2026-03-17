@@ -1,3 +1,11 @@
+import AboutIntro from "../components/about-us/AboutIntro";
+import AboutMission from "../components/about-us/AboutMission";
+
 export default function SobreNosotros() {
-    return <div>Sobre Nosotros</div>
+    return (
+        <>
+            <AboutIntro />
+            <AboutMission />
+        </>
+    )
 }
