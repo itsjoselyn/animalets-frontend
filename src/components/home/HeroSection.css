@@ -7,13 +7,12 @@
 }
 
 .hero-mobile {
-  margin-top: 3svh;
   min-height: unset;
   height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 72px 28px 48px;
+  padding: 28px 28px 48px;
   background-color: #ffffff;
   text-align: center;
   overflow: hidden;
@@ -89,7 +88,7 @@
     min-height: 80svh;
     background: #ffffff;
     /* padding : primero juega con el espacio entre navbar */
-    padding: 150px 40px 40px;
+    padding: 80px 40px 40px;
     position: relative;
     overflow: hidden;
     align-items: start;
