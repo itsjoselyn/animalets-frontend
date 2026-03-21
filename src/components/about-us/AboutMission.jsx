@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "./AboutMission.css";
 
 const CARDS = [
@@ -44,10 +44,7 @@ function Card({ card, active, onDotClick, showDots }) {
         )}
       </div>
       <div className="amission-card-body">
-        <div className="amission-card-top">
-          <span className="amission-card-num">{card.num}</span>
-          <h3 className="amission-card-title">{card.title}</h3>
-        </div>
+        <h3 className="amission-card-title">{card.title}</h3>
         <p className="amission-card-text">{card.text}</p>
       </div>
     </div>
@@ -56,6 +53,16 @@ function Card({ card, active, onDotClick, showDots }) {
 
 export default function AboutMission() {
   const [active, setActive] = useState(0);
+  const touchStartX = useRef(0);
+
+  const prev = () => setActive((a) => (a - 1 + CARDS.length) % CARDS.length);
+  const next = () => setActive((a) => (a + 1) % CARDS.length);
+
+  const onTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+  const onTouchEnd = (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(dx) > 50) dx < 0 ? next() : prev();
+  };
 
   return (
     <section className="amission">
@@ -69,14 +76,14 @@ export default function AboutMission() {
       </div>
 
       {/* Mobile: 1 card con dots */}
-      <div className="amission-mobile" key={active}>
+      <div className="amission-mobile" key={active} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         <Card card={CARDS[active]} active={active} onDotClick={setActive} showDots={true} />
       </div>
 
       {/* Desktop: 3 cards en grid, cada una con sus propios dots (decorativos) */}
       <div className="amission-desktop">
         {CARDS.map((card, i) => (
-          <Card key={card.id} card={card} active={i} onDotClick={() => {}} showDots={true} />
+          <Card key={card.id} card={card} active={i} onDotClick={() => { }} showDots={false} />
         ))}
       </div>
 

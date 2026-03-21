@@ -10,8 +10,11 @@
 /* ---- HEADER ---- */
 .amission-header {
   padding: 0 28px;
-  margin-bottom: 40px;
+  margin-bottom: 48px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .amission-label {
@@ -21,7 +24,7 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #4caf50;
-  margin: 0 0 16px;
+  margin: 0;
 }
 
 .amission-body {
@@ -35,8 +38,15 @@
 }
 
 /* Mobile: 1 card visible */
-.amission-mobile { display: block; animation: card-fade 0.35s ease; padding: 0 28px; }
-.amission-desktop { display: none; }
+.amission-mobile {
+  display: block;
+  animation: card-fade 0.35s ease;
+  padding: 0 28px;
+}
+
+.amission-desktop {
+  display: none;
+}
 
 /* ---- CARD ---- */
 .amission-card {
@@ -44,15 +54,22 @@
 }
 
 @keyframes card-fade {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ---- IMAGEN ---- */
 .amission-card-img-wrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 4/5;
+  aspect-ratio: 3/2;
   overflow: hidden;
 }
 
@@ -90,8 +107,13 @@
 
 /* ---- BODY ---- */
 .amission-card-body {
-  padding: 20px 28px 24px;
+  padding: 24px 28px 28px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 160px;
+  overflow: hidden;
 }
 
 .amission-card-top {
@@ -143,7 +165,10 @@
     margin-bottom: 48px;
   }
 
-  .amission-mobile  { display: none; }
+  .amission-mobile {
+    display: none;
+  }
+
   .amission-desktop {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -152,10 +177,11 @@
   }
 
   .amission-card-img-wrap {
-    aspect-ratio: 3/4;
+    aspect-ratio: 3/2;
   }
 
   .amission-card-body {
     padding: 24px 28px;
+    height: 200px;
   }
 }
