@@ -1,0 +1,80 @@
+/* =====================
+   ABOUT JOIN
+===================== */
+
+.aboutjoin {
+  background: #ffffff;
+}
+
+.aboutjoin-body {
+  background: #f5f0e8;
+  padding: 80px 28px 80px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.aboutjoin-title {
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(36px, 10vw, 64px);
+  color: #4caf50;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.aboutjoin-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(14px, 4vw, 18px);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #4caf50;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 360px;
+}
+
+.aboutjoin-btns {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.aboutjoin-btn {
+  font-family: 'Lilita One', sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #4caf50;
+  border: 2px solid #4caf50;
+  border-radius: 100px;
+  padding: 12px 32px;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.aboutjoin-btn:hover {
+  background: #4caf50;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* =====================
+   DESKTOP (1125px+)
+===================== */
+@media (min-width: 1125px) {
+  .aboutjoin-body {
+    padding: 120px 80px 120px;
+    gap: 36px;
+  }
+
+  .aboutjoin-btn {
+    font-size: 16px;
+    padding: 14px 40px;
+  }
+}

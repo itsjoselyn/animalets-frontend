@@ -35,7 +35,9 @@ export default function AboutIntro() {
     const handleScroll = () => {
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
-      const progress = 1 - rect.top / window.innerHeight;
+      const windowH = window.innerHeight;
+      // empieza a rotar cuando la sección está al 150% del viewport (antes de entrar)
+      const progress = 1 - (rect.top - windowH * -0.25) / windowH;
       setRotation(progress * 360);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
