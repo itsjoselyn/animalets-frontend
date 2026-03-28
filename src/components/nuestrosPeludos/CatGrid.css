@@ -1,0 +1,83 @@
+/* =====================
+   CAT GRID
+===================== */
+
+.cat-grid-wrap {
+  background: #ffffff;
+  padding: 24px 28px 48px;
+}
+
+/* ---- GRID ---- */
+.cat-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+/* ---- FOOTER ---- */
+.cat-grid-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.cat-grid-count {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: rgba(0,0,0,0.4);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.cat-grid-progress-bar {
+  width: 200px;
+  height: 2px;
+  background: rgba(76, 175, 80, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.cat-grid-progress-fill {
+  height: 100%;
+  background: #4caf50;
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cat-grid-more-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #222;
+  background: none;
+  border: 1.5px solid rgba(0,0,0,0.2);
+  border-radius: 100px;
+  padding: 10px 32px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.cat-grid-more-btn:hover {
+  border-color: #4caf50;
+  color: #4caf50;
+}
+
+/* =====================
+   DESKTOP (1125px+)
+===================== */
+@media (min-width: 1125px) {
+  .cat-grid-wrap {
+    padding: 32px 80px 64px;
+  }
+
+  .cat-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+}

@@ -1,0 +1,249 @@
+/* =====================
+   PELUDOS FILTERS
+===================== */
+
+/* ---- OVERLAY ---- */
+.pfilters-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.pfilters-overlay--open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ---- PANEL — slide desde la derecha ---- */
+.pfilters-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(340px, 90vw);
+  background: #ffffff;
+  z-index: 1001;
+  padding: 32px 28px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+}
+
+.pfilters-panel--open {
+  transform: translateX(0);
+}
+
+/* ---- TOP ---- */
+.pfilters-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pfilters-title {
+  font-family: 'Lilita One', sans-serif;
+  font-size: 28px;
+  color: #4caf50;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+.pfilters-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #222;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.pfilters-close:hover {
+  color: #4caf50;
+}
+
+/* ---- SECCIÓN ---- */
+.pfilters-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pfilters-section-title {
+  font-family: 'Lilita One', sans-serif;
+  font-size: 20px;
+  color: #222;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+/* ---- EDAD ---- */
+.pfilters-age-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4caf50;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+.pfilters-range-wrap {
+  position: relative;
+}
+
+/* Contenedor del doble slider que visualmente parece uno solo */
+.pfilters-range-track {
+  position: relative;
+  height: 3px;
+  background: rgba(76,175,80,0.15);
+  border-radius: 2px;
+  margin: 14px 0;
+}
+
+/* Barra verde entre los dos thumbs */
+.pfilters-range-track::before {
+  content: '';
+  position: absolute;
+  height: 100%;
+  border-radius: 2px;
+  background: #4caf50;
+  left: calc(var(--min) / 25 * 100%);
+  right: calc((25 - var(--max)) / 25 * 100%);
+}
+
+.pfilters-range {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+  pointer-events: none;
+  margin: 0;
+  height: 3px;
+}
+
+.pfilters-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #4caf50;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 6px rgba(76,175,80,0.4);
+  pointer-events: all;
+}
+
+.pfilters-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #4caf50;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 6px rgba(76,175,80,0.4);
+  pointer-events: all;
+}
+
+/* ---- CHECKBOXES ---- */
+.pfilters-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #222;
+  cursor: pointer;
+  user-select: none;
+}
+
+.pfilters-checkbox input {
+  display: none;
+}
+
+.pfilters-checkbox-box {
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid rgba(0,0,0,0.2);
+  border-radius: 4px;
+  flex-shrink: 0;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  position: relative;
+}
+
+.pfilters-checkbox input:checked + .pfilters-checkbox-box {
+  background: #4caf50;
+  border-color: #4caf50;
+}
+
+.pfilters-checkbox input:checked + .pfilters-checkbox-box::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+/* ---- ACCIONES ---- */
+.pfilters-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.pfilters-btn {
+  flex: 1;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 100px;
+  padding: 12px 0;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.pfilters-btn--reset {
+  background: none;
+  border: 1.5px solid rgba(0,0,0,0.15);
+  color: #222;
+}
+
+.pfilters-btn--reset:hover {
+  border-color: #4caf50;
+  color: #4caf50;
+}
+
+.pfilters-btn--apply {
+  background: #4caf50;
+  border: 1.5px solid #4caf50;
+  color: #fff;
+}
+
+.pfilters-btn--apply:hover {
+  background: #2e7d32;
+  border-color: #2e7d32;
+  transform: translateY(-1px);
+}
