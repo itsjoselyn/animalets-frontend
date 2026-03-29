@@ -1,0 +1,97 @@
+/* =====================
+   BLOG CARD
+===================== */
+
+.blog-card {
+  display: block;
+  text-decoration: none;
+  transition: transform 0.25s ease;
+}
+
+.blog-card:hover {
+  transform: translateY(-2px);
+}
+
+.blog-card-inner {
+  position: relative;
+  border: 1px solid rgba(76, 175, 80, 0.15);
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 16px 16px 20px;
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* Foto ocupa casi toda la card */
+.blog-card-img-wrap {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 78%;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+}
+
+/* Fecha arriba izquierda */
+.blog-card-date {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #222;
+  z-index: 3;
+  background: rgba(255,255,255,0.85);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+
+
+.blog-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.blog-card:hover .blog-card-img {
+  transform: scale(1.04);
+}
+
+/* Título abajo centrado */
+.blog-card-title {
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(16px, 4vw, 22px);
+  color: #4caf50;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  margin: 0;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding-top: 8px;
+}
+
+/* =====================
+   DESKTOP (1125px+)
+===================== */
+@media (min-width: 1125px) {
+  .blog-card-inner {
+    min-height: 560px;
+  }
+
+  .blog-card-img-wrap {
+    width: 100%;
+    height: 75%;
+    border-radius: 8px 8px 0 0;
+  }
+}

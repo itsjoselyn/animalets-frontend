@@ -1,39 +1,31 @@
 /* =====================
-   CAT GRID
+   BLOG GRID
 ===================== */
 
-.cat-grid-wrap {
+.blog-grid-wrap {
   background: #ffffff;
-  padding: 24px 28px 48px;
+  padding: 8px 40px 48px;
 }
 
-/* ---- GRID ---- */
-.cat-grid {
-  display: grid;
-  grid-template-columns: 1fr;
+.blog-grid {
+  display: flex;
+  flex-direction: column;
   gap: 16px;
   margin-bottom: 40px;
-  max-width: 320px;
+  max-width: 480px;
   margin-left: auto;
   margin-right: auto;
 }
 
-@media (min-width: 600px) {
-  .cat-grid {
-    grid-template-columns: 1fr 1fr;
-    max-width: 640px;
-  }
-}
-
 /* ---- FOOTER ---- */
-.cat-grid-footer {
+.blog-grid-footer {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
 }
 
-.cat-grid-count {
+.blog-grid-count {
   font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 500;
@@ -43,7 +35,7 @@
   text-transform: uppercase;
 }
 
-.cat-grid-progress-bar {
+.blog-grid-progress-bar {
   width: 200px;
   height: 2px;
   background: rgba(76, 175, 80, 0.15);
@@ -51,14 +43,14 @@
   overflow: hidden;
 }
 
-.cat-grid-progress-fill {
+.blog-grid-progress-fill {
   height: 100%;
   background: #4caf50;
   border-radius: 2px;
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.cat-grid-more-btn {
+.blog-grid-more-btn {
   font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 700;
@@ -73,7 +65,7 @@
   transition: border-color 0.2s ease, color 0.2s ease;
 }
 
-.cat-grid-more-btn:hover {
+.blog-grid-more-btn:hover {
   border-color: #4caf50;
   color: #4caf50;
 }
@@ -82,12 +74,13 @@
    DESKTOP (1125px+)
 ===================== */
 @media (min-width: 1125px) {
-  .cat-grid-wrap {
-    padding: 32px 80px 64px;
+  .blog-grid-wrap {
+    padding: 8px 80px 64px;
   }
 
-  .cat-grid {
-    grid-template-columns: repeat(4, 1fr);
+  .blog-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 24px;
     max-width: none;
   }
