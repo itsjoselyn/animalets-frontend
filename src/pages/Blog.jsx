@@ -1,3 +1,12 @@
+import BlogGrid from "../components/blog/BlogGrid";
+import BlogHeader from "../components/blog/BlogHeader";
+
+
 export default function Blog() {
-    return <div>Blog</div>
+    return (
+    <>
+    <BlogHeader />
+    <BlogGrid />
+    </>
+    )
 }
