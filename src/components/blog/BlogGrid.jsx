@@ -18,7 +18,7 @@ const POSTS = [
   { id: 13, date: "18 May, 2024", title: "Voluntariado en Animalets: así fue mi experiencia",  img: "https://placecats.com/bella/400/300" },
 ];
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 6;
 
 export default function BlogGrid() {
   const [visible, setVisible] = useState(PAGE_SIZE);

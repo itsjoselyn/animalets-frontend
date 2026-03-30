@@ -16,7 +16,7 @@ export default function BlogCard({ post }) {
         </div>
 
         {/* Título abajo */}
-        <h2 className="blog-card-title">{title}</h2>
+        <div className="blog-card-title">{title}</div>
       </div>
     </Link>
   );
