@@ -7,16 +7,18 @@ export default function BlogCard({ post }) {
   return (
     <Link to={`/blog/${id}`} className="blog-card">
       <div className="blog-card-inner">
-        {/* Fecha arriba izquierda */}
-        <span className="blog-card-date">{date}</span>
 
-        {/* Foto encajada arriba derecha */}
-        <div className="blog-card-img-wrap">
-          <img src={img} alt={title} className="blog-card-img" />
+        {/* Top: fecha izquierda + foto derecha */}
+        <div className="blog-card-top">
+          <span className="blog-card-date">{date}</span>
+          <div className="blog-card-img-wrap">
+            <img src={img} alt={title} className="blog-card-img" />
+          </div>
         </div>
 
-        {/* Título abajo */}
+        {/* Título abajo izquierda */}
         <div className="blog-card-title">{title}</div>
+
       </div>
     </Link>
   );
