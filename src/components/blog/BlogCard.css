@@ -9,49 +9,54 @@
 }
 
 .blog-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
 
 .blog-card-inner {
-  position: relative;
   border: 1px solid rgba(76, 175, 80, 0.15);
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
+  background: #fff;
+  height: 380px;
   display: flex;
   flex-direction: column;
-  height: 420px; /* altura fija igual en todas */
-}
-
-/* Foto arriba — altura fija para que el espacio bajo sea siempre igual */
-.blog-card-img-wrap {
-  width: 100%;
-  height: 82%;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-/* Fecha — encima de la foto, posición absoluta dentro de img-wrap */
-.blog-card-img-wrap {
+  justify-content: space-between;
+  padding: 20px;
   position: relative;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  transition: box-shadow 0.25s ease;
+}
+
+.blog-card:hover .blog-card-inner {
+  box-shadow: 0 8px 28px rgba(76,175,80,0.13);
+}
+
+/* ---- TOP: fecha izquierda + foto derecha ---- */
+.blog-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .blog-card-date {
-  position: absolute;
-  top: 12px;
-  left: 12px;
   font-family: 'DM Sans', sans-serif;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #222;
-  z-index: 3;
-  background: rgba(255,255,255,0.85);
-  padding: 3px 8px;
-  border-radius: 4px;
+  color: rgba(0,0,0,0.4);
+  padding-top: 4px;
+  flex-shrink: 0;
 }
 
-
+.blog-card-img-wrap {
+  width: 52%;
+  aspect-ratio: 1/1;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
 
 .blog-card-img {
   width: 100%;
@@ -65,21 +70,16 @@
   transform: scale(1.04);
 }
 
-/* Título centrado en el espacio bajo la foto */
+/* ---- TÍTULO abajo izquierda ---- */
 .blog-card-title {
   font-family: 'Lilita One', sans-serif;
-  font-size: clamp(16px, 4vw, 22px);
+  font-size: clamp(16px, 3.5vw, 21px);
   color: #4caf50;
   text-transform: uppercase;
   letter-spacing: 0.02em;
-  line-height: 1.15;
+  line-height: 1.2;
   margin: 0;
-  text-align: center;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 14px;
+  text-align: left;
 }
 
 /* =====================
@@ -87,6 +87,11 @@
 ===================== */
 @media (min-width: 1125px) {
   .blog-card-inner {
-    height: 520px;
+    height: 420px;
+    padding: 24px;
+  }
+
+  .blog-card-img-wrap {
+    width: 48%;
   }
 }
