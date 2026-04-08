@@ -17,7 +17,7 @@
   border-radius: 12px;
   overflow: hidden;
   background: #fff;
-  height: 380px;
+  min-height: 270px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -79,19 +79,27 @@
   letter-spacing: 0.02em;
   line-height: 1.2;
   margin: 0;
-  text-align: left;
+  text-align: center;
 }
 
 /* =====================
    DESKTOP (1125px+)
 ===================== */
 @media (min-width: 1125px) {
+
   .blog-card-inner {
-    height: 420px;
+    min-height: 420px;
     padding: 24px;
   }
 
   .blog-card-img-wrap {
     width: 48%;
+    max-height: 190px;   /* evita que la imagen crezca demasiado */
+    aspect-ratio: 1/1;
   }
+
+  .blog-card-img {
+    height: 100%;
+  }
+
 }
