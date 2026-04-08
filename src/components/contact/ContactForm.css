@@ -1,0 +1,214 @@
+/* =====================
+   CONTACT FORM
+===================== */
+
+.cform-wrap {
+  background: #ffffff;
+  padding: 8px 28px 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cform-title {
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(24px, 7vw, 40px);
+  color: #4caf50;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  margin: 0 0 28px;
+  text-align: center;
+}
+
+.cform {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 560px;
+}
+
+/* ---- INPUTS ---- */
+.cform-input,
+.cform-select,
+.cform-textarea {
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #222;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 6px;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.cform-input::placeholder,
+.cform-textarea::placeholder {
+  color: rgba(0,0,0,0.35);
+}
+
+.cform-input:focus,
+.cform-select:focus,
+.cform-textarea:focus {
+  border-color: #4caf50;
+}
+
+.cform-select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234caf50' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.cform-select option {
+  color: #222;
+}
+
+.cform-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* ---- FIELDSET DINÁMICO ---- */
+.cform-fieldset {
+  border: 1px solid rgba(76,175,80,0.2);
+  border-radius: 8px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #f9fdf9;
+}
+
+.cform-legend {
+  font-family: 'Lilita One', sans-serif;
+  font-size: 16px;
+  color: #4caf50;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0 6px;
+}
+
+.cform-sublabel {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.4);
+  margin: 4px 0 0;
+}
+
+/* ---- CHECKBOXES ---- */
+.cform-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cform-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #222;
+  cursor: pointer;
+  user-select: none;
+}
+
+.cform-check input {
+  display: none;
+}
+
+.cform-check-box {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid rgba(0,0,0,0.2);
+  border-radius: 4px;
+  flex-shrink: 0;
+  position: relative;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.cform-check input:checked + .cform-check-box {
+  background: #4caf50;
+  border-color: #4caf50;
+}
+
+.cform-check input:checked + .cform-check-box::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 6px;
+  height: 10px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+/* ---- PRIVACIDAD ---- */
+.cform-privacy {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #555;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.cform-privacy input {
+  display: none;
+}
+
+.cform-privacy-link {
+  color: #4caf50;
+  text-decoration: underline;
+}
+
+/* ---- SUBMIT ---- */
+.cform-submit {
+  font-family: 'Lilita One', sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: #4caf50;
+  border: none;
+  border-radius: 6px;
+  padding: 14px 0;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.cform-submit:hover {
+  background: #2e7d32;
+  transform: translateY(-2px);
+}
+
+/* =====================
+   DESKTOP (1125px+)
+===================== */
+@media (min-width: 1125px) {
+  .cform-wrap {
+    padding: 8px 80px 80px;
+  }
+
+  .cform-title {
+    margin-bottom: 36px;
+  }
+}

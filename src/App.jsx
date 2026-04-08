@@ -8,6 +8,7 @@ import Blog from "./pages/Blog";
 import Contacto from "./pages/Contacto";
 import SobreNosotros from "./pages/SobreNosotros"
 import Footer from "./components/layout/Footer";
+import TestimonioPage from "./pages/TestimonioPage";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
           <Route path="/como-ayudar" element={<ComoAyudar />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/contacto" element={<Contacto />} />
+          <Route path="/testimonios/:id" element={<TestimonioPage />} />
         </Routes>
       </main>
       <Footer />

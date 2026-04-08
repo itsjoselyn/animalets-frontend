@@ -69,7 +69,7 @@ export default function Testimonials() {
   const mobileActive = active > 3 ? 1 : active;
 
   return (
-    <section className="testi">
+    <section className="testi" id="testimonios">
       <div className="testi-body">
 
         <h2 className="testi-title">Testimonios</h2>
