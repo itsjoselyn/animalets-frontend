@@ -1,0 +1,158 @@
+/* =====================
+   TESTIMONIO PAGE
+===================== */
+
+.testpage {
+  min-height: 100svh;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- HEADER ---- */
+.testpage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  border-bottom: 1px solid rgba(76, 175, 80, 0.1);
+}
+
+.testpage-logo {
+  height: 44px;
+  width: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.testpage-close {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #222;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 0;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.testpage-close::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: #4caf50;
+  transition: width 0.3s ease;
+}
+
+.testpage-close:hover {
+  color: #4caf50;
+}
+
+.testpage-close:hover::after {
+  width: 100%;
+}
+
+/* ---- SUBHEADER ---- */
+.testpage-subheader {
+  background: #4caf50;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.testpage-name {
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(20px, 5vw, 28px);
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+.testpage-date {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.75);
+  flex-shrink: 0;
+}
+
+/* ---- BODY ---- */
+.testpage-body {
+  padding: 28px 24px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.testpage-img-wrap {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.testpage-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.testpage-title {
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(20px, 5.5vw, 30px);
+  color: #4caf50;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  margin: 0;
+  text-align: center;
+}
+
+.testpage-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #333;
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* ---- NOT FOUND ---- */
+.testpage-notfound {
+  padding: 60px 28px;
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  color: #4caf50;
+}
+
+/* =====================
+   DESKTOP (1125px+)
+===================== */
+@media (min-width: 1125px) {
+  .testpage-header {
+    padding: 12px 48px;
+  }
+
+  .testpage-subheader {
+    padding: 16px 48px;
+  }
+
+  .testpage-body {
+    padding: 40px 48px 80px;
+  }
+}

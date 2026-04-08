@@ -1,3 +1,13 @@
+import ContactCloud from "../components/contact/ContactCloud";
+import ContactForm from "../components/contact/ContactForm";
+import ContactHeader from "../components/contact/ContactHeader";
+
 export default function Contacto() {
-    return <div>Contacto</div>
+    return (
+    <>
+    <ContactHeader />
+    <ContactCloud />
+    <ContactForm />
+    </>
+    )
 }
