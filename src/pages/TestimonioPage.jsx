@@ -55,7 +55,7 @@ export default function TestimonioPage() {
     return (
       <div className="testpage-notfound">
         <p>Testimonio no encontrado.</p>
-        <button onClick={() => navigate("/#testimonios")}>Volver</button>
+        <button onClick={() => navigate(`/?testimonio=${testimonio.id}`)}>Volver</button>
       </div>
     );
   }
@@ -68,7 +68,7 @@ export default function TestimonioPage() {
         <img src={logo} alt="Animalets" className="testpage-logo" />
         <button
           className="testpage-close"
-          onClick={() => navigate("/#testimonios")}
+          onClick={() => navigate(`/?testimonio=${testimonio.id}`)}
         >
           Cerrar
         </button>

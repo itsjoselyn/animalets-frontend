@@ -13,19 +13,30 @@ import TestimonioPage from "./pages/TestimonioPage";
 export default function App() {
   return (
     <BrowserRouter>
-      <Navbar />
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/sobre-nosotros" element={<SobreNosotros />} />
-          <Route path="/nuestros-peludos" element={<NuestrosPeludos />} />
-          <Route path="/como-ayudar" element={<ComoAyudar />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/contacto" element={<Contacto />} />
-          <Route path="/testimonios/:id" element={<TestimonioPage />} />
-        </Routes>
-      </main>
-      <Footer />
+      <Routes>
+
+        {/* Testimonio — sin navbar ni footer */}
+        <Route path="/testimonios/:id" element={<TestimonioPage />} />
+
+        {/* Resto — con navbar y footer */}
+        <Route path="/*" element={
+          <>
+            <Navbar />
+            <main style={{ paddingTop: '76px' }}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+                <Route path="/nuestros-peludos" element={<NuestrosPeludos />} />
+                <Route path="/como-ayudar" element={<ComoAyudar />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/contacto" element={<Contacto />} />
+              </Routes>
+            </main>
+            <Footer />
+          </>
+        } />
+
+      </Routes>
     </BrowserRouter>
   );
 }
