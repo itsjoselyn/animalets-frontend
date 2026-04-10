@@ -1,0 +1,247 @@
+/* =====================
+   CAT PROFILE PAGE
+===================== */
+
+.catprofile {
+  min-height: 100svh;
+  background: #ffffff;
+  position: relative;
+}
+
+/* ---- CERRAR fijo arriba derecha ---- */
+.catprofile-close {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #4caf50;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(76,175,80,0.35);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.catprofile-close:hover {
+  background: #2e7d32;
+  transform: scale(1.08);
+}
+
+/* ---- FOTO ---- */
+.catprofile-img-wrap {
+  width: 100%;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+}
+
+.catprofile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---- BODY ---- */
+.catprofile-body {
+  padding: 28px 24px 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ---- HERO: nombre + meta ---- */
+.catprofile-hero {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.catprofile-name {
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(40px, 12vw, 64px);
+  color: #4caf50;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  margin: 0;
+}
+
+.catprofile-meta {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(14px, 3.5vw, 18px);
+  color: #4caf50;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+  opacity: 0.85;
+}
+
+/* ---- BIO ---- */
+.catprofile-bio {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #333;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ---- SECCIONES ---- */
+.catprofile-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.catprofile-section-title {
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(20px, 5vw, 26px);
+  color: #4caf50;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0;
+  line-height: 1;
+}
+
+/* ---- LO QUE NECESITO ---- */
+.catprofile-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.catprofile-list-item {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+  padding-left: 16px;
+  position: relative;
+}
+
+.catprofile-list-item::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: #4caf50;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+/* ---- SUPERPODERES ---- */
+.catprofile-powers {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.catprofile-power {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+}
+
+.catprofile-power-label {
+  font-weight: 700;
+  color: #4caf50;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+
+/* ---- CTAs fijos abajo ---- */
+.catprofile-ctas {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 0;
+  z-index: 50;
+}
+
+.catprofile-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Lilita One', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 18px 0;
+  transition: opacity 0.2s ease;
+}
+
+.catprofile-btn:hover {
+  opacity: 0.9;
+}
+
+.catprofile-btn--adopt {
+  background: #4caf50;
+  color: #ffffff;
+}
+
+.catprofile-btn--foster {
+  background: #2e7d32;
+  color: #ffffff;
+}
+
+/* ---- NOT FOUND ---- */
+.catprofile-notfound {
+  padding: 60px 28px;
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  color: #4caf50;
+}
+
+/* =====================
+   DESKTOP (1125px+)
+===================== */
+@media (min-width: 1125px) {
+  .catprofile-img-wrap {
+    aspect-ratio: 16/7;
+  }
+
+  .catprofile-body {
+    padding: 40px 80px 120px;
+  }
+
+  .catprofile-close {
+    top: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+
+  .catprofile-ctas {
+    max-width: 600px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 24px;
+    border-radius: 100px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  }
+}
