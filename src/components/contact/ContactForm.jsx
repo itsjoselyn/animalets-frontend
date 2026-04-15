@@ -25,9 +25,9 @@ export default function ContactForm() {
   const [tipo, setTipo]           = useState("");
   const [privacidad, setPrivacidad] = useState(false);
   const [form, setForm]           = useState({
-    nombre: "", correo: "", telefono: "", conocido: "", mensaje: "",
+    nombre: "", correo: "", telefono: "", conocido: "", mensaje: "", edad: "",
     // voluntario
-    disponibilidad: [], tareas: [], experienciaVol: "",
+    disponibilidad: [], tareas: [], experienciaVol: "", tareasOtros: "",
     // acogida
     tipoHogar: "", personasCasa: "", animalesCasa: [], animalesTexto: "", tiempoAcogida: "", experienciaAcogida: "",
     // apadrinar
@@ -53,6 +53,27 @@ export default function ContactForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Validaciones básicas
+    if (!form.edad) {
+      alert("Por favor indica tu edad.");
+      return;
+    }
+
+    if (tipo === "voluntario") {
+      if (!form.disponibilidad || form.disponibilidad.length === 0) {
+        alert("Selecciona al menos una disponibilidad horaria.");
+        return;
+      }
+      if (!form.tareas || form.tareas.length === 0) {
+        alert("Selecciona al menos una tarea que podrías realizar.");
+        return;
+      }
+      if (form.tareas.includes("Otros") && !form.tareasOtros) {
+        alert('Por favor especifica las "Otros" tareas.');
+        return;
+      }
+    }
+
     console.log({ tipo, privacidad, ...form });
     // aquí irá la llamada a Firebase / backend
   };
@@ -67,6 +88,8 @@ export default function ContactForm() {
         <input className="cform-input" type="text" placeholder="Nombre completo *" value={form.nombre} onChange={(e) => set("nombre", e.target.value)} required />
         <input className="cform-input" type="email" placeholder="Correo *" value={form.correo} onChange={(e) => set("correo", e.target.value)} required />
         <input className="cform-input" type="tel" placeholder="Teléfono" value={form.telefono} onChange={(e) => set("telefono", e.target.value)} />
+
+        <input className="cform-input" type="number" min="0" placeholder="Edad *" value={form.edad} onChange={(e) => set("edad", e.target.value)} required />
 
         <select className="cform-select" value={tipo} onChange={(e) => setTipo(e.target.value)} required>
           {TIPOS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
@@ -94,7 +117,7 @@ export default function ContactForm() {
             </div>
             <p className="cform-sublabel">Tareas que podrías realizar *</p>
             <div className="cform-checks">
-              {["Limpieza", "Alimentación", "Medicación", "Fotos/vídeos", "Socialización"].map((v) => (
+              {["Limpieza", "Alimentación", "Medicación", "Fotos", "Socialización", "Otros"].map((v) => (
                 <label key={v} className="cform-check">
                   <input type="checkbox" checked={form.tareas.includes(v)} onChange={() => toggleArr("tareas", v)} />
                   <span className="cform-check-box" />
@@ -102,6 +125,13 @@ export default function ContactForm() {
                 </label>
               ))}
             </div>
+
+            {/* Campo de subida de fotos eliminado por petición del mantenedor */}
+
+            {form.tareas.includes("Otros") && (
+              <input className="cform-input" type="text" placeholder="Especifica otras tareas *" value={form.tareasOtros} onChange={(e) => set("tareasOtros", e.target.value)} required />
+            )}
+
             <textarea className="cform-textarea" placeholder="¿Tienes experiencia previa con animales?" value={form.experienciaVol} onChange={(e) => set("experienciaVol", e.target.value)} rows={3} />
           </fieldset>
         )}
@@ -143,10 +173,6 @@ export default function ContactForm() {
               <option value="">Tipo de aportación *</option>
               <option value="10">10€/mes</option>
               <option value="otra">Otra cantidad</option>
-            </select>
-            <select className="cform-select" value={form.comunicacion} onChange={(e) => set("comunicacion", e.target.value)} required>
-              <option value="">Preferencia de comunicación *</option>
-              {["Email", "WhatsApp", "Ambos"].map((v) => <option key={v} value={v}>{v}</option>)}
             </select>
           </fieldset>
         )}
