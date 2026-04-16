@@ -1,59 +1,119 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import "./BlogPostPage.css";
-
-const POSTS = [
-  {
-    id: 1,
-    date: "03 Dic, 2024",
-    title: "Qué debes saber antes de bañar a tu gato",
-    img: "https://placecats.com/neo/400/300",
-    body: `Bañar a un gato no es algo que deba hacerse con frecuencia, ya que ellos son animales que se limpian solos de manera muy eficiente. Sin embargo, hay situaciones en las que un baño se hace necesario: si el gato se ha ensuciado con alguna sustancia, si tiene parásitos o una condición dermatológica, o simplemente si el veterinario lo recomienda.
-
-Antes de meter a tu gato en el agua, prepara todo lo necesario: champú específico para gatos (nunca uses el de personas), toallas secas, y un ambiente cálido. El agua debe estar tibia, ni fría ni caliente.
-
-Habla con tu gato durante todo el proceso con un tono calmado. Si es la primera vez, empieza mojando solo las patas y ve aumentando gradualmente. Nunca mojes la cabeza directamente, usa un paño húmedo para limpiar esa zona.
-
-Después del baño, seca bien a tu gato con la toalla y, si lo tolera, puedes usar el secador a temperatura baja y a distancia. Recompénsale con chuches y mimos para que asocie la experiencia de forma positiva.`,
-  },
-  {
-    id: 2,
-    date: "20 Nov, 2024",
-    title: "Cómo preparar tu casa para acoger un gato",
-    img: "https://placecats.com/millie/400/300",
-    body: `Acoger a un gato por primera vez es una experiencia maravillosa, pero requiere cierta preparación del hogar para que el animal se sienta seguro y cómodo desde el primer momento.
-
-Lo primero es crear un espacio propio: una cama o manta en un rincón tranquilo, alejado del bullicio. Los gatos necesitan tener su zona de refugio, especialmente en los primeros días de adaptación.
-
-Revisa que no haya plantas tóxicas para gatos en casa (los lirios, el potus y la hiedra son algunos ejemplos), ni cables sueltos que puedan morder. Los armarios y cajones abiertos también pueden ser peligrosos.
-
-Prepara el arenero en un lugar tranquilo y accesible, el comedero y bebedero en otro espacio diferente, y asegúrate de tener algunos juguetes para los primeros días.`,
-  },
-  {
-    id: 3,
-    date: "05 Nov, 2024",
-    title: "Los mejores juguetes para gatos de interior",
-    img: "https://placecats.com/bella/400/300",
-    body: `Los gatos de interior necesitan estimulación mental y física diaria para mantenerse sanos y felices. Un gato aburrido puede desarrollar comportamientos problemáticos como arañar muebles, comer en exceso o volverse ansioso.
-
-Los juguetes tipo caña con plumas o ratones son siempre un éxito: imitan el movimiento de la presa y activan el instinto cazador. Lo importante es que tú participes activamente en el juego, no basta con dejarlo solo con el juguete.
-
-Los puzzles de comida o comederos interactivos son ideales para ralentizar la ingesta y estimular la mente. Los túneles y rascadores con plataformas también son muy recomendables.
-
-Recuerda rotar los juguetes cada semana para que no pierdan interés, y reserva al menos dos sesiones de juego al día de unos 10-15 minutos cada una.`,
-  },
-];
+import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase/firebaseConfig";
 
 export default function BlogPostPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const currentIndex = POSTS.findIndex((p) => p.id === Number(id));
-  const post = POSTS[currentIndex];
-  const nextPost = POSTS[currentIndex + 1] || null;
+  const [post, setPost] = useState(null);
+  const [nextPost, setNextPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (!post) {
+  useEffect(() => {
+    if (!id) {
+      setError("No se indicó id del artículo");
+      setLoading(false);
+      return;
+    }
+
+    let mounted = true;
+    async function fetchPost() {
+      setLoading(true);
+      try {
+        const docRef = doc(db, "blog", id);
+        const docSnap = await getDoc(docRef);
+        if (!docSnap.exists()) {
+          setError("Artículo no encontrado");
+          setLoading(false);
+          return;
+        }
+
+        const data = docSnap.data();
+        const ts = data.updatedAt || data.createdAt;
+        let dateStr = "";
+        if (ts) {
+          if (typeof ts.toDate === "function") {
+            dateStr = ts.toDate().toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" });
+          } else {
+            dateStr = new Date(ts).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" });
+          }
+        }
+
+        const normalized = {
+          id: docSnap.id,
+          title: data.titulo || data.title || "",
+          img: data.imagen || data.image || data.img || "",
+          body: data.descripcion || data.body || data.text || "",
+          date: dateStr,
+          createdAt: data.createdAt,
+          updatedAt: data.updatedAt,
+        };
+
+        if (mounted) setPost(normalized);
+
+        // Fetch all posts to determine the "next" article by date
+        const snapshot = await getDocs(collection(db, "blog"));
+        const docs = snapshot.docs.map((d) => {
+          const dd = d.data();
+          const t = dd.updatedAt || dd.createdAt;
+          const time = t ? (typeof t.toDate === "function" ? t.toDate().getTime() : new Date(t).getTime()) : 0;
+          return {
+            id: d.id,
+            title: dd.titulo || dd.title || "",
+            time,
+          };
+        });
+        docs.sort((a, b) => b.time - a.time);
+        const index = docs.findIndex((p) => p.id === id);
+        if (index >= 0 && index + 1 < docs.length) {
+          if (mounted) setNextPost(docs[index + 1]);
+        }
+
+      } catch (err) {
+        console.error("Error fetching blog post:", err);
+        if (mounted) setError("Error cargando artículo");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+
+    fetchPost();
+    return () => {
+      mounted = false;
+    };
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="blogpost-skeleton-wrap">
+        <div className="blogpost-hero">
+          <div className="blogpost-title-skel skeleton" style={{ width: '60%', height: '36px', borderRadius: 6 }} />
+          <div className="blogpost-nav-top">
+            <div className="blogpost-back-skel skeleton" style={{ width: '120px', height: '12px', borderRadius: 6 }} />
+            <div className="blogpost-date-skel skeleton" style={{ width: '80px', height: '12px', borderRadius: 6 }} />
+          </div>
+        </div>
+        <div className="blogpost-body">
+          <div className="blogpost-img-wrap">
+            <div className="blogpost-img-skel skeleton" style={{ width: '100%', height: '220px', borderRadius: 8 }} />
+          </div>
+          <div className="blogpost-text">
+            <div className="skel-line skeleton" style={{ width: '100%', height: '14px', borderRadius: 6 }} />
+            <div className="skel-line skeleton" style={{ width: '95%', height: '14px', borderRadius: 6 }} />
+            <div className="skel-line skeleton" style={{ width: '90%', height: '14px', borderRadius: 6 }} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !post) {
     return (
       <div className="blogpost-notfound">
-        <p>Artículo no encontrado.</p>
+        <p>{error || "Artículo no encontrado."}</p>
         <Link to="/blog">Volver al blog</Link>
       </div>
     );
@@ -77,11 +137,11 @@ export default function BlogPostPage() {
       {/* Contenido blanco */}
       <div className="blogpost-body">
         <div className="blogpost-img-wrap">
-          <img src={post.img} alt={post.title} className="blogpost-img" />
+          {post.img ? <img src={post.img} alt={post.title} className="blogpost-img" /> : null}
         </div>
 
         <div className="blogpost-text">
-          {post.body.split("\n\n").map((p, i) => (
+          {String(post.body).split("\n\n").map((p, i) => (
             <p key={i}>{p}</p>
           ))}
         </div>

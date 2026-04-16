@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import "./Testimonials.css";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/firebaseConfig";
 
 const TESTIMONIALS = [
   {
@@ -57,9 +59,50 @@ function Timeline({ items, active, onSelect }) {
 export default function Testimonials() {
   const [active, setActive] = useState(1);
   const [searchParams] = useSearchParams();
-  const current = TESTIMONIALS.find((t) => t.id === active);
-  const mobileList = TESTIMONIALS.slice(0, 3);
-  const mobileActive = active > 3 ? 1 : active;
+  const [testimonials, setTestimonials] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Load testimonios from Firestore (collection: 'testimonios')
+  useEffect(() => {
+    let mounted = true;
+    async function loadTestimonials() {
+      setLoading(true);
+      try {
+        const q = collection(db, "testimonios");
+        const snapshot = await getDocs(q);
+        const docs = snapshot.docs.map((doc, idx) => {
+          const data = doc.data();
+          return {
+            id: idx + 1,
+            name: data.name || data.nombre || `Testimonio ${idx + 1}`,
+            // Use only the explicit `preview` field for the home summary.
+            preview: data.preview || "",
+            full: `/testimonios/${doc.id}`,
+          };
+        });
+        if (mounted) {
+          if (docs.length > 0) setTestimonials(docs);
+          else setTestimonials(TESTIMONIALS); // fallback only after loading
+        }
+      } catch (err) {
+        console.error("Error cargando testimonios desde Firestore:", err);
+        if (mounted) setTestimonials(TESTIMONIALS); // fallback on error
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+    loadTestimonials();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  // Limit lists: mobile = first 3, desktop = first 5
+  const desktopList = testimonials.slice(0, 5);
+  const desktopActive = active > desktopList.length ? 1 : active;
+  const current = testimonials.length ? testimonials.find((t) => t.id === active) || testimonials[0] : null;
+  const mobileList = testimonials.slice(0, 3);
+  const mobileActive = active > mobileList.length ? 1 : active;
 
   useEffect(() => {
     const id = Number(searchParams.get("testimonio"));
@@ -77,19 +120,39 @@ export default function Testimonials() {
 
         <h2 className="testi-title">Testimonios</h2>
 
-        <div className="testi-timeline-mobile">
-          <Timeline items={mobileList} active={mobileActive} onSelect={setActive} />
-        </div>
+        {loading && testimonials.length === 0 ? (
+          <div className="testi-loading">
+            <div className="testi-timeline-skeleton">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="testi-node-skeleton">
+                  <span className="testi-node-dot skeleton" />
+                  <span className="testi-node-name-skel skeleton" />
+                </div>
+              ))}
+            </div>
+            <div className="testi-preview-skel skeleton" />
+          </div>
+        ) : (
 
-        <div className="testi-timeline-desktop">
-          <Timeline items={TESTIMONIALS} active={active} onSelect={setActive} />
-        </div>
+          <>
+            <div className="testi-timeline-mobile">
+              <Timeline items={mobileList} active={mobileActive} onSelect={setActive} />
+            </div>
 
-        <div className="testi-content" key={active}>
-          <Link to={current.full} className="testi-preview">
-            {current.preview}
-          </Link>
-        </div>
+            <div className="testi-timeline-desktop">
+              <Timeline items={desktopList} active={desktopActive} onSelect={setActive} />
+            </div>
+
+            <div className="testi-content" key={active}>
+              {current ? (
+                <Link to={current.full} className="testi-preview">
+                  {current.preview}
+                </Link>
+              ) : null}
+            </div>
+          </>
+
+        )}
 
       </div>
     </section>

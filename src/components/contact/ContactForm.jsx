@@ -29,7 +29,7 @@ export default function ContactForm() {
     // voluntario
     disponibilidad: [], tareas: [], experienciaVol: "", tareasOtros: "",
     // acogida
-    tipoHogar: "", personasCasa: "", animalesCasa: [], animalesTexto: "", tiempoAcogida: "", experienciaAcogida: "",
+    tipoHogar: "", personasCasa: "", animalesCasa: [], animalesTexto: "", gatoAcogida: "", tiempoAcogida: "", experienciaAcogida: "",
     // apadrinar
     nombreGato: "", tipoAportacion: "", comunicacion: "",
     // adoptar
@@ -41,7 +41,7 @@ export default function ContactForm() {
     const t = searchParams.get("tipo");
     if (t) setTipo(t);
     const gato = searchParams.get("gato");
-    if (gato) setForm((f) => ({ ...f, nombreGato: gato, gatoEnMente: gato }));
+    if (gato) setForm((f) => ({ ...f, nombreGato: gato, gatoEnMente: gato, gatoAcogida: gato }));
   }, [searchParams]);
 
   const set = (key, val) => setForm((f) => ({ ...f, [key]: val }));
@@ -140,6 +140,7 @@ export default function ContactForm() {
         {tipo === "acogida" && (
           <fieldset className="cform-fieldset">
             <legend className="cform-legend">Casa de acogida</legend>
+            <input className="cform-input" type="text" placeholder="¿Tienes ya un gato en mente?" value={form.gatoAcogida} onChange={(e) => set("gatoAcogida", e.target.value)} />
             <select className="cform-select" value={form.tipoHogar} onChange={(e) => set("tipoHogar", e.target.value)} required>
               <option value="">Tipo de hogar *</option>
               {["Piso", "Casa", "Con terraza", "Con patio"].map((v) => <option key={v} value={v}>{v}</option>)}

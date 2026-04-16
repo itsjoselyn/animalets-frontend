@@ -1,58 +1,121 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BlogCard from "./BlogCard";
 import "./BlogGrid.css";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/firebaseConfig";
 
-const POSTS = [
-  { id: 1,  date: "03 Dic, 2024", title: "Qué debes saber antes de bañar a tu gato",         img: "https://placecats.com/neo/400/300" },
-  { id: 2,  date: "20 Nov, 2024", title: "Cómo preparar tu casa para acoger un gato",         img: "https://placecats.com/millie/400/300" },
-  { id: 3,  date: "05 Nov, 2024", title: "Los mejores juguetes para gatos de interior",        img: "https://placecats.com/bella/400/300" },
-  { id: 4,  date: "18 Oct, 2024", title: "Señales de que tu gato está estresado",              img: "https://placecats.com/neo_2/400/300" },
-  { id: 5,  date: "02 Oct, 2024", title: "Alimentación saludable para gatos mayores",          img: "https://placecats.com/millie_neo/400/300" },
-  { id: 6,  date: "15 Sep, 2024", title: "Por qué los gatos ronronean y qué significa",        img: "https://placecats.com/neo/400/300" },
-  { id: 7,  date: "01 Sep, 2024", title: "Adoptar un gato adulto: ventajas que no conocías",   img: "https://placecats.com/millie/400/300" },
-  { id: 8,  date: "10 Ago, 2024", title: "Cómo socializar a un gato asustadizo",               img: "https://placecats.com/bella/400/300" },
-  { id: 9,  date: "22 Jul, 2024", title: "El apadrinamiento: una forma de ayudar desde casa",  img: "https://placecats.com/neo_2/400/300" },
-  { id: 10, date: "08 Jul, 2024", title: "5 cosas que los gatos intentan decirte",             img: "https://placecats.com/millie_neo/400/300" },
-  { id: 11, date: "20 Jun, 2024", title: "Cómo llevar a tu gato al veterinario sin estrés",   img: "https://placecats.com/neo/400/300" },
-  { id: 12, date: "05 Jun, 2024", title: "Historia de Mochi: de la calle a un hogar",          img: "https://placecats.com/millie/400/300" },
-  { id: 13, date: "18 May, 2024", title: "Voluntariado en Animalets: así fue mi experiencia",  img: "https://placecats.com/bella/400/300" },
-];
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 12;
 
 export default function BlogGrid() {
   const [visible, setVisible] = useState(PAGE_SIZE);
-  const shown = POSTS.slice(0, visible);
-  const hasMore = visible < POSTS.length;
-  const progress = Math.round((visible / POSTS.length) * 100);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Load blog posts from Firestore collection 'blog'
+  useEffect(() => {
+    let mounted = true;
+    async function loadPosts() {
+      setLoading(true);
+      try {
+        const q = collection(db, "blog");
+        const snapshot = await getDocs(q);
+        const docs = snapshot.docs.map((doc) => {
+          const data = doc.data();
+          const ts = data.updatedAt || data.createdAt;
+          let dateStr = "";
+          if (ts) {
+            if (typeof ts.toDate === "function") {
+              dateStr = ts.toDate().toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" });
+            } else {
+              dateStr = new Date(ts).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" });
+            }
+          }
+          return {
+            id: doc.id,
+            title: data.titulo || data.title || "",
+            img: data.imagen || data.image || data.img || "",
+            body: data.descripcion || data.body || data.text || "",
+            createdAt: data.createdAt,
+            updatedAt: data.updatedAt,
+            date: dateStr,
+          };
+        });
+
+        // Sort by updatedAt (or createdAt) descending
+        const getTime = (ts) => {
+          if (!ts) return 0;
+          if (typeof ts.toDate === "function") return ts.toDate().getTime();
+          return new Date(ts).getTime();
+        };
+
+        docs.sort((a, b) => getTime(b.updatedAt || b.createdAt) - getTime(a.updatedAt || a.createdAt));
+
+        if (mounted) {
+          if (docs.length > 0) setPosts(docs);
+          else setPosts(POSTS); // fallback only after loading
+        }
+      } catch (err) {
+        console.error("Error cargando posts desde Firestore:", err);
+        if (mounted) setPosts(POSTS); // fallback on error
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+
+    loadPosts();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const total = posts.length;
+  const shown = posts.slice(0, visible);
+  const hasMore = visible < total;
+  const progress = total > 0 ? Math.round((shown.length / total) * 100) : 0;
 
   return (
     <div className="blog-grid-wrap">
       <div className="blog-grid">
-        {shown.map((post) => (
-          <BlogCard key={post.id} post={post} />
-        ))}
-      </div>
-
-      <div className="blog-grid-footer">
-        <p className="blog-grid-count">
-          Mostrando {shown.length} de {POSTS.length} resultados
-        </p>
-        <div className="blog-grid-progress-bar">
-          <div
-            className="blog-grid-progress-fill"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        {hasMore && (
-          <button
-            className="blog-grid-more-btn"
-            onClick={() => setVisible((v) => Math.min(v + PAGE_SIZE, POSTS.length))}
-          >
-            Mostrar más
-          </button>
+        {loading ? (
+          // Loading skeletons
+          Array.from({ length: Math.min(PAGE_SIZE, 6) }).map((_, i) => (
+            <div key={i} className="blog-skeleton">
+              <div className="blog-skeleton-top">
+                <div className="blog-skeleton-date skeleton" />
+                <div className="blog-skeleton-img skeleton" />
+              </div>
+              <div className="blog-skeleton-title skeleton" />
+            </div>
+          ))
+        ) : (
+          shown.map((post) => (
+            <BlogCard key={post.id} post={post} />
+          ))
         )}
       </div>
+
+      {!loading && (
+        <div className="blog-grid-footer">
+          <p className="blog-grid-count">
+            Mostrando {shown.length} de {posts.length} resultados
+          </p>
+          <div className="blog-grid-progress-bar">
+            <div
+              className="blog-grid-progress-fill"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          {hasMore && (
+            <button
+              className="blog-grid-more-btn"
+              onClick={() => setVisible((v) => Math.min(v + PAGE_SIZE, posts.length))}
+            >
+              Mostrar más
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

@@ -153,3 +153,54 @@
     margin: 0 auto;
   }
 }
+
+/* ---- SKELETON LOADER ---- */
+.skeleton {
+  background: linear-gradient(90deg, #eeeeee 25%, #f5f5f5 37%, #eeeeee 63%);
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.2s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.testi-loading {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+}
+
+.testi-timeline-skeleton {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.testi-node-skeleton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.testi-node-name-skel {
+  width: 70px;
+  height: 10px;
+  border-radius: 6px;
+}
+
+.testi-preview-skel {
+  width: 80%;
+  height: 56px;
+  border-radius: 8px;
+}
+
+.testi-node-dot.skeleton {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: block;
+}
