@@ -1,106 +1,94 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import "./CatProfilePage.css";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase/firebaseConfig";
 
-// Datos de ejemplo — luego vendrán de Firebase
-const CATS = [
-  {
-    id: 1,
-    name: "Steven",
-    age: "7 años",
-    gender: "Macho",
-    img: "https://placecats.com/neo/400/500",
-    bio: "Steven es un gato joven y curioso, muy cariñoso cuando coge confianza. Le encanta observarlo todo desde su rincón favorito y pedir mimos cuando se siente seguro.",
-    necesito: [
-      "Un hogar tranquilo y paciente para seguir ganando confianza.",
-      "Gente que respete sus tiempos y le deje acercarse poco a poco.",
-      "Interior seguro, sin acceso al exterior sin protección.",
-    ],
-    superpoderes: [
-      { label: "Nivel de mimos", value: "Experto en ronroneo" },
-      { label: "Habilidad especial", value: "Atrapar pelotas invisibles" },
-      { label: "Estado actual", value: "Buscando sofá definitivo" },
-    ],
-  },
-  {
-    id: 2,
-    name: "Luna",
-    age: "2 años",
-    gender: "Hembra",
-    img: "https://placecats.com/millie/400/500",
-    bio: "Luna es una gata juguetona y llena de energía. Se lleva genial con otros gatos y le encanta trepar a los sitios más altos de la casa.",
-    necesito: [
-      "Un hogar con espacio para explorar y trepar.",
-      "Compañía felina o humana constante, no le gusta estar sola.",
-      "Juguetes y enriquecimiento ambiental.",
-    ],
-    superpoderes: [
-      { label: "Nivel de mimos", value: "Ronroneo a máximo volumen" },
-      { label: "Habilidad especial", value: "Escapista nata" },
-      { label: "Estado actual", value: "En busca de aventuras" },
-    ],
-  },
-  {
-    id: 3,
-    name: "Mochi",
-    age: "1 año",
-    gender: "Macho",
-    img: "https://placecats.com/bella/400/500",
-    bio: "Mochi es el más pequeño y el más travieso. Llegó muy joven y ha crecido lleno de amor. Ahora está listo para encontrar su familia definitiva.",
-    necesito: [
-      "Una familia con tiempo y paciencia para un gatito joven.",
-      "Juego diario y estimulación mental.",
-      "Preferiblemente sin niños muy pequeños.",
-    ],
-    superpoderes: [
-      { label: "Nivel de mimos", value: "Intenso e incondicional" },
-      { label: "Habilidad especial", value: "Desaparecer calcetines" },
-      { label: "Estado actual", value: "Listo para el caos doméstico" },
-    ],
-  },
-  {
-    id: 4,
-    name: "Nala",
-    age: "3 años",
-    gender: "Hembra",
-    img: "https://placecats.com/neo_2/400/500",
-    bio: "Nala es elegante, independiente y muy lista. Tardará en darte su confianza, pero cuando lo haga serás su persona favorita para siempre.",
-    necesito: [
-      "Un hogar tranquilo, sin mucho ruido ni ajetreo.",
-      "Respeto por sus espacios y sus ritmos.",
-      "Paciencia en los primeros meses de adaptación.",
-    ],
-    superpoderes: [
-      { label: "Nivel de mimos", value: "Selectiva pero intensa" },
-      { label: "Habilidad especial", value: "Leer el estado de ánimo humano" },
-      { label: "Estado actual", value: "Buscando su trono definitivo" },
-    ],
-  },
-  {
-    id: 5,
-    name: "Simba",
-    age: "4 años",
-    gender: "Macho",
-    img: "https://placecats.com/millie_neo/400/500",
-    bio: "Simba vive a tope. Cariñoso, activo y siempre dispuesto a jugar. Le encanta la gente y se adapta rápido a entornos nuevos.",
-    necesito: [
-      "Una familia activa que le dedique tiempo de juego.",
-      "Espacio para moverse y explorar.",
-      "Buena convivencia con otros animales.",
-    ],
-    superpoderes: [
-      { label: "Nivel de mimos", value: "Desbordante y sin frenos" },
-      { label: "Habilidad especial", value: "Saltar distancias imposibles" },
-      { label: "Estado actual", value: "Con energía para dar y regalar" },
-    ],
-  },
-];
+function formatAge(value) {
+  if (!value && value !== 0) return "";
+  if (typeof value === "number") return value === 1 ? "1 año" : `${value} años`;
+  return String(value);
+}
+
+function mapSuperpowers(obj) {
+  if (!obj) return [
+    { label: "Nivel de mimos", value: "" },
+    { label: "Habilidad especial", value: "" },
+    { label: "Estado actual", value: "" },
+  ];
+  return [
+    { label: "Nivel de mimos", value: obj.nivelMimos || obj.nivel || "" },
+    { label: "Habilidad especial", value: obj.habilidadEspecial || obj.habilidad || "" },
+    { label: "Estado actual", value: obj.estadoActual || obj.estado || "" },
+  ];
+}
 
 export default function CatProfilePage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const cat = CATS.find((c) => c.id === Number(id));
+  const [cat, setCat] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!cat) {
+  useEffect(() => {
+    let mounted = true;
+    async function loadCat() {
+      setLoading(true);
+      try {
+        const ref = doc(db, "gatos", id);
+        const snap = await getDoc(ref);
+        if (!snap.exists()) {
+          if (mounted) setCat(null);
+          return;
+        }
+        const data = snap.data() || {};
+        const mapped = {
+          id: snap.id,
+          name: data.nombre || data.name || "",
+          age: formatAge(data.edad || data.age),
+          gender: data.sexo || data.gender || "",
+          img: data.imagen || data.image || data.img || "https://placecats.com/400/500",
+          bio: data.historia || data.bio || data.descripcion || "",
+          necesito: data.necesidades || data.necesito || [],
+          superpoderes: mapSuperpowers(data.superpoderes || data.superpowers || {}),
+          adoptado: data.adoptado || false,
+        };
+
+        if (mounted) setCat(mapped);
+      } catch (err) {
+        console.error("Error loading cat:", err);
+        if (mounted) setCat(null);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+    loadCat();
+    return () => { mounted = false; };
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="catprofile">
+        <button
+          className="catprofile-close"
+          onClick={() => navigate("/nuestros-peludos")}
+          aria-label="Cerrar"
+        >
+          ✕
+        </button>
+        <div className="catprofile-img-wrap">
+          <div className="skeleton" style={{ width: 400, height: 500, borderRadius: 8 }} />
+        </div>
+        <div className="catprofile-body">
+          <div className="skeleton" style={{ height: 28, width: 200, marginBottom: 12 }} />
+          <div className="skeleton" style={{ height: 16, width: 120, marginBottom: 20 }} />
+          <div className="skeleton" style={{ height: 14, width: "100%", marginBottom: 8 }} />
+          <div className="skeleton" style={{ height: 14, width: "100%", marginBottom: 8 }} />
+        </div>
+      </div>
+    );
+  }
+
+  if (!cat || cat.adoptado) {
     return (
       <div className="catprofile-notfound">
         <p>Gato no encontrado.</p>
@@ -166,13 +154,13 @@ export default function CatProfilePage() {
         {/* CTAs */}
         <div className="catprofile-ctas">
           <a
-            href={`/contacto?tipo=adoptar&gato=${cat.name}`}
+            href={`/contacto?tipo=adoptar&gato=${encodeURIComponent(cat.name)}`}
             className="catprofile-btn catprofile-btn--adopt"
           >
             Adóptame
           </a>
           <a
-            href={`/contacto?tipo=acogida&gato=${cat.name}`}
+            href={`/contacto?tipo=acogida&gato=${encodeURIComponent(cat.name)}`}
             className="catprofile-btn catprofile-btn--foster"
           >
             Acógeme
