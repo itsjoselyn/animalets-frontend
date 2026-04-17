@@ -171,7 +171,6 @@ export default function ContactForm() {
     if (Object.keys(errs).length) {
       setErrors(errs);
       focusFirstError(errs);
-      setToast({ type: "error", text: "Por favor corrige los errores del formulario" });
       return;
     }
 
