@@ -2,9 +2,8 @@ import { useState } from "react";
 import "./PeludosHeader.css";
 import PeludosSort from "./PeludosSort";
 
-export default function PeludosHeader({ onFilter }) {
+export default function PeludosHeader({ onFilter, sortValue, onSortChange }) {
   const [sortOpen, setSortOpen] = useState(false);
-  const [sortValue, setSortValue] = useState(null);
 
   return (
     <div className="peludos-header">
@@ -27,7 +26,7 @@ export default function PeludosHeader({ onFilter }) {
             isOpen={sortOpen}
             onClose={() => setSortOpen(false)}
             value={sortValue}
-            onChange={setSortValue}
+            onChange={onSortChange}
           />
         </div>
 

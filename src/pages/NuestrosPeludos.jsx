@@ -5,16 +5,22 @@ import CatGrid from "../components/nuestrosPeludos/CatGrid";
 
 export default function NuestrosPeludos() {
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [filters, setFilters] = useState({ ageRange: [0, 25], sexo: { macho: false, hembra: false } });
+  const [sortValue, setSortValue] = useState(null);
 
   return (
     <>
-      <PeludosHeader onFilter={() => setFiltersOpen(true)} />
+      <PeludosHeader
+        onFilter={() => setFiltersOpen(true)}
+        sortValue={sortValue}
+        onSortChange={setSortValue}
+      />
       <PeludosFilters
         isOpen={filtersOpen}
         onClose={() => setFiltersOpen(false)}
-        onApply={(f) => console.log(f)}
+        onApply={(f) => { setFilters(f); setFiltersOpen(false); }}
       />
-      <CatGrid />
+      <CatGrid filters={filters} sortValue={sortValue} />
     </>
   );
 }

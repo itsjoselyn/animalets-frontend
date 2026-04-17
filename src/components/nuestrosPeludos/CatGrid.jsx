@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import CatCard from "./CatCard";
 import "./CatGrid.css";
 import { collection, getDocs } from "firebase/firestore";
@@ -53,9 +53,9 @@ function mapSuperpowers(obj) {
   ];
 }
 
-export default function CatGrid() {
+export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: false, hembra: false } }, sortValue = null }) {
   const [visible, setVisible] = useState(PAGE_SIZE);
-  const [cats, setCats] = useState([]);
+  const [allCats, setAllCats] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -68,10 +68,14 @@ export default function CatGrid() {
         const docs = snapshot.docs
           .map((doc, idx) => {
             const data = doc.data() || {};
+            const rawAge = data.edad ?? data.age ?? null;
+            const ageValue = typeof rawAge === "number" ? rawAge : parseInt(String(rawAge || ""), 10) || 0;
             return {
               id: doc.id,
               name: data.nombre || data.name || `Gato ${idx + 1}`,
-              age: formatAge(data.edad || data.age),
+              age: formatAge(ageValue ?? rawAge),
+              ageValue,
+              origIndex: idx,
               gender: data.sexo || data.gender || "",
               img: data.imagen || data.image || data.img || "https://placecats.com/300/400",
               status: data.apadrinado ? "Apadrinado" : null,
@@ -86,12 +90,12 @@ export default function CatGrid() {
           .filter((c) => !c.adoptado);
 
         if (mounted) {
-          if (docs.length > 0) setCats(docs);
-          else setCats(CATS_DATA);
+          if (docs.length > 0) setAllCats(docs);
+          else setAllCats(CATS_DATA.map((c, i) => ({ ...c, ageValue: typeof c.age === "number" ? c.age : parseInt(String(c.age || ""), 10) || 0, origIndex: i })));
         }
       } catch (err) {
         console.error("Error cargando gatos desde Firestore:", err);
-        if (mounted) setCats(CATS_DATA);
+        if (mounted) setAllCats(CATS_DATA.map((c, i) => ({ ...c, ageValue: typeof c.age === "number" ? c.age : parseInt(String(c.age || ""), 10) || 0, origIndex: i })));
       } finally {
         if (mounted) setLoading(false);
       }
@@ -100,8 +104,44 @@ export default function CatGrid() {
     return () => { mounted = false; };
   }, []);
 
-  const total = cats.length;
-  const shown = cats.slice(0, visible);
+  const processed = useMemo(() => {
+    const maleRe = /(macho|male)/i;
+    const femaleRe = /(hembra|female)/i;
+    let arr = Array.isArray(allCats) ? allCats.slice() : [];
+
+    // Apply filters
+    if (filters) {
+      const [minAge, maxAge] = filters.ageRange ?? [0, 25];
+      const sexo = filters.sexo ?? { macho: false, hembra: false };
+      arr = arr.filter((c) => {
+        const a = c.ageValue ?? (typeof c.age === "number" ? c.age : parseInt(String(c.age || ""), 10) || 0);
+        if (a < minAge || a > maxAge) return false;
+        if (sexo.macho && !sexo.hembra) return maleRe.test(String(c.gender || ""));
+        if (!sexo.macho && sexo.hembra) return femaleRe.test(String(c.gender || ""));
+        return true;
+      });
+    }
+
+    // Apply sort/filter shortcuts
+    if (sortValue === "age_asc") {
+      arr.sort((a, b) => (a.ageValue || 0) - (b.ageValue || 0));
+    } else if (sortValue === "age_desc") {
+      arr.sort((a, b) => (b.ageValue || 0) - (a.ageValue || 0));
+    } else if (sortValue === "macho" || sortValue === "hembra") {
+      const isMaleSort = sortValue === "macho";
+      arr.sort((a, b) => {
+        const aMatch = isMaleSort ? /(macho|male)/i.test(String(a.gender || "")) : /(hembra|female)/i.test(String(a.gender || ""));
+        const bMatch = isMaleSort ? /(macho|male)/i.test(String(b.gender || "")) : /(hembra|female)/i.test(String(b.gender || ""));
+        if (aMatch === bMatch) return (a.origIndex ?? 0) - (b.origIndex ?? 0);
+        return aMatch ? -1 : 1;
+      });
+    }
+
+    return arr;
+  }, [allCats, filters, sortValue]);
+
+  const total = processed.length;
+  const shown = processed.slice(0, visible);
   const hasMore = visible < total;
   const progress = total > 0 ? Math.round((shown.length / total) * 100) : 0;
 
@@ -128,7 +168,7 @@ export default function CatGrid() {
       {!loading && (
         <div className="cat-grid-footer">
           <p className="cat-grid-count">
-            Mostrando {shown.length} de {cats.length} resultados
+            Mostrando {shown.length} de {processed.length} resultados
           </p>
           <div className="cat-grid-progress-bar">
             <div
@@ -139,7 +179,7 @@ export default function CatGrid() {
           {hasMore && (
             <button
               className="cat-grid-more-btn"
-              onClick={() => setVisible((v) => Math.min(v + PAGE_SIZE, cats.length))}
+              onClick={() => setVisible((v) => Math.min(v + PAGE_SIZE, processed.length))}
             >
               Mostrar más
             </button>

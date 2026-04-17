@@ -23,6 +23,9 @@ export default function App() {
         {/* Testimonio — sin navbar ni footer */}
         <Route path="/testimonios/:id" element={<TestimonioPage />} />
 
+        {/* Privacidad sin layout (para modal/iframe) */}
+        <Route path="/privacidad-bare" element={<PrivacidadPage />} />
+
         {/* Card de cada gato individual*/}
         <Route path="/nuestros-peludos/:id" element={<CatProfilePage />} />
 
