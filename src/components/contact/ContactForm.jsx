@@ -31,6 +31,7 @@ const initialFormState = {
   tareas: [],
   tareasOtros: "",
   experienciaVol: "",
+  tieneExperienciaAnimales: "",
   gatoAcogida: "",
   tipoHogar: "",
   personasCasa: "",
@@ -42,7 +43,10 @@ const initialFormState = {
   tipoAportacion: "",
   cantidadAportacion: "",
   gatoEnMente: "",
-  tipoVivienda: "",
+  tipoVivienda: [],
+  tieneAnimalesCasa: "",
+  hayPersonasCasa: "",
+  tieneExperienciaGatos: "",
   animalesActuales: [],
   animalesActualesTexto: "",
   personasAdoptar: "",
@@ -91,6 +95,21 @@ export default function ContactForm() {
     });
   };
 
+  const toggleMax = (field, value, max) => {
+    const arr = form[field] || [];
+    if (arr.includes(value)) {
+      setForm((p) => ({ ...p, [field]: arr.filter((x) => x !== value) }));
+      setErrors((e) => { const ne = { ...e }; delete ne[field]; return ne; });
+      return;
+    }
+    if (arr.length >= max) {
+      setErrors((e) => ({ ...e, [field]: `Selecciona como máximo ${max} opciones` }));
+      return;
+    }
+    setForm((p) => ({ ...p, [field]: [...arr, value] }));
+    setErrors((e) => { const ne = { ...e }; delete ne[field]; return ne; });
+  };
+
   const clearError = (k) => setErrors((e) => { const ne = { ...e }; delete ne[k]; return ne; });
 
   const validateAll = () => {
@@ -100,7 +119,9 @@ export default function ContactForm() {
     if (!form.correo || !/^\S+@\S+\.\S+$/.test(form.correo)) e.correo = "Introduce un correo válido";
     if (form.telefono) {
       const telDigits = String(form.telefono).replace(/\D/g, '');
-      if (!/^\d{7,15}$/.test(telDigits)) e.telefono = "Introduce un número de teléfono válido (7-15 dígitos)";
+      if (!/^[6-9]\d{8}$/.test(telDigits)) {
+        e.telefono = "Introduce un teléfono español válido";
+      }
     }
     // `mensaje` obligatorio solo si la consulta es 'otros'. En otros casos es opcional pero se valida si se escribe.
     if (tipo === "otros") {
@@ -110,22 +131,51 @@ export default function ContactForm() {
     }
     if (!privacidad) e.privacidad = "Debes aceptar la política de privacidad";
     if (!tipo) e.tipo = "Selecciona el tipo de consulta";
-    if (!form.edad && tipo !== "otros") {
+    if (!form.edad) {
       e.edad = "Indica la edad";
-    } else if (form.edad) {
+    } else {
       const ageNum = Number(form.edad);
-      if (!Number.isInteger(ageNum) || ageNum < 0) e.edad = "La edad debe ser un número entero no negativo";
+      if (!Number.isInteger(ageNum) || ageNum < 18) e.edad = "Debes ser mayor de edad (18+) para realizar una consulta";
     }
 
     if (tipo === "voluntario") {
       if (!form.disponibilidad || form.disponibilidad.length === 0) e.disponibilidad = "Indica tu disponibilidad";
       if (!form.tareas || form.tareas.length === 0) e.tareas = "Selecciona al menos una tarea";
       if (form.tareas.includes("Otros") && !form.tareasOtros) e.tareasOtros = "Especifica otras tareas";
+      if (form.tieneExperienciaAnimales === "" || form.tieneExperienciaAnimales === undefined) {
+        e.tieneExperienciaAnimales = "Indica si tienes experiencia previa con animales";
+      } else if (form.tieneExperienciaAnimales === "si") {
+        if (!form.experienciaVol || form.experienciaVol.trim().length < 5) e.experienciaVol = "Cuéntanos un poco tu experiencia (mínimo 5 caracteres)";
+      }
     }
 
     if (tipo === "acogida") {
-      if (!form.tipoHogar) e.tipoHogar = "Selecciona el tipo de hogar";
-      if (!form.personasCasa) e.personasCasa = "Indica las personas en casa";
+      if (!form.tipoVivienda || form.tipoVivienda.length === 0) e.tipoVivienda = "Selecciona el tipo de vivienda";
+      else if (form.tipoVivienda.length > 2) e.tipoVivienda = "Selecciona como máximo 2 opciones";
+
+      if (form.tieneAnimalesCasa === "" || form.tieneAnimalesCasa === undefined) {
+        e.tieneAnimalesCasa = "Indica si tienes animales en casa";
+      } else if (form.tieneAnimalesCasa === "si") {
+        if (!form.animalesActuales || form.animalesActuales.length === 0) e.animalesActuales = "Selecciona los animales en casa";
+        if (form.animalesActuales && form.animalesActuales.includes("Otros")) {
+          const text = String(form.animalesActualesTexto || "").trim();
+          const letters = (text.match(/[A-Za-zÁÉÍÓÚáéíóúÑñÜü]/g) || []).length;
+          if (letters < 3) e.animalesActualesTexto = "Especifica los otros animales (mínimo 3 letras)";
+        }
+      }
+
+      if (form.hayPersonasCasa === "" || form.hayPersonasCasa === undefined) {
+        e.hayPersonasCasa = "Indica si hay otras personas en casa";
+      } else if (form.hayPersonasCasa === "si") {
+        if (!form.personasAdoptar || form.personasAdoptar.trim().length < 5) e.personasAdoptar = "Especifica cuántas personas y sus edades (mínimo 5 caracteres)";
+      }
+
+      if (form.tieneExperienciaGatos === "" || form.tieneExperienciaGatos === undefined) {
+        e.tieneExperienciaGatos = "Indica si tienes experiencia previa con gatos";
+      } else if (form.tieneExperienciaGatos === "si") {
+        if (!form.experienciaAdoptar || form.experienciaAdoptar.trim().length < 5) e.experienciaAdoptar = "Cuéntanos un poco de tu experiencia (mínimo 5 caracteres)";
+      }
+
       if (!form.tiempoAcogida) e.tiempoAcogida = "Indica el tiempo de acogida";
     }
 
@@ -143,8 +193,31 @@ export default function ContactForm() {
     }
 
     if (tipo === "adoptar") {
-      if (!form.tipoVivienda) e.tipoVivienda = "Selecciona el tipo de vivienda";
-      if (!form.personasAdoptar) e.personasAdoptar = "Indica las personas en casa";
+      if (!form.tipoVivienda || form.tipoVivienda.length === 0) e.tipoVivienda = "Selecciona el tipo de vivienda";
+      else if (form.tipoVivienda.length > 2) e.tipoVivienda = "Selecciona como máximo 2 opciones";
+
+      if (form.tieneAnimalesCasa === "" || form.tieneAnimalesCasa === undefined) {
+        e.tieneAnimalesCasa = "Indica si tienes animales en casa";
+      } else if (form.tieneAnimalesCasa === "si") {
+        if (!form.animalesActuales || form.animalesActuales.length === 0) e.animalesActuales = "Selecciona los animales en casa";
+        if (form.animalesActuales && form.animalesActuales.includes("Otros")) {
+          const text = String(form.animalesActualesTexto || "").trim();
+          const letters = (text.match(/[A-Za-zÁÉÍÓÚáéíóúÑñÜü]/g) || []).length;
+          if (letters < 3) e.animalesActualesTexto = "Especifica los otros animales (mínimo 3 letras)";
+        }
+      }
+
+      if (form.hayPersonasCasa === "" || form.hayPersonasCasa === undefined) {
+        e.hayPersonasCasa = "Indica si hay otras personas en casa";
+      } else if (form.hayPersonasCasa === "si") {
+        if (!form.personasAdoptar || form.personasAdoptar.trim().length < 5) e.personasAdoptar = "Especifica cuántas personas y sus edades (mínimo 5 caracteres)";
+      }
+
+      if (form.tieneExperienciaGatos === "" || form.tieneExperienciaGatos === undefined) {
+        e.tieneExperienciaGatos = "Indica si tienes experiencia previa con gatos";
+      } else if (form.tieneExperienciaGatos === "si") {
+        if (!form.experienciaAdoptar || form.experienciaAdoptar.trim().length < 5) e.experienciaAdoptar = "Cuéntanos un poco de tu experiencia (mínimo 5 caracteres)";
+      }
     }
 
     return e;
@@ -250,14 +323,16 @@ export default function ContactForm() {
         <input data-field="edad" className={`cform-input${errors.edad ? ' cform-input--error' : ''}`} type="number" min="0" placeholder="Edad *" value={form.edad} onChange={(e) => setField("edad", e.target.value)} />
         {errors.edad && <p className="cform-field-error">{errors.edad}</p>}
 
+        <p className="cform-sublabel">¿Cuál es tu consulta? *</p>
         <select data-field="tipo" className={`cform-select${errors.tipo ? ' cform-select--error' : ''}`} value={tipo} onChange={(e) => handleTipoChange(e.target.value)}>
-          <option value="" disabled hidden>¿Cuál es tu consulta?</option>
+          <option value="" disabled hidden>Elige una opción</option>
           {TIPOS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
         </select>
         {errors.tipo && <p className="cform-field-error">{errors.tipo}</p>}
 
+        <p className="cform-sublabel">¿Cómo nos conociste?</p>
         <select data-field="conocido" className="cform-select" value={form.conocido} onChange={(e) => setField("conocido", e.target.value)}>
-          <option value="" disabled hidden>¿Cómo nos conociste?</option>
+          <option value="" disabled hidden>Elige una opción</option>
           {CONOCIDO.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
         </select>
 
@@ -299,7 +374,25 @@ export default function ContactForm() {
               </>
             )}
 
-            <textarea className="cform-textarea" placeholder="¿Tienes experiencia previa con animales?" value={form.experienciaVol} onChange={(e) => setField("experienciaVol", e.target.value)} rows={3} />
+            <p className="cform-sublabel">¿Tienes experiencia previa con animales? *</p>
+            <div data-field="tieneExperienciaAnimales" className={`cform-radios${errors.tieneExperienciaAnimales ? ' cform-radios--error' : ''}`}>
+              <label className="cform-check">
+                <input type="radio" name="tieneExperienciaAnimales" checked={form.tieneExperienciaAnimales === 'si'} onChange={() => { setField('tieneExperienciaAnimales', 'si'); }} />
+                <span className="cform-check-box" /> Sí
+              </label>
+              <label className="cform-check">
+                <input type="radio" name="tieneExperienciaAnimales" checked={form.tieneExperienciaAnimales === 'no'} onChange={() => { setField('tieneExperienciaAnimales', 'no'); setField('experienciaVol', ''); }} />
+                <span className="cform-check-box" /> No
+              </label>
+            </div>
+            {errors.tieneExperienciaAnimales && <p className="cform-field-error">{errors.tieneExperienciaAnimales}</p>}
+
+            {form.tieneExperienciaAnimales === 'si' && (
+              <>
+                <textarea data-field="experienciaVol" className={`cform-textarea${errors.experienciaVol ? ' cform-textarea--error' : ''}`} placeholder="Cuéntanos un poco tu experiencia *" value={form.experienciaVol} onChange={(e) => setField("experienciaVol", e.target.value)} rows={3} />
+                {errors.experienciaVol && <p className="cform-field-error">{errors.experienciaVol}</p>}
+              </>
+            )}
           </fieldset>
         )}
 
@@ -307,31 +400,95 @@ export default function ContactForm() {
         {tipo === "acogida" && (
           <fieldset className="cform-fieldset">
             <legend className="cform-legend">Casa de acogida</legend>
-            <input data-field="gatoAcogida" className="cform-input" type="text" placeholder="¿Tienes ya un gato en mente?" value={form.gatoAcogida} onChange={(e) => setField("gatoAcogida", e.target.value)} />
-            <select data-field="tipoHogar" className={`cform-select${errors.tipoHogar ? ' cform-select--error' : ''}`} value={form.tipoHogar} onChange={(e) => setField("tipoHogar", e.target.value)}>
-              <option value="">Tipo de hogar *</option>
-              {["Piso", "Casa", "Con terraza", "Con patio"].map((v) => <option key={v} value={v}>{v}</option>)}
-            </select>
-            {errors.tipoHogar && <p className="cform-field-error">{errors.tipoHogar}</p>}
-            <input data-field="personasCasa" className={`cform-input${errors.personasCasa ? ' cform-input--error' : ''}`} type="text" placeholder="Personas en casa (adultos, niños y edades) *" value={form.personasCasa} onChange={(e) => setField("personasCasa", e.target.value)} />
-            {errors.personasCasa && <p className="cform-field-error">{errors.personasCasa}</p>}
-            <p className="cform-sublabel">Animales en casa</p>
-            <div className="cform-checks">
-              {["Perros", "Gatos", "Otros"].map((v) => (
+            <input data-field="gatoEnMente" className="cform-input" type="text" placeholder="¿Tienes ya un gato en mente?" value={form.gatoEnMente} onChange={(e) => setField("gatoEnMente", e.target.value)} />
+
+            <p className="cform-sublabel">Tipo de vivienda (elige 1-2) *</p>
+            <div data-field="tipoVivienda" className={`cform-checks${errors.tipoVivienda ? ' cform-checks--error' : ''}`}>
+              {["Piso", "Casa", "Con terraza", "Con patio"].map((v) => (
                 <label key={v} className="cform-check">
-                  <input type="checkbox" checked={form.animalesCasa.includes(v)} onChange={() => toggleArr("animalesCasa", v)} />
+                  <input type="checkbox" checked={form.tipoVivienda.includes(v)} onChange={() => toggleMax("tipoVivienda", v, 2)} />
                   <span className="cform-check-box" />
                   {v}
                 </label>
               ))}
             </div>
-            <input data-field="animalesTexto" className="cform-input" type="text" placeholder="Especifica si hay otros animales" value={form.animalesTexto} onChange={(e) => setField("animalesTexto", e.target.value)} />
+            {errors.tipoVivienda && <p className="cform-field-error">{errors.tipoVivienda}</p>}
+
+            <p className="cform-sublabel">¿Tienes animales en casa? *</p>
+            <div data-field="tieneAnimalesCasa" className={`cform-radios${errors.tieneAnimalesCasa ? ' cform-radios--error' : ''}`}>
+              <label className="cform-check">
+                <input type="radio" name="tieneAnimalesCasa" checked={form.tieneAnimalesCasa === 'si'} onChange={() => { setField('tieneAnimalesCasa', 'si'); }} />
+                <span className="cform-check-box" /> Sí
+              </label>
+              <label className="cform-check">
+                <input type="radio" name="tieneAnimalesCasa" checked={form.tieneAnimalesCasa === 'no'} onChange={() => { setField('tieneAnimalesCasa', 'no'); setField('animalesActuales', []); setField('animalesActualesTexto', ''); }} />
+                <span className="cform-check-box" /> No
+              </label>
+            </div>
+            {errors.tieneAnimalesCasa && <p className="cform-field-error">{errors.tieneAnimalesCasa}</p>}
+
+            {form.tieneAnimalesCasa === 'si' && (
+              <>
+                <p className="cform-sublabel">Animales actuales en casa *</p>
+                <div data-field="animalesActuales" className={`cform-checks${errors.animalesActuales ? ' cform-checks--error' : ''}`}>
+                  {["Perros", "Gatos", "Otros"].map((v) => (
+                    <label key={v} className="cform-check">
+                      <input type="checkbox" checked={form.animalesActuales.includes(v)} onChange={() => toggleArr("animalesActuales", v)} />
+                      <span className="cform-check-box" />
+                      {v}
+                    </label>
+                  ))}
+                </div>
+                {errors.animalesActuales && <p className="cform-field-error">{errors.animalesActuales}</p>}
+                {form.animalesActuales.includes('Otros') && (
+                  <input data-field="animalesActualesTexto" className={`cform-input${errors.animalesActualesTexto ? ' cform-input--error' : ''}`} type="text" placeholder="Especifica si hay otros animales *" value={form.animalesActualesTexto} onChange={(e) => setField("animalesActualesTexto", e.target.value)} />
+                )}
+                {errors.animalesActualesTexto && <p className="cform-field-error">{errors.animalesActualesTexto}</p>}
+              </>
+            )}
+
+            <p className="cform-sublabel">¿Hay otras personas en casa? *</p>
+            <div data-field="hayPersonasCasa" className={`cform-radios${errors.hayPersonasCasa ? ' cform-radios--error' : ''}`}>
+              <label className="cform-check">
+                <input type="radio" name="hayPersonasCasa" checked={form.hayPersonasCasa === 'si'} onChange={() => { setField('hayPersonasCasa', 'si'); }} />
+                <span className="cform-check-box" /> Sí
+              </label>
+              <label className="cform-check">
+                <input type="radio" name="hayPersonasCasa" checked={form.hayPersonasCasa === 'no'} onChange={() => { setField('hayPersonasCasa', 'no'); setField('personasAdoptar', ''); }} />
+                <span className="cform-check-box" /> No
+              </label>
+            </div>
+            {errors.hayPersonasCasa && <p className="cform-field-error">{errors.hayPersonasCasa}</p>}
+
+            {form.hayPersonasCasa === 'si' && (
+              <input data-field="personasAdoptar" className={`cform-input${errors.personasAdoptar ? ' cform-input--error' : ''}`} type="text" placeholder="Especifica cuántas personas y sus edades *" value={form.personasAdoptar} onChange={(e) => setField("personasAdoptar", e.target.value)} />
+            )}
+            {errors.personasAdoptar && <p className="cform-field-error">{errors.personasAdoptar}</p>}
+
+            <p className="cform-sublabel">¿Tienes experiencia previa con gatos? *</p>
+            <div data-field="tieneExperienciaGatos" className={`cform-radios${errors.tieneExperienciaGatos ? ' cform-radios--error' : ''}`}>
+              <label className="cform-check">
+                <input type="radio" name="tieneExperienciaGatos" checked={form.tieneExperienciaGatos === 'si'} onChange={() => { setField('tieneExperienciaGatos', 'si'); }} />
+                <span className="cform-check-box" /> Sí
+              </label>
+              <label className="cform-check">
+                <input type="radio" name="tieneExperienciaGatos" checked={form.tieneExperienciaGatos === 'no'} onChange={() => { setField('tieneExperienciaGatos', 'no'); setField('experienciaAdoptar', ''); }} />
+                <span className="cform-check-box" /> No
+              </label>
+            </div>
+            {errors.tieneExperienciaGatos && <p className="cform-field-error">{errors.tieneExperienciaGatos}</p>}
+
+            {form.tieneExperienciaGatos === 'si' && (
+              <textarea data-field="experienciaAdoptar" className={`cform-textarea${errors.experienciaAdoptar ? ' cform-textarea--error' : ''}`} placeholder="Cuéntanos un poco de tu experiencia *" value={form.experienciaAdoptar} onChange={(e) => setField("experienciaAdoptar", e.target.value)} rows={3} />
+            )}
+            {errors.experienciaAdoptar && <p className="cform-field-error">{errors.experienciaAdoptar}</p>}
+
+            <p className="cform-sublabel">Tiempo de acogida que puedes ofrecer *</p>
             <select data-field="tiempoAcogida" className={`cform-select${errors.tiempoAcogida ? ' cform-select--error' : ''}`} value={form.tiempoAcogida} onChange={(e) => setField("tiempoAcogida", e.target.value)}>
-              <option value="">Tiempo de acogida que puedes ofrecer *</option>
+              <option value="" disabled hidden>Elige una opción</option>
               {["Menos de 1 mes", "1-3 meses", "Indefinido"].map((v) => <option key={v} value={v}>{v}</option>)}
             </select>
             {errors.tiempoAcogida && <p className="cform-field-error">{errors.tiempoAcogida}</p>}
-            <textarea className="cform-textarea" placeholder="Experiencia previa acogiendo o conviviendo con gatos" value={form.experienciaAcogida} onChange={(e) => setField("experienciaAcogida", e.target.value)} rows={3} />
           </fieldset>
         )}
 
@@ -341,6 +498,7 @@ export default function ContactForm() {
             <legend className="cform-legend">Apadrinar un gato</legend>
             <input data-field="nombreGato" className={`cform-input${errors.nombreGato ? ' cform-input--error' : ''}`} type="text" placeholder="Nombre del gato a apadrinar *" value={form.nombreGato} onChange={(e) => setField("nombreGato", e.target.value)} />
             {errors.nombreGato && <p className="cform-field-error">{errors.nombreGato}</p>}
+            <p className="cform-sublabel">Tipo de aportación *</p>
             <select
               data-field="tipoAportacion"
               className={`cform-select${errors.tipoAportacion ? ' cform-select--error' : ''}`}
@@ -351,7 +509,7 @@ export default function ContactForm() {
                 if (v !== "otra") setField("cantidadAportacion", "");
               }}
             >
-              <option value="">Tipo de aportación *</option>
+              <option value="" disabled hidden>Elige una opción</option>
               <option value="10">10€/mes</option>
               <option value="otra">Otra cantidad</option>
             </select>
@@ -380,25 +538,87 @@ export default function ContactForm() {
           <fieldset className="cform-fieldset">
             <legend className="cform-legend">Adopción</legend>
             <input data-field="gatoEnMente" className="cform-input" type="text" placeholder="¿Tienes ya un gato en mente?" value={form.gatoEnMente} onChange={(e) => setField("gatoEnMente", e.target.value)} />
-            <select data-field="tipoVivienda" className={`cform-select${errors.tipoVivienda ? ' cform-select--error' : ''}`} value={form.tipoVivienda} onChange={(e) => setField("tipoVivienda", e.target.value)}>
-              <option value="">Tipo de vivienda *</option>
-              {["Piso", "Casa", "Con terraza", "Con patio"].map((v) => <option key={v} value={v}>{v}</option>)}
-            </select>
-            {errors.tipoVivienda && <p className="cform-field-error">{errors.tipoVivienda}</p>}
-            <p className="cform-sublabel">Animales actuales en casa</p>
-            <div className="cform-checks">
-              {["Perros", "Gatos", "Otros"].map((v) => (
+
+            <p className="cform-sublabel">Tipo de vivienda (elige 1-2) *</p>
+            <div data-field="tipoVivienda" className={`cform-checks${errors.tipoVivienda ? ' cform-checks--error' : ''}`}>
+              {["Piso", "Casa", "Con terraza", "Con patio"].map((v) => (
                 <label key={v} className="cform-check">
-                  <input type="checkbox" checked={form.animalesActuales.includes(v)} onChange={() => toggleArr("animalesActuales", v)} />
+                  <input type="checkbox" checked={form.tipoVivienda.includes(v)} onChange={() => toggleMax("tipoVivienda", v, 2)} />
                   <span className="cform-check-box" />
                   {v}
                 </label>
               ))}
             </div>
-            <input data-field="animalesActualesTexto" className="cform-input" type="text" placeholder="Especifica si hay otros animales" value={form.animalesActualesTexto} onChange={(e) => setField("animalesActualesTexto", e.target.value)} />
-            <input data-field="personasAdoptar" className={`cform-input${errors.personasAdoptar ? ' cform-input--error' : ''}`} type="text" placeholder="Personas en casa (adultos, niños y edades) *" value={form.personasAdoptar} onChange={(e) => setField("personasAdoptar", e.target.value)} />
+            {errors.tipoVivienda && <p className="cform-field-error">{errors.tipoVivienda}</p>}
+
+            <p className="cform-sublabel">¿Tienes animales en casa? *</p>
+            <div data-field="tieneAnimalesCasa" className={`cform-radios${errors.tieneAnimalesCasa ? ' cform-radios--error' : ''}`}>
+              <label className="cform-check">
+                <input type="radio" name="tieneAnimalesCasa" checked={form.tieneAnimalesCasa === 'si'} onChange={() => { setField('tieneAnimalesCasa', 'si'); }} />
+                <span className="cform-check-box" /> Sí
+              </label>
+              <label className="cform-check">
+                <input type="radio" name="tieneAnimalesCasa" checked={form.tieneAnimalesCasa === 'no'} onChange={() => { setField('tieneAnimalesCasa', 'no'); setField('animalesActuales', []); setField('animalesActualesTexto', ''); }} />
+                <span className="cform-check-box" /> No
+              </label>
+            </div>
+            {errors.tieneAnimalesCasa && <p className="cform-field-error">{errors.tieneAnimalesCasa}</p>}
+
+            {form.tieneAnimalesCasa === 'si' && (
+              <>
+                <p className="cform-sublabel">Animales actuales en casa *</p>
+                <div data-field="animalesActuales" className={`cform-checks${errors.animalesActuales ? ' cform-checks--error' : ''}`}>
+                  {["Perros", "Gatos", "Otros"].map((v) => (
+                    <label key={v} className="cform-check">
+                      <input type="checkbox" checked={form.animalesActuales.includes(v)} onChange={() => toggleArr("animalesActuales", v)} />
+                      <span className="cform-check-box" />
+                      {v}
+                    </label>
+                  ))}
+                </div>
+                {errors.animalesActuales && <p className="cform-field-error">{errors.animalesActuales}</p>}
+                {form.animalesActuales.includes('Otros') && (
+                  <input data-field="animalesActualesTexto" className={`cform-input${errors.animalesActualesTexto ? ' cform-input--error' : ''}`} type="text" placeholder="Especifica si hay otros animales *" value={form.animalesActualesTexto} onChange={(e) => setField("animalesActualesTexto", e.target.value)} />
+                )}
+                {errors.animalesActualesTexto && <p className="cform-field-error">{errors.animalesActualesTexto}</p>}
+              </>
+            )}
+
+            <p className="cform-sublabel">¿Hay otras personas en casa? *</p>
+            <div data-field="hayPersonasCasa" className={`cform-radios${errors.hayPersonasCasa ? ' cform-radios--error' : ''}`}>
+              <label className="cform-check">
+                <input type="radio" name="hayPersonasCasa" checked={form.hayPersonasCasa === 'si'} onChange={() => { setField('hayPersonasCasa', 'si'); }} />
+                <span className="cform-check-box" /> Sí
+              </label>
+              <label className="cform-check">
+                <input type="radio" name="hayPersonasCasa" checked={form.hayPersonasCasa === 'no'} onChange={() => { setField('hayPersonasCasa', 'no'); setField('personasAdoptar', ''); }} />
+                <span className="cform-check-box" /> No
+              </label>
+            </div>
+            {errors.hayPersonasCasa && <p className="cform-field-error">{errors.hayPersonasCasa}</p>}
+
+            {form.hayPersonasCasa === 'si' && (
+              <input data-field="personasAdoptar" className={`cform-input${errors.personasAdoptar ? ' cform-input--error' : ''}`} type="text" placeholder="Especifica cuántas personas y sus edades *" value={form.personasAdoptar} onChange={(e) => setField("personasAdoptar", e.target.value)} />
+            )}
             {errors.personasAdoptar && <p className="cform-field-error">{errors.personasAdoptar}</p>}
-            <textarea className="cform-textarea" placeholder="Experiencia previa con gatos" value={form.experienciaAdoptar} onChange={(e) => setField("experienciaAdoptar", e.target.value)} rows={3} />
+
+            <p className="cform-sublabel">¿Tienes experiencia previa con gatos? *</p>
+            <div data-field="tieneExperienciaGatos" className={`cform-radios${errors.tieneExperienciaGatos ? ' cform-radios--error' : ''}`}>
+              <label className="cform-check">
+                <input type="radio" name="tieneExperienciaGatos" checked={form.tieneExperienciaGatos === 'si'} onChange={() => { setField('tieneExperienciaGatos', 'si'); }} />
+                <span className="cform-check-box" /> Sí
+              </label>
+              <label className="cform-check">
+                <input type="radio" name="tieneExperienciaGatos" checked={form.tieneExperienciaGatos === 'no'} onChange={() => { setField('tieneExperienciaGatos', 'no'); setField('experienciaAdoptar', ''); }} />
+                <span className="cform-check-box" /> No
+              </label>
+            </div>
+            {errors.tieneExperienciaGatos && <p className="cform-field-error">{errors.tieneExperienciaGatos}</p>}
+
+            {form.tieneExperienciaGatos === 'si' && (
+              <textarea data-field="experienciaAdoptar" className={`cform-textarea${errors.experienciaAdoptar ? ' cform-textarea--error' : ''}`} placeholder="Cuéntanos un poco de tu experiencia *" value={form.experienciaAdoptar} onChange={(e) => setField("experienciaAdoptar", e.target.value)} rows={3} />
+            )}
+            {errors.experienciaAdoptar && <p className="cform-field-error">{errors.experienciaAdoptar}</p>}
           </fieldset>
         )}
 
