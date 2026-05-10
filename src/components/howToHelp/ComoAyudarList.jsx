@@ -75,6 +75,18 @@ const OPTIONS = [
     ),
   },
   {
+    id: "paypal",
+    title: "PayPal",
+    icon: "◇",
+    content: (
+      <>
+        <p>Si prefieres donar mediante PayPal, puedes hacerlo de forma rápida y segura desde aquí.</p>
+        <p><strong>Nota:</strong> Selecciona "Enviar a familiares y amigos" para evitar comisiones.</p>
+        <a href={"https://www.paypal.com/donate?business=animaletslallagosta%40gmail.com&currency_code=EUR"} target="_blank" rel="noopener noreferrer" className="cayudar-btn">Donar con PayPal</a>
+      </>
+    ),
+  },
+  {
     id: "compra",
     title: "Compra solidaria",
     icon: "◇",

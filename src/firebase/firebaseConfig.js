@@ -1,7 +1,9 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, initializeFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -11,7 +13,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyCdUE9vA5isdt86WlDrFfDbYenqXETpME0",
   authDomain: "animalets-a042c.firebaseapp.com",
   projectId: "animalets-a042c",
-  storageBucket: "animalets-a042c.firebasestorage.app",
+  storageBucket: "animalets-a042c.appspot.com",
   messagingSenderId: "161692304454",
   appId: "1:161692304454:web:9cd7afd1c7fa3013ddb647",
   measurementId: "G-WJSBRYQ1JT"
@@ -21,5 +23,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
+// Initialize Firestore with a development-friendly fallback to long-polling
+// This avoids browser streaming (WebChannel) issues / CORS errors in some dev setups.
+try {
+  initializeFirestore(app, { experimentalForceLongPolling: true });
+} catch (e) {
+  // If initializeFirestore is called twice it'll throw; ignore safely
+}
+
 // Export Firestore database instance for use in the app
 export const db = getFirestore(app);
+// Export Firebase Auth instance
+export const auth = getAuth(app);
+// Export Firebase Storage instance
+export const storage = getStorage(app);

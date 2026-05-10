@@ -1,4 +1,5 @@
 import './App.css';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from './components/layout/Navbar';
 import Home from './pages/Home';
@@ -13,11 +14,16 @@ import PrivacidadPage from './pages/PrivacidadPage';
 import CatProfilePage from "./pages/CatProfilePage";
 import BlogPostPage from "./pages/BlogPostPage";
 import ScrollToTop from './components/ScrollToTop';
+import AdminLogin from './pages/admin/Login';
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminGatos from './pages/admin/Gatos';
+const GatoEditor = lazy(() => import('./pages/admin/GatoEditor'));
+import { Navigate } from 'react-router-dom';
 
 export default function App() {
   return (
     <BrowserRouter>
-    <ScrollToTop />
+      <ScrollToTop />
       <Routes>
 
         {/* Testimonio — sin navbar ni footer */}
@@ -32,6 +38,24 @@ export default function App() {
         {/* Card de cada noticia individual*/}
         <Route path="/blog/:id" element={<BlogPostPage />} />
 
+
+        {/* Admin routes (separadas del layout principal) */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Navigate to="/admin/gatos" replace />} />
+          <Route path="gatos" element={<AdminGatos />} />
+          <Route path="gatos/new" element={
+            <Suspense fallback={<div>Cargando...</div>}>
+              <GatoEditor />
+            </Suspense>
+          } />
+          <Route path="gatos/:id" element={
+            <Suspense fallback={<div>Cargando...</div>}>
+              <GatoEditor />
+            </Suspense>
+          } />
+          {/* más rutas admin se añadirán aquí */}
+        </Route>
 
         {/* Resto — con navbar y footer */}
         <Route path="/*" element={

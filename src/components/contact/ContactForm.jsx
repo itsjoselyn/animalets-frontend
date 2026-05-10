@@ -229,7 +229,7 @@ export default function ContactForm() {
     const el = formRef.current?.querySelector(`[data-field="${keys[0]}"]`);
     if (el && el.scrollIntoView) {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
-      try { el.focus(); } catch (e) {}
+      try { el.focus(); } catch (e) { }
     }
   };
 
@@ -274,16 +274,44 @@ export default function ContactForm() {
       if (!Number.isNaN(asNum)) filteredForm.cantidadAportacion = asNum;
     }
 
-    const payload = {
-      tipo,
-      privacidad,
-      ...filteredForm,
-      createdAt: serverTimestamp(),
+    const buildPayload = (tipo, filteredForm) => {
+      const payload = {};
+      payload.tipo = tipo;
+      payload.createdAt = serverTimestamp();
+      payload.estado = "nuevo";
+
+      // Basic contact fields (in requested order)
+      if (filteredForm.nombre !== undefined) payload.nombre = filteredForm.nombre;
+      if (filteredForm.correo !== undefined) payload.correo = filteredForm.correo;
+      if (filteredForm.telefono !== undefined) payload.telefono = filteredForm.telefono;
+      if (filteredForm.edad !== undefined) payload.edad = filteredForm.edad;
+
+      if (filteredForm.mensaje !== undefined) payload.mensaje = filteredForm.mensaje;
+
+      // Type-specific fields: include only the fields relevant for the selected `tipo`
+      const typeFields = {
+        voluntario: ['disponibilidad', 'tareas', 'tareasOtros', 'tieneExperienciaAnimales', 'experienciaVol'],
+        acogida: ['gatoEnMente', 'tipoVivienda', 'tieneAnimalesCasa', 'animalesActuales', 'animalesActualesTexto', 'hayPersonasCasa', 'personasAdoptar', 'tieneExperienciaGatos', 'experienciaAcogida', 'tiempoAcogida', 'tipoHogar'],
+        apadrinar: ['nombreGato', 'tipoAportacion', 'cantidadAportacion'],
+        adoptar: ['gatoEnMente', 'tipoVivienda', 'tieneAnimalesCasa', 'animalesActuales', 'animalesActualesTexto', 'hayPersonasCasa', 'personasAdoptar', 'tieneExperienciaGatos', 'experienciaAdoptar'],
+        otros: []
+      };
+
+      const fields = typeFields[tipo] || [];
+      fields.forEach((f) => {
+        if (filteredForm[f] !== undefined) payload[f] = filteredForm[f];
+      });
+
+      // Keep privacidad for records
+      payload.privacidad = privacidad;
+
+      return payload;
     };
 
     try {
+      const payload = buildPayload(tipo, filteredForm);
       await addDoc(collection(db, "contactRequests"), payload);
-      setToast({ type: "success", text: "Mensaje enviado correctamente" });
+      setToast({ type: "success", text: "¡Gracias por contactar con Animalets! Hemos recibido tu mensaje y te responderemos lo antes posible." });
       setForm(initialFormState);
       setTipo("");
       setPrivacidad(false);
@@ -294,7 +322,7 @@ export default function ContactForm() {
     } finally {
       setSending(false);
       if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
-      toastTimeoutRef.current = setTimeout(() => setToast(null), 5000);
+      toastTimeoutRef.current = setTimeout(() => setToast(null), 6000);
     }
   };
 
@@ -323,18 +351,18 @@ export default function ContactForm() {
         <input data-field="edad" className={`cform-input${errors.edad ? ' cform-input--error' : ''}`} type="number" min="0" placeholder="Edad *" value={form.edad} onChange={(e) => setField("edad", e.target.value)} />
         {errors.edad && <p className="cform-field-error">{errors.edad}</p>}
 
+        <p className="cform-sublabel">¿Cómo nos conociste?</p>
+        <select data-field="conocido" className="cform-select" value={form.conocido} onChange={(e) => setField("conocido", e.target.value)}>
+          <option value="" disabled hidden>Elige una opción</option>
+          {CONOCIDO.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
+        </select>
+
         <p className="cform-sublabel">¿Cuál es tu consulta? *</p>
         <select data-field="tipo" className={`cform-select${errors.tipo ? ' cform-select--error' : ''}`} value={tipo} onChange={(e) => handleTipoChange(e.target.value)}>
           <option value="" disabled hidden>Elige una opción</option>
           {TIPOS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
         </select>
         {errors.tipo && <p className="cform-field-error">{errors.tipo}</p>}
-
-        <p className="cform-sublabel">¿Cómo nos conociste?</p>
-        <select data-field="conocido" className="cform-select" value={form.conocido} onChange={(e) => setField("conocido", e.target.value)}>
-          <option value="" disabled hidden>Elige una opción</option>
-          {CONOCIDO.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
-        </select>
 
         <textarea data-field="mensaje" className={`cform-textarea${errors.mensaje ? ' cform-textarea--error' : ''}`} placeholder={tipo === 'otros' ? 'Cuéntanos más *' : 'Cuéntanos más'} value={form.mensaje} onChange={(e) => setField("mensaje", e.target.value)} rows={4} />
         {errors.mensaje && <p className="cform-field-error">{errors.mensaje}</p>}

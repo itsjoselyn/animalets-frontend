@@ -5,31 +5,31 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 
 const CATS_DATA = [
-  { id: 1,  name: "Steven",   age: "7 años", gender: "Macho",  img: "https://placecats.com/neo/300/400",        status: "Apadrinado" },
-  { id: 2,  name: "Luna",     age: "2 años", gender: "Hembra", img: "https://placecats.com/millie/300/400",     status: null },
-  { id: 3,  name: "Mochi",    age: "1 año",  gender: "Macho",  img: "https://placecats.com/bella/300/400",      status: null },
-  { id: 4,  name: "Nala",     age: "3 años", gender: "Hembra", img: "https://placecats.com/neo_2/300/400",      status: null },
-  { id: 5,  name: "Simba",    age: "4 años", gender: "Macho",  img: "https://placecats.com/millie_neo/300/400", status: "Apadrinado" },
-  { id: 6,  name: "Cleo",     age: "2 años", gender: "Hembra", img: "https://placecats.com/300/400",            status: null },
-  { id: 7,  name: "Tigre",    age: "5 años", gender: "Macho",  img: "https://placecats.com/neo/300/400",        status: null },
-  { id: 8,  name: "Mimi",     age: "1 año",  gender: "Hembra", img: "https://placecats.com/millie/300/400",     status: null },
-  { id: 9,  name: "Garfield", age: "6 años", gender: "Macho",  img: "https://placecats.com/bella/300/400",      status: null },
-  { id: 10, name: "Perla",    age: "2 años", gender: "Hembra", img: "https://placecats.com/neo_2/300/400",      status: null },
-  { id: 11, name: "Rocky",    age: "3 años", gender: "Macho",  img: "https://placecats.com/millie_neo/300/400", status: null },
-  { id: 12, name: "Isis",     age: "4 años", gender: "Hembra", img: "https://placecats.com/300/400",            status: "Apadrinado" },
-  { id: 13, name: "Kiko",     age: "1 año",  gender: "Macho",  img: "https://placecats.com/neo/300/400",        status: null },
-  { id: 14, name: "Mora",     age: "2 años", gender: "Hembra", img: "https://placecats.com/millie/300/400",     status: null },
-  { id: 15, name: "Bruno",    age: "5 años", gender: "Macho",  img: "https://placecats.com/bella/300/400",      status: null },
-  { id: 16, name: "Lola",     age: "3 años", gender: "Hembra", img: "https://placecats.com/neo_2/300/400",      status: null },
-  { id: 17, name: "Paco",     age: "7 años", gender: "Macho",  img: "https://placecats.com/millie_neo/300/400", status: null },
-  { id: 18, name: "Nina",     age: "1 año",  gender: "Hembra", img: "https://placecats.com/300/400",            status: null },
-  { id: 19, name: "Max",      age: "4 años", gender: "Macho",  img: "https://placecats.com/neo/300/400",        status: null },
-  { id: 20, name: "Tina",     age: "2 años", gender: "Hembra", img: "https://placecats.com/millie/300/400",     status: "Apadrinado" },
-  { id: 21, name: "Thor",     age: "3 años", gender: "Macho",  img: "https://placecats.com/bella/300/400",      status: null },
-  { id: 22, name: "Gala",     age: "6 años", gender: "Hembra", img: "https://placecats.com/neo_2/300/400",      status: null },
-  { id: 23, name: "Nano",     age: "1 año",  gender: "Macho",  img: "https://placecats.com/millie_neo/300/400", status: null },
-  { id: 24, name: "Vera",     age: "5 años", gender: "Hembra", img: "https://placecats.com/300/400",            status: null },
-  { id: 25, name: "Leo",      age: "2 años", gender: "Macho",  img: "https://placecats.com/neo/300/400",        status: null },
+  { id: 1, name: "Steven", age: "7 años", gender: "Macho", img: "https://placecats.com/neo/300/400", status: "Apadrinado" },
+  { id: 2, name: "Luna", age: "2 años", gender: "Hembra", img: "https://placecats.com/millie/300/400", status: null },
+  { id: 3, name: "Mochi", age: "1 año", gender: "Macho", img: "https://placecats.com/bella/300/400", status: null },
+  { id: 4, name: "Nala", age: "3 años", gender: "Hembra", img: "https://placecats.com/neo_2/300/400", status: null },
+  { id: 5, name: "Simba", age: "4 años", gender: "Macho", img: "https://placecats.com/millie_neo/300/400", status: "Apadrinado" },
+  { id: 6, name: "Cleo", age: "2 años", gender: "Hembra", img: "https://placecats.com/300/400", status: null },
+  { id: 7, name: "Tigre", age: "5 años", gender: "Macho", img: "https://placecats.com/neo/300/400", status: null },
+  { id: 8, name: "Mimi", age: "1 año", gender: "Hembra", img: "https://placecats.com/millie/300/400", status: null },
+  { id: 9, name: "Garfield", age: "6 años", gender: "Macho", img: "https://placecats.com/bella/300/400", status: null },
+  { id: 10, name: "Perla", age: "2 años", gender: "Hembra", img: "https://placecats.com/neo_2/300/400", status: null },
+  { id: 11, name: "Rocky", age: "3 años", gender: "Macho", img: "https://placecats.com/millie_neo/300/400", status: null },
+  { id: 12, name: "Isis", age: "4 años", gender: "Hembra", img: "https://placecats.com/300/400", status: "Apadrinado" },
+  { id: 13, name: "Kiko", age: "1 año", gender: "Macho", img: "https://placecats.com/neo/300/400", status: null },
+  { id: 14, name: "Mora", age: "2 años", gender: "Hembra", img: "https://placecats.com/millie/300/400", status: null },
+  { id: 15, name: "Bruno", age: "5 años", gender: "Macho", img: "https://placecats.com/bella/300/400", status: null },
+  { id: 16, name: "Lola", age: "3 años", gender: "Hembra", img: "https://placecats.com/neo_2/300/400", status: null },
+  { id: 17, name: "Paco", age: "7 años", gender: "Macho", img: "https://placecats.com/millie_neo/300/400", status: null },
+  { id: 18, name: "Nina", age: "1 año", gender: "Hembra", img: "https://placecats.com/300/400", status: null },
+  { id: 19, name: "Max", age: "4 años", gender: "Macho", img: "https://placecats.com/neo/300/400", status: null },
+  { id: 20, name: "Tina", age: "2 años", gender: "Hembra", img: "https://placecats.com/millie/300/400", status: "Apadrinado" },
+  { id: 21, name: "Thor", age: "3 años", gender: "Macho", img: "https://placecats.com/bella/300/400", status: null },
+  { id: 22, name: "Gala", age: "6 años", gender: "Hembra", img: "https://placecats.com/neo_2/300/400", status: null },
+  { id: 23, name: "Nano", age: "1 año", gender: "Macho", img: "https://placecats.com/millie_neo/300/400", status: null },
+  { id: 24, name: "Vera", age: "5 años", gender: "Hembra", img: "https://placecats.com/300/400", status: null },
+  { id: 25, name: "Leo", age: "2 años", gender: "Macho", img: "https://placecats.com/neo/300/400", status: null },
 ];
 
 const PAGE_SIZE = 12;
@@ -65,6 +65,7 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
       try {
         const q = collection(db, "gatos");
         const snapshot = await getDocs(q);
+        console.debug('CatGrid: snapshot size', snapshot.size);
         const docs = snapshot.docs
           .map((doc, idx) => {
             const data = doc.data() || {};
@@ -77,7 +78,7 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
               ageValue,
               origIndex: idx,
               gender: data.sexo || data.gender || "",
-              img: data.imagen || data.image || data.img || "https://placecats.com/300/400",
+              img: (Array.isArray(data.imagenes) && data.imagenes[0] && data.imagenes[0].url) || data.imagen || data.image || data.img || "https://placecats.com/300/400",
               status: data.apadrinado ? "Apadrinado" : null,
               bio: data.historia || data.bio || "",
               necesito: data.necesidades || data.necesito || [],
@@ -87,7 +88,12 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
               adoptado: data.adoptado || false,
             };
           })
-          .filter((c) => !c.adoptado);
+        // keep all docs (show adopted too). Previously we filtered out adopted cats here;
+        // keep them so admin changes don't hide all cats unintentionally.
+        // .filter((c) => !c.adoptado);
+
+        console.debug('CatGrid: loaded docs count', docs.length, docs.slice(0, 3));
+        console.debug('CatGrid: first mapped doc (raw)', docs[0]);
 
         if (mounted) {
           if (docs.length > 0) setAllCats(docs);
@@ -113,13 +119,22 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
     if (filters) {
       const [minAge, maxAge] = filters.ageRange ?? [0, 25];
       const sexo = filters.sexo ?? { macho: false, hembra: false };
+      const debugResults = [];
       arr = arr.filter((c) => {
         const a = c.ageValue ?? (typeof c.age === "number" ? c.age : parseInt(String(c.age || ""), 10) || 0);
-        if (a < minAge || a > maxAge) return false;
-        if (sexo.macho && !sexo.hembra) return maleRe.test(String(c.gender || ""));
-        if (!sexo.macho && sexo.hembra) return femaleRe.test(String(c.gender || ""));
-        return true;
+        let pass = true;
+        let reason = 'ok';
+        if (a < minAge || a > maxAge) { pass = false; reason = `age ${a} out of ${minAge}-${maxAge}`; }
+        else if (sexo.macho && !sexo.hembra) { pass = maleRe.test(String(c.gender || "")); if (!pass) reason = `gender ${c.gender} not macho`; }
+        else if (!sexo.macho && sexo.hembra) { pass = femaleRe.test(String(c.gender || "")); if (!pass) reason = `gender ${c.gender} not hembra`; }
+        debugResults.push({ id: c.id, name: c.name, ageValue: a, gender: c.gender, pass, reason });
+        return pass;
       });
+      try {
+        console.debug('CatGrid: filter debug', JSON.stringify(debugResults, null, 2));
+      } catch (e) {
+        console.debug('CatGrid: filter debug (fallback)', debugResults);
+      }
     }
 
     // Apply sort/filter shortcuts
@@ -140,10 +155,20 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
     return arr;
   }, [allCats, filters, sortValue]);
 
-  const total = processed.length;
-  const shown = processed.slice(0, visible);
+  console.debug('CatGrid: processed count', processed.length, processed.slice(0, 3));
+
+  // If filters exclude all results but we do have cats from Firestore,
+  // fall back to showing them so the public page isn't empty.
+  const finalProcessed = (processed.length === 0 && allCats.length > 0) ? allCats : processed;
+  if (processed.length === 0 && allCats.length > 0) console.debug('CatGrid: processed empty, using allCats as fallback');
+
+  const total = finalProcessed.length;
+  const shown = finalProcessed.slice(0, visible);
   const hasMore = visible < total;
   const progress = total > 0 ? Math.round((shown.length / total) * 100) : 0;
+
+  console.debug('CatGrid: allCats length', allCats.length, allCats.slice(0, 3));
+  console.debug('CatGrid: shown length', shown.length, shown.slice(0, 3));
 
   return (
     <div className="cat-grid-wrap">
