@@ -1,29 +1,58 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/firebaseConfig";
 import "./CatCarousel.css";
-
-const CATS = [
-  { id: 1, name: "Steven", age: "6 años", gender: "Macho", img: "https://placecats.com/neo/300/400" },
-  { id: 2, name: "Luna", age: "2 años", gender: "Hembra", img: "https://placecats.com/millie/300/400" },
-  { id: 3, name: "Mochi", age: "1 año", gender: "Macho", img: "https://placecats.com/bella/300/400" },
-  { id: 4, name: "Nala", age: "3 años", gender: "Hembra", img: "https://placecats.com/neo_2/300/400" },
-  { id: 5, name: "Simba", age: "4 años", gender: "Macho", img: "https://placecats.com/millie_neo/300/400" },
-  { id: 6, name: "Cleo", age: "2 años", gender: "Hembra", img: "https://placecats.com/300/400" },
-];
 
 const AUTO_SCROLL_INTERVAL = 3000;
 
 export default function CatCarousel() {
+  const [cats, setCats] = useState([]);
   const [current, setCurrent] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(true);
   const intervalRef = useRef(null);
   const progressRef = useRef(null);
   const progressStartRef = useRef(null);
 
-  const totalSlides = CATS.length;
+  const totalSlides = cats.length;
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadCats() {
+      setLoading(true);
+      try {
+        const snapshot = await getDocs(collection(db, "gatos"));
+        const docs = snapshot.docs.map((doc, idx) => {
+          const data = doc.data() || {};
+          return {
+            id: doc.id,
+            name: data.nombre || data.name || `Gato ${idx + 1}`,
+            age: typeof data.edad === "number" ? (data.edad === 1 ? "1 año" : `${data.edad} años`) : (data.edad || data.age || ""),
+            gender: data.sexo || data.gender || "",
+            img: (Array.isArray(data.imagenes) && data.imagenes[0] && data.imagenes[0].url) || data.imagen || data.image || data.img || "",
+          };
+        });
+        if (mounted) {
+          setCats(docs.slice(0, 6));
+          setCurrent(0);
+        }
+      } catch (err) {
+        console.error("Error cargando carrusel de gatos:", err);
+        if (mounted) setCats([]);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+    loadCats();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const goTo = useCallback((index) => {
+    if (!totalSlides) return;
     setCurrent((index + totalSlides) % totalSlides);
     setProgress(0);
   }, [totalSlides]);
@@ -32,6 +61,7 @@ export default function CatCarousel() {
   const prev = useCallback(() => goTo(current - 1), [current, goTo]);
 
   useEffect(() => {
+    if (!totalSlides) return;
     if (isHovered) {
       clearInterval(intervalRef.current);
       cancelAnimationFrame(progressRef.current);
@@ -90,7 +120,22 @@ export default function CatCarousel() {
 
         {/* Cards */}
         <div className="cat-carousel-track">
-          {CATS.map((cat, index) => {
+          {loading ? (
+            <div className="cat-card cat-card--active">
+              <div className="cat-card-inner">
+                <div className="cat-card-img-wrapper">
+                  <div className="skeleton" style={{ width: "100%", height: "100%" }} />
+                </div>
+                <div className="cat-card-info">
+                  <div className="skeleton" style={{ height: 22, width: "60%", marginBottom: 8 }} />
+                  <div className="skeleton" style={{ height: 14, width: "40%", marginBottom: 6 }} />
+                  <div className="skeleton" style={{ height: 14, width: "40%" }} />
+                </div>
+              </div>
+            </div>
+          ) : cats.length === 0 ? (
+            <p>No hay gatos publicados todavía.</p>
+          ) : cats.map((cat, index) => {
             const pos = getPosition(index);
             return (
               <div
@@ -102,7 +147,7 @@ export default function CatCarousel() {
                 {pos === "active" ? (
                   <Link to={`/nuestros-peludos/${cat.id}`} className="cat-card-inner">
                     <div className="cat-card-img-wrapper">
-                      <img src={cat.img} alt={cat.name} className="cat-card-img" />
+                      {cat.img ? <img src={cat.img} alt={cat.name} className="cat-card-img" /> : <div className="skeleton" style={{ width: "100%", height: "100%" }} />}
                     </div>
                     <div className="cat-card-info">
                       <h3 className="cat-card-name">{cat.name}</h3>
@@ -113,7 +158,7 @@ export default function CatCarousel() {
                 ) : (
                   <div className="cat-card-inner">
                     <div className="cat-card-img-wrapper">
-                      <img src={cat.img} alt={cat.name} className="cat-card-img" />
+                      {cat.img ? <img src={cat.img} alt={cat.name} className="cat-card-img" /> : <div className="skeleton" style={{ width: "100%", height: "100%" }} />}
                     </div>
                     <div className="cat-card-info">
                       <h3 className="cat-card-name">{cat.name}</h3>
@@ -138,7 +183,7 @@ export default function CatCarousel() {
         <div className="cat-carousel-progress-bar">
           <div
             className="cat-carousel-progress-fill"
-            style={{ width: `${((current + 1) / totalSlides) * 100}%` }}
+            style={{ width: totalSlides ? `${((current + 1) / totalSlides) * 100}%` : "0%" }}
           />
         </div>
         <div className="cat-carousel-progress-auto">
@@ -151,7 +196,7 @@ export default function CatCarousel() {
 
       {/* Contador */}
       <p className="cat-carousel-counter">
-        {String(current + 1).padStart(2, "0")} / {String(totalSlides).padStart(2, "0")}
+        {totalSlides ? `${String(current + 1).padStart(2, "0")} / ${String(totalSlides).padStart(2, "0")}` : "00 / 00"}
       </p>
 
     </section>

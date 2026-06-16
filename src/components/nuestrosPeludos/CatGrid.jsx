@@ -4,34 +4,6 @@ import "./CatGrid.css";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 
-const CATS_DATA = [
-  { id: 1, name: "Steven", age: "7 años", gender: "Macho", img: "https://placecats.com/neo/300/400", status: "Apadrinado" },
-  { id: 2, name: "Luna", age: "2 años", gender: "Hembra", img: "https://placecats.com/millie/300/400", status: null },
-  { id: 3, name: "Mochi", age: "1 año", gender: "Macho", img: "https://placecats.com/bella/300/400", status: null },
-  { id: 4, name: "Nala", age: "3 años", gender: "Hembra", img: "https://placecats.com/neo_2/300/400", status: null },
-  { id: 5, name: "Simba", age: "4 años", gender: "Macho", img: "https://placecats.com/millie_neo/300/400", status: "Apadrinado" },
-  { id: 6, name: "Cleo", age: "2 años", gender: "Hembra", img: "https://placecats.com/300/400", status: null },
-  { id: 7, name: "Tigre", age: "5 años", gender: "Macho", img: "https://placecats.com/neo/300/400", status: null },
-  { id: 8, name: "Mimi", age: "1 año", gender: "Hembra", img: "https://placecats.com/millie/300/400", status: null },
-  { id: 9, name: "Garfield", age: "6 años", gender: "Macho", img: "https://placecats.com/bella/300/400", status: null },
-  { id: 10, name: "Perla", age: "2 años", gender: "Hembra", img: "https://placecats.com/neo_2/300/400", status: null },
-  { id: 11, name: "Rocky", age: "3 años", gender: "Macho", img: "https://placecats.com/millie_neo/300/400", status: null },
-  { id: 12, name: "Isis", age: "4 años", gender: "Hembra", img: "https://placecats.com/300/400", status: "Apadrinado" },
-  { id: 13, name: "Kiko", age: "1 año", gender: "Macho", img: "https://placecats.com/neo/300/400", status: null },
-  { id: 14, name: "Mora", age: "2 años", gender: "Hembra", img: "https://placecats.com/millie/300/400", status: null },
-  { id: 15, name: "Bruno", age: "5 años", gender: "Macho", img: "https://placecats.com/bella/300/400", status: null },
-  { id: 16, name: "Lola", age: "3 años", gender: "Hembra", img: "https://placecats.com/neo_2/300/400", status: null },
-  { id: 17, name: "Paco", age: "7 años", gender: "Macho", img: "https://placecats.com/millie_neo/300/400", status: null },
-  { id: 18, name: "Nina", age: "1 año", gender: "Hembra", img: "https://placecats.com/300/400", status: null },
-  { id: 19, name: "Max", age: "4 años", gender: "Macho", img: "https://placecats.com/neo/300/400", status: null },
-  { id: 20, name: "Tina", age: "2 años", gender: "Hembra", img: "https://placecats.com/millie/300/400", status: "Apadrinado" },
-  { id: 21, name: "Thor", age: "3 años", gender: "Macho", img: "https://placecats.com/bella/300/400", status: null },
-  { id: 22, name: "Gala", age: "6 años", gender: "Hembra", img: "https://placecats.com/neo_2/300/400", status: null },
-  { id: 23, name: "Nano", age: "1 año", gender: "Macho", img: "https://placecats.com/millie_neo/300/400", status: null },
-  { id: 24, name: "Vera", age: "5 años", gender: "Hembra", img: "https://placecats.com/300/400", status: null },
-  { id: 25, name: "Leo", age: "2 años", gender: "Macho", img: "https://placecats.com/neo/300/400", status: null },
-];
-
 const PAGE_SIZE = 12;
 
 function formatAge(value) {
@@ -78,7 +50,7 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
               ageValue,
               origIndex: idx,
               gender: data.sexo || data.gender || "",
-              img: (Array.isArray(data.imagenes) && data.imagenes[0] && data.imagenes[0].url) || data.imagen || data.image || data.img || "https://placecats.com/300/400",
+              img: (Array.isArray(data.imagenes) && data.imagenes[0] && data.imagenes[0].url) || data.imagen || data.image || data.img || "",
               status: data.apadrinado ? "Apadrinado" : null,
               bio: data.historia || data.bio || "",
               necesito: data.necesidades || data.necesito || [],
@@ -96,12 +68,11 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
         console.debug('CatGrid: first mapped doc (raw)', docs[0]);
 
         if (mounted) {
-          if (docs.length > 0) setAllCats(docs);
-          else setAllCats(CATS_DATA.map((c, i) => ({ ...c, ageValue: typeof c.age === "number" ? c.age : parseInt(String(c.age || ""), 10) || 0, origIndex: i })));
+          setAllCats(docs);
         }
       } catch (err) {
         console.error("Error cargando gatos desde Firestore:", err);
-        if (mounted) setAllCats(CATS_DATA.map((c, i) => ({ ...c, ageValue: typeof c.age === "number" ? c.age : parseInt(String(c.age || ""), 10) || 0, origIndex: i })));
+        if (mounted) setAllCats([]);
       } finally {
         if (mounted) setLoading(false);
       }
@@ -133,7 +104,7 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
       try {
         console.debug('CatGrid: filter debug', JSON.stringify(debugResults, null, 2));
       } catch (e) {
-        console.debug('CatGrid: filter debug (fallback)', debugResults);
+        console.debug('CatGrid: filter debug (fallback)');
       }
     }
 
@@ -157,10 +128,7 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
 
   console.debug('CatGrid: processed count', processed.length, processed.slice(0, 3));
 
-  // If filters exclude all results but we do have cats from Firestore,
-  // fall back to showing them so the public page isn't empty.
-  const finalProcessed = (processed.length === 0 && allCats.length > 0) ? allCats : processed;
-  if (processed.length === 0 && allCats.length > 0) console.debug('CatGrid: processed empty, using allCats as fallback');
+  const finalProcessed = processed;
 
   const total = finalProcessed.length;
   const shown = finalProcessed.slice(0, visible);
@@ -183,6 +151,8 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
               <div className="cat-skel-meta skeleton" />
             </div>
           ))
+        ) : finalProcessed.length === 0 ? (
+          <p>No hay gatos publicados todavía.</p>
         ) : (
           shown.map((cat) => (
             <CatCard key={cat.id} cat={cat} />

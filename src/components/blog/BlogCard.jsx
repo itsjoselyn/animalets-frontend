@@ -12,7 +12,7 @@ export default function BlogCard({ post }) {
         <div className="blog-card-top">
           <span className="blog-card-date">{date}</span>
           <div className="blog-card-img-wrap">
-            <img src={img} alt={title} className="blog-card-img" />
+            {img ? <img src={img} alt={title} className="blog-card-img" /> : <div className="skeleton" style={{ width: "100%", height: "100%" }} />}
           </div>
         </div>
 

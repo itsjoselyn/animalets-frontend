@@ -17,7 +17,12 @@ import ScrollToTop from './components/ScrollToTop';
 import AdminLogin from './pages/admin/Login';
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminGatos from './pages/admin/Gatos';
+import AdminNoticias from './pages/admin/Noticias';
+import AdminTestimonios from './pages/admin/Testimonios';
+import AdminSolicitudes from './pages/admin/Solicitudes';
 const GatoEditor = lazy(() => import('./pages/admin/GatoEditor'));
+const NoticiaEditor = lazy(() => import('./pages/admin/NoticiaEditor'));
+const TestimonioEditor = lazy(() => import('./pages/admin/TestimonioEditor'));
 import { Navigate } from 'react-router-dom';
 
 export default function App() {
@@ -54,7 +59,29 @@ export default function App() {
               <GatoEditor />
             </Suspense>
           } />
-          {/* más rutas admin se añadirán aquí */}
+          <Route path="testimonios" element={<AdminTestimonios />} />
+          <Route path="testimonios/new" element={
+            <Suspense fallback={<div>Cargando...</div>}>
+              <TestimonioEditor />
+            </Suspense>
+          } />
+          <Route path="testimonios/:id" element={
+            <Suspense fallback={<div>Cargando...</div>}>
+              <TestimonioEditor />
+            </Suspense>
+          } />
+          <Route path="noticias" element={<AdminNoticias />} />
+          <Route path="noticias/new" element={
+            <Suspense fallback={<div>Cargando...</div>}>
+              <NoticiaEditor />
+            </Suspense>
+          } />
+          <Route path="noticias/:id" element={
+            <Suspense fallback={<div>Cargando...</div>}>
+              <NoticiaEditor />
+            </Suspense>
+          } />
+          <Route path="solicitudes" element={<AdminSolicitudes />} />
         </Route>
 
         {/* Resto — con navbar y footer */}

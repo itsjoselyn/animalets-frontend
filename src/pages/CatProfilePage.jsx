@@ -46,7 +46,7 @@ export default function CatProfilePage() {
           name: data.nombre || data.name || "",
           age: formatAge(data.edad || data.age),
           gender: data.sexo || data.gender || "",
-          img: data.imagen || data.image || data.img || "https://placecats.com/400/500",
+          img: (Array.isArray(data.imagenes) && data.imagenes[0] && data.imagenes[0].url) || data.imagen || data.image || data.img || "",
           bio: data.historia || data.bio || data.descripcion || "",
           necesito: data.necesidades || data.necesito || [],
           superpoderes: mapSuperpowers(data.superpoderes || data.superpowers || {}),
@@ -111,7 +111,7 @@ export default function CatProfilePage() {
 
       {/* Foto */}
       <div className="catprofile-img-wrap">
-        <img src={cat.img} alt={cat.name} className="catprofile-img" />
+        {cat.img ? <img src={cat.img} alt={cat.name} className="catprofile-img" /> : <div className="skeleton" style={{ width: "100%", height: "100%", borderRadius: 8 }} />}
       </div>
 
       {/* Contenido */}

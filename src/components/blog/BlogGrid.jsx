@@ -52,12 +52,11 @@ export default function BlogGrid() {
         docs.sort((a, b) => getTime(b.updatedAt || b.createdAt) - getTime(a.updatedAt || a.createdAt));
 
         if (mounted) {
-          if (docs.length > 0) setPosts(docs);
-          else setPosts(POSTS); // fallback only after loading
+          setPosts(docs);
         }
       } catch (err) {
         console.error("Error cargando posts desde Firestore:", err);
-        if (mounted) setPosts(POSTS); // fallback on error
+        if (mounted) setPosts([]);
       } finally {
         if (mounted) setLoading(false);
       }
@@ -88,6 +87,8 @@ export default function BlogGrid() {
               <div className="blog-skeleton-title skeleton" />
             </div>
           ))
+        ) : posts.length === 0 ? (
+          <p>No hay noticias publicadas todavía.</p>
         ) : (
           shown.map((post) => (
             <BlogCard key={post.id} post={post} />

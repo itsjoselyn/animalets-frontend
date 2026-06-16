@@ -7,7 +7,7 @@ export default function CatCard({ cat }) {
   return (
     <Link to={`/nuestros-peludos/${id}`} className="pcat-card">
       <div className="pcat-card-img-wrap">
-        <img src={img} alt={name} className="pcat-card-img" />
+        {img ? <img src={img} alt={name} className="pcat-card-img" /> : <div className="skeleton" style={{ width: "100%", height: "100%" }} />}
         {status && <div className="pcat-card-badge">{status}</div>}
       </div>
       <div className="pcat-card-info">
