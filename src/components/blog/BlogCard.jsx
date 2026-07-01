@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "./BlogCard.css";
+import { optimizeCloudinaryImage } from '../../lib/optimizeCloudinaryImage';
 
 export default function BlogCard({ post }) {
   const { id, date, title, img } = post;
@@ -12,7 +13,7 @@ export default function BlogCard({ post }) {
         <div className="blog-card-top">
           <span className="blog-card-date">{date}</span>
           <div className="blog-card-img-wrap">
-            {img ? <img src={img} alt={title} className="blog-card-img" /> : <div className="skeleton" style={{ width: "100%", height: "100%" }} />}
+            {img ? <img src={optimizeCloudinaryImage(img, 600)} alt={title} className="blog-card-img" /> : <div className="skeleton" style={{ width: "100%", height: "100%" }} />}
           </div>
         </div>
 

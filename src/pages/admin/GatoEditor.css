@@ -1,0 +1,25 @@
+.gato-editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 20px;
+    align-items: start
+}
+
+.gato-editor-form {
+    min-width: 0
+}
+
+.gato-editor-preview {
+    position: relative
+}
+
+@media(max-width:900px) {
+    .gato-editor-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .gato-editor-preview {
+        order: 2;
+        margin-top: 18px
+    }
+}

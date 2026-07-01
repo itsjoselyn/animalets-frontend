@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../firebase/firebaseConfig";
+import { optimizeCloudinaryImage } from '../../lib/optimizeCloudinaryImage';
 
 function formatDate(value) {
     if (!value) return "-";
@@ -23,11 +24,12 @@ export default function AdminNoticias() {
                 const items = snap.docs.map((d) => {
                     const data = d.data() || {};
                     const ts = data.updatedAt || data.createdAt;
+                    const imgFromArray = Array.isArray(data.imagenes) && data.imagenes[0] ? (data.imagenes[0].url || data.imagenes[0]) : null;
                     return {
                         id: d.id,
                         titulo: data.titulo || data.title || "",
                         descripcion: data.descripcion || data.body || data.text || "",
-                        imagen: data.imagen || data.image || data.img || "",
+                        imagen: imgFromArray || data.imagen || data.image || data.img || "",
                         date: formatDate(ts),
                         sortTime: ts,
                     };
@@ -75,7 +77,7 @@ export default function AdminNoticias() {
                                         <td style={{ padding: 8 }}>{post.titulo || "-"}</td>
                                         <td style={{ padding: 8 }}>{post.date}</td>
                                         <td style={{ padding: 8 }}>
-                                            {post.imagen ? <img src={post.imagen} alt={post.titulo} style={{ width: 64, height: 48, objectFit: "cover", borderRadius: 6 }} /> : "-"}
+                                            {post.imagen ? <img src={optimizeCloudinaryImage(post.imagen, 300)} alt={post.titulo} style={{ width: 64, height: 48, objectFit: "cover", borderRadius: 6 }} /> : "-"}
                                         </td>
                                         <td style={{ padding: 8 }}>
                                             <button className="cayudar-btn" onClick={() => navigate(`/admin/noticias/${post.id}`)}>Editar</button>

@@ -31,10 +31,11 @@ export default function BlogGrid() {
               dateStr = new Date(ts).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" });
             }
           }
+          const imgFromArray = Array.isArray(data.imagenes) && data.imagenes[0] ? (data.imagenes[0].url || data.imagenes[0]) : null;
           return {
             id: doc.id,
             title: data.titulo || data.title || "",
-            img: data.imagen || data.image || data.img || "",
+            img: imgFromArray || data.imagen || data.image || data.img || "",
             body: data.descripcion || data.body || data.text || "",
             createdAt: data.createdAt,
             updatedAt: data.updatedAt,
