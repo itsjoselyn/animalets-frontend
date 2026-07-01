@@ -1,5 +1,6 @@
 import "./HowToHelp.css";
 import { Link } from "react-router-dom";
+import { optimizeCloudinaryImage } from '../../lib/optimizeCloudinaryImage';
 
 const OPTIONS = [
   { id: 1, title: "Voluntariado", link: "/como-ayudar/voluntariado", img: "https://placecats.com/neo/300/400" },
@@ -21,7 +22,7 @@ export default function HowToHelp() {
         {OPTIONS.map((opt) => (
           <Link key={opt.id} to={opt.link} className="hthelp-card">
             <div className="hthelp-card-img-wrap">
-              <img src={opt.img} alt={opt.title} className="hthelp-card-img" />
+              <img src={optimizeCloudinaryImage(opt.img, 300)} alt={opt.title} className="hthelp-card-img" />
             </div>
             <div className="hthelp-card-body">
               <h3 className="hthelp-card-title">{opt.title}</h3>

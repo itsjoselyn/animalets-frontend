@@ -57,7 +57,9 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
               superpoderes: mapSuperpowers(data.superpoderes || data.superpowers || {}),
               createdAt: data.createdAt,
               updatedAt: data.updatedAt,
-              adoptado: data.adoptado || false,
+              // derive adoptado from new `estado` field, fallback to legacy boolean
+              adoptado: (data.estado === 'adoptado') || data.adoptado || false,
+              estado: data.estado || (data.adoptado === true ? 'adoptado' : 'disponible'),
             };
           })
         // keep all docs (show adopted too). Previously we filtered out adopted cats here;

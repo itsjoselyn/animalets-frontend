@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import "./CatCarousel.css";
+import { optimizeCloudinaryImage } from '../../lib/optimizeCloudinaryImage';
 
 const AUTO_SCROLL_INTERVAL = 3000;
 
@@ -147,7 +148,7 @@ export default function CatCarousel() {
                 {pos === "active" ? (
                   <Link to={`/nuestros-peludos/${cat.id}`} className="cat-card-inner">
                     <div className="cat-card-img-wrapper">
-                      {cat.img ? <img src={cat.img} alt={cat.name} className="cat-card-img" /> : <div className="skeleton" style={{ width: "100%", height: "100%" }} />}
+                      {cat.img ? <img src={optimizeCloudinaryImage(cat.img, 300)} alt={cat.name} className="cat-card-img" /> : <div className="skeleton" style={{ width: "100%", height: "100%" }} />}
                     </div>
                     <div className="cat-card-info">
                       <h3 className="cat-card-name">{cat.name}</h3>
@@ -158,7 +159,7 @@ export default function CatCarousel() {
                 ) : (
                   <div className="cat-card-inner">
                     <div className="cat-card-img-wrapper">
-                      {cat.img ? <img src={cat.img} alt={cat.name} className="cat-card-img" /> : <div className="skeleton" style={{ width: "100%", height: "100%" }} />}
+                      {cat.img ? <img src={optimizeCloudinaryImage(cat.img, 300)} alt={cat.name} className="cat-card-img" /> : <div className="skeleton" style={{ width: "100%", height: "100%" }} />}
                     </div>
                     <div className="cat-card-info">
                       <h3 className="cat-card-name">{cat.name}</h3>

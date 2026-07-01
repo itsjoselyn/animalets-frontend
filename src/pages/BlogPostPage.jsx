@@ -1,6 +1,7 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./BlogPostPage.css";
+import { optimizeCloudinaryImage } from '../lib/optimizeCloudinaryImage';
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 
@@ -45,7 +46,7 @@ export default function BlogPostPage() {
         const normalized = {
           id: docSnap.id,
           title: data.titulo || data.title || "",
-          img: data.imagen || data.image || data.img || "",
+          img: (Array.isArray(data.imagenes) && data.imagenes[0] && (data.imagenes[0].url || data.imagenes[0])) || data.imagen || data.image || data.img || "",
           body: data.descripcion || data.body || data.text || "",
           date: dateStr,
           createdAt: data.createdAt,
@@ -137,7 +138,7 @@ export default function BlogPostPage() {
       {/* Contenido blanco */}
       <div className="blogpost-body">
         <div className="blogpost-img-wrap">
-          {post.img ? <img src={post.img} alt={post.title} className="blogpost-img" /> : null}
+          {post.img ? <img src={optimizeCloudinaryImage(post.img, 1200)} alt={post.title} className="blogpost-img" /> : null}
         </div>
 
         <div className="blogpost-text">

@@ -25,7 +25,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 12px rgba(76,175,80,0.35);
+  box-shadow: 0 2px 12px rgba(76, 175, 80, 0.35);
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
@@ -242,6 +242,6 @@
     bottom: 24px;
     border-radius: 100px;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   }
 }

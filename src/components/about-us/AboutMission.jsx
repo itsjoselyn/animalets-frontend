@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import "./AboutMission.css";
+import { optimizeCloudinaryImage } from '../../lib/optimizeCloudinaryImage';
 
 const CARDS = [
   {
@@ -29,7 +30,7 @@ function Card({ card, active, onDotClick, showDots }) {
   return (
     <div className="amission-card">
       <div className="amission-card-img-wrap">
-        <img src={card.img} alt={card.title} className="amission-card-img" />
+        <img src={optimizeCloudinaryImage(card.img, 300)} alt={card.title} className="amission-card-img" />
         {showDots && (
           <div className="amission-dots">
             {CARDS.map((_, i) => (

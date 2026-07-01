@@ -14,7 +14,11 @@ export default function AdminGatos() {
             try {
                 const q = collection(db, 'gatos');
                 const snap = await getDocs(q);
-                const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                const items = snap.docs.map(d => {
+                    const docData = d.data() || {};
+                    const estado = docData.estado || (docData.adoptado === true ? 'adoptado' : 'disponible');
+                    return { id: d.id, ...docData, estado };
+                });
                 setGatos(items);
             } catch (err) {
                 console.error(err);

@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore, initializeFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { getStorage } from "firebase/storage";
+// Storage removed: use Cloudinary for image uploads instead of Firebase Storage
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -35,5 +35,4 @@ try {
 export const db = getFirestore(app);
 // Export Firebase Auth instance
 export const auth = getAuth(app);
-// Export Firebase Storage instance
-export const storage = getStorage(app);
+// Note: Storage SDK removed from this project (Cloudinary used instead).
