@@ -7,7 +7,6 @@ import { uploadImageToCloudinary } from '../../lib/uploadImageToCloudinary';
 import { compressForUpload } from '../../lib/imageUtils';
 import '../../components/contact/ContactForm.css';
 import './GatoEditor.css';
-import { optimizeCloudinaryImage } from '../../lib/optimizeCloudinaryImage';
 
 const EMPTY = {
     nombre: '',
@@ -52,7 +51,8 @@ export default function GatoEditor() {
     const { id } = useParams();
     const isNew = id === undefined || id === 'new';
     const [data, setData] = useState(EMPTY);
-    const [imageFiles, setImageFiles] = useState([]);
+    const [imagenesPreview, setImagenesPreview] = useState([]);
+    const [selectedPreview, setSelectedPreview] = useState(0);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -87,6 +87,8 @@ export default function GatoEditor() {
                         superpoderes: docData.superpoderes || docData.superpowers || { nivelMimos: '', habilidadEspecial: '', estadoActual: '' },
                     };
                     setData({ ...EMPTY, ...mapped });
+                    setImagenesPreview(mapped.imagenes || []);
+                    setSelectedPreview(0);
                 } catch (err) {
                     console.error(err);
                     alert('Error cargando el documento');
@@ -96,11 +98,18 @@ export default function GatoEditor() {
             })();
         } else {
             setData(EMPTY);
+            setImagenesPreview([]);
         }
         return () => { mounted = false; };
     }, [id]);
 
     const setField = (k, v) => setData((p) => ({ ...p, [k]: v }));
+
+    useEffect(() => {
+        if (selectedPreview >= imagenesPreview.length) {
+            setSelectedPreview(0);
+        }
+    }, [imagenesPreview, selectedPreview]);
 
     const handleDeleteImage = async (imgEntry) => {
         if (!confirm('Borrar esta imagen?')) return;
@@ -108,10 +117,24 @@ export default function GatoEditor() {
             setLoading(true);
             // We no longer delete remote files from Cloudinary here (requires authenticated API).
             // Soft-delete: remove the URL from the document's imagenes array.
-            const next = (data.imagenes || []).filter((x) => (x && x.url ? x.url : x) !== (imgEntry && imgEntry.url ? imgEntry.url : imgEntry));
-            setData((p) => ({ ...p, imagenes: next }));
+            const next = imagenesPreview.filter(
+                img => img.url !== imgEntry.url
+            );
+            setImagenesPreview(next);
+            setData(p => ({
+                ...p,
+                imagenes: next.filter(img => !img.file)
+            }));
             const dref = doc(db, 'gatos', id);
-            await setDoc(dref, { imagenes: next }, { merge: true });
+            await setDoc(
+                dref,
+                {
+                    imagenes: next
+                        .filter(img => !img.file)
+                        .map(img => ({ url: img.url }))
+                },
+                { merge: true }
+            );
         } catch (e) {
             console.error('Error removing image entry', e);
             alert('No se pudo borrar la imagen');
@@ -122,7 +145,7 @@ export default function GatoEditor() {
 
     const handleSave = async () => {
         try {
-            console.debug('GatoEditor: handleSave start', { id, isNew, imagenesBefore: data.imagenes, imageFilesLength: imageFiles.length });
+            console.debug('GatoEditor: handleSave start', { id, isNew, imagenesBefore: data.imagenes, imagenesPreviewlength: imagenesPreview.length });
             setLoading(true);
             const payload = { ...data };
             // Validation
@@ -137,10 +160,14 @@ export default function GatoEditor() {
             if (!payload.sexo || String(payload.sexo).trim() === '') errors.push('Sexo es obligatorio');
             if (!payload.estado || String(payload.estado).trim() === '') errors.push('Estado es obligatorio');
             if (!payload.superpoderes || typeof payload.superpoderes !== 'object') errors.push('Superpoderes incompletos');
+
             else {
                 if (!String(payload.superpoderes.nivelMimos || '').trim()) errors.push('Nivel de mimos es obligatorio');
                 if (!String(payload.superpoderes.habilidadEspecial || '').trim()) errors.push('Habilidad especial es obligatoria');
                 if (!String(payload.superpoderes.estadoActual || '').trim()) errors.push('Estado actual es obligatorio');
+            }
+            if (imagenesPreview.length === 0) {
+                errors.push('Debes añadir al menos una imagen');
             }
             if (errors.length > 0) {
                 alert('Errores:\n' + errors.join('\n'));
@@ -158,19 +185,23 @@ export default function GatoEditor() {
             // handle image files -> compress, upload to Cloudinary, collect URLs
             const uploadedImages = [];
 
-            if (imageFiles && imageFiles.length > 0) {
-                // If creating new doc, we need its id first
-                let targetDocId = id;
+            if (imagenesPreview.length > 0) {
                 let createdRef = null;
                 if (isNew) {
                     payload.createdAt = serverTimestamp();
                     const col = collection(db, 'gatos');
                     createdRef = await addDoc(col, payload);
-                    targetDocId = createdRef.id;
                 }
 
-                for (let i = 0; i < imageFiles.length; i++) {
-                    const f = imageFiles[i];
+                for (const img of imagenesPreview) {
+
+                    // Si ya estaba subida no la volvemos a subir
+                    if (!img.file) {
+                        uploadedImages.push({ url: img.url });
+                        continue;
+                    }
+
+                    const f = img.file;
                     try {
                         console.debug('GatoEditor: compressing file', f.name);
                         const blob = await compressForUpload(f, { maxWidth: 1200, quality: 0.75, preferWebP: true });
@@ -188,7 +219,9 @@ export default function GatoEditor() {
                 if (!isNew && uploadedImages.length > 0) {
                     try {
                         const dref = doc(db, 'gatos', id);
-                        await updateDoc(dref, { imagenes: arrayUnion(...uploadedImages) });
+                        await updateDoc(dref, {
+                            imagenes: arrayUnion(...uploadedImages)
+                        });
                     } catch (e) {
                         console.error('Error appending images to existing doc', e);
                     }
@@ -215,12 +248,7 @@ export default function GatoEditor() {
             // Do not write the legacy boolean field anymore
             delete payload.adoptado;
 
-            if (isNew) {
-                payload.createdAt = serverTimestamp();
-                const col = collection(db, 'gatos');
-                const ref = await addDoc(col, payload);
-                navigate('/admin/gatos');
-            } else {
+            if (!isNew) {
                 const dref = doc(db, 'gatos', id);
                 payload.updatedAt = serverTimestamp();
                 // remove legacy `adoptado` field from document (soft migration)
@@ -274,7 +302,6 @@ export default function GatoEditor() {
                     <select className="cform-select" value={data.estado || 'disponible'} onChange={(e) => setField('estado', e.target.value)}>
                         <option value="disponible">Disponible</option>
                         <option value="adoptado">Adoptado</option>
-                        <option value="en_proceso">En proceso</option>
                     </select>
 
                     <label className="cform-sublabel">Descripción / Historia</label>
@@ -289,28 +316,42 @@ export default function GatoEditor() {
                     </label>
 
                     <label className="cform-sublabel">Imágenes</label>
-                    <input type="file" accept="image/*" multiple onChange={(e) => setImageFiles(e.target.files ? Array.from(e.target.files) : [])} />
+                    <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={(e) => {
+                            if (!e.target.files) return;
 
-                    {/* Existing uploaded images */}
-                    {Array.isArray(data.imagenes) && data.imagenes.length > 0 && (
-                        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 8 }}>
-                            {data.imagenes.map((img, idx) => (
-                                <div key={idx} style={{ width: 120 }}>
-                                    <img src={optimizeCloudinaryImage(img.url, 600)} alt={`img-${idx}`} style={{ width: '100%', borderRadius: 8 }} />
-                                    <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
-                                        <button type="button" className="cayudar-btn" onClick={() => handleDeleteImage(img)}>Eliminar</button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                            const nuevos = Array.from(e.target.files).map(file => ({
+                                file,
+                                url: URL.createObjectURL(file),
+                                uploaded: false,
+                            }));
 
-                    {/* New selected files preview */}
-                    {imageFiles && imageFiles.length > 0 && (
+                            setImagenesPreview(prev =>
+                                [...prev, ...nuevos].slice(0, 5)
+                            );
+                        }}
+                    />
+
+                    {imagenesPreview.length > 0 && (
                         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 8 }}>
-                            {imageFiles.map((f, i) => (
+                            {imagenesPreview.map((img, i) => (
                                 <div key={i} style={{ width: 120 }}>
-                                    <img src={URL.createObjectURL(f)} alt={f.name} style={{ width: '100%', borderRadius: 8 }} />
+                                    <img
+                                        src={img.url}
+                                        alt={`img-${i}`}
+                                        style={{ width: '100%', borderRadius: 8 }}
+                                    />
+
+                                    <button
+                                        type="button"
+                                        className="cayudar-btn"
+                                        onClick={() => handleDeleteImage(img)}
+                                    >
+                                        Eliminar
+                                    </button>
                                 </div>
                             ))}
                         </div>
@@ -333,13 +374,57 @@ export default function GatoEditor() {
 
                 <aside className="gato-editor-preview">
                     <div className="catprofile">
-                        <div className="catprofile-img-wrap">
-                            {Array.isArray(data.imagenes) && data.imagenes[0] && data.imagenes[0].url ? (
-                                <img src={optimizeCloudinaryImage(data.imagenes[0].url, 900)} alt={data.nombre || 'Imagen gato'} className="catprofile-img" />
-                            ) : (
-                                <div className="skeleton" style={{ width: '100%', height: 300, borderRadius: 8 }} />
+                        <>
+                            {imagenesPreview.length > 1 && (
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        gap: 8,
+                                        overflowX: "auto",
+                                        padding: "10px",
+                                        marginBottom: "10px",
+                                    }}
+                                >
+                                    {imagenesPreview.map((img, i) => (
+                                        <img
+                                            key={i}
+                                            src={img.url}
+                                            alt={`preview-${i}`}
+                                            onClick={() => setSelectedPreview(i)}
+                                            style={{
+                                                width: 70,
+                                                height: 70,
+                                                objectFit: "cover",
+                                                borderRadius: 8,
+                                                cursor: "pointer",
+                                                border:
+                                                    i === selectedPreview
+                                                        ? "3px solid #4caf50"
+                                                        : "2px solid #ddd",
+                                                flexShrink: 0,
+                                            }}
+                                        />
+                                    ))}
+                                </div>
                             )}
-                        </div>
+
+                            {imagenesPreview.length > 0 ? (
+                                <img
+                                    src={imagenesPreview[selectedPreview]?.url}
+                                    alt="Preview"
+                                    className="catprofile-img"
+                                />
+                            ) : (
+                                <div
+                                    className="skeleton"
+                                    style={{
+                                        width: "100%",
+                                        height: 300,
+                                        borderRadius: 8,
+                                    }}
+                                />
+                            )}
+                        </>
                         <div className="catprofile-body">
                             <div className="catprofile-hero">
                                 <h1 className="catprofile-name">{data.nombre || 'Nombre del gato'}</h1>
@@ -351,8 +436,55 @@ export default function GatoEditor() {
 
                             <p className="catprofile-bio">{data.historia || 'Descripción breve del gato'}</p>
 
-                            <div style={{ marginTop: 12 }}>
-                                <strong>Estado:</strong> <span style={{ textTransform: 'capitalize' }}>{data.estado || 'disponible'}</span>
+                            <div className="catprofile-section">
+
+                                <h2 className="catprofile-section-title">
+                                    Lo que necesito
+                                </h2>
+
+                                <ul className="catprofile-list">
+                                    {(data.necesidades || []).map((n, i) => (
+                                        <li
+                                            key={i}
+                                            className="catprofile-list-item"
+                                        >
+                                            {n}
+                                        </li>
+                                    ))}
+                                </ul>
+                                <div className="catprofile-section">
+
+                                    <h2 className="catprofile-section-title">
+                                        Mis superpoderes
+                                    </h2>
+
+                                    <ul className="catprofile-powers">
+
+                                        <li className="catprofile-power">
+                                            <span className="catprofile-power-label">
+                                                Nivel de mimos:
+                                            </span>{" "}
+                                            {data.superpoderes?.nivelMimos}
+                                        </li>
+
+                                        <li className="catprofile-power">
+                                            <span className="catprofile-power-label">
+                                                Habilidad especial:
+                                            </span>{" "}
+                                            {data.superpoderes?.habilidadEspecial}
+                                        </li>
+
+                                        <li className="catprofile-power">
+                                            <span className="catprofile-power-label">
+                                                Estado actual:
+                                            </span>{" "}
+                                            {data.superpoderes?.estadoActual}
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+
                             </div>
                         </div>
                     </div>

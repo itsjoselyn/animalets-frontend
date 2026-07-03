@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./CatProfilePage.css";
-import { optimizeCloudinaryImage, optimizeCloudinaryModal } from "../lib/optimizeCloudinaryImage";
+import { optimizeCloudinaryImage } from "../lib/optimizeCloudinaryImage";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 
@@ -148,7 +148,7 @@ export default function CatProfilePage() {
       <div className="catprofile-img-wrap" style={{ position: "relative" }}>
         {currentImage ? (
           <img
-            src={optimizeCloudinaryModal(currentImage)}
+            src={optimizeCloudinaryImage(currentImage)}
             alt={cat.name}
             className="catprofile-img"
             style={{ cursor: "zoom-in" }}
@@ -213,8 +213,10 @@ export default function CatProfilePage() {
         >
           <div onClick={(e) => e.stopPropagation()} style={{ position: "relative" }}>
             <img
-              src={optimizeCloudinaryImage(currentImage, 1200)}
-              alt={cat.name}
+              src={optimizeCloudinaryImage(currentImage, {
+                width: 1800,
+                height: 1350,
+              })} alt={cat.name}
               style={{
                 maxWidth: "95vw",
                 maxHeight: "90vh",
