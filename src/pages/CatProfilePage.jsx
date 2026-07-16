@@ -148,58 +148,7 @@ export default function CatProfilePage() {
         ✕
       </button>
 
-      {/* ================= IMAGEN ================= */}
-      <div className="catprofile-img-wrap" style={{ position: "relative" }}>
-        {currentImage ? (
-          <img
-            src={optimizeCloudinaryImage(currentImage)}
-            alt={cat.name}
-            className="catprofile-img"
-            style={{ cursor: "zoom-in" }}
-            onClick={() => setOpen(true)} // 🔥 OPEN MODAL
-          />
-        ) : (
-          <div className="skeleton" style={{ width: "100%", height: "100%" }} />
-        )}
 
-        {images.length > 1 && (
-          <>
-            <button
-              onClick={prev}
-              style={{
-                position: "absolute",
-                left: 10,
-                top: "50%",
-                transform: "translateY(-50%)",
-                zIndex: 2,
-                background: "transparent",
-                border: "none",
-                fontSize: 24,
-                cursor: "pointer",
-              }}
-            >
-              ◀
-            </button>
-
-            <button
-              onClick={next}
-              style={{
-                position: "absolute",
-                right: 10,
-                top: "50%",
-                transform: "translateY(-50%)",
-                zIndex: 2,
-                background: "transparent",
-                border: "none",
-                fontSize: 24,
-                cursor: "pointer",
-              }}
-            >
-              ▶
-            </button>
-          </>
-        )}
-      </div>
 
       {/* ================= MODAL ================= */}
       {open && currentImage && (
@@ -215,17 +164,27 @@ export default function CatProfilePage() {
             zIndex: 9999,
           }}
         >
-          <div onClick={(e) => e.stopPropagation()} style={{ position: "relative" }}>
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: "relative",
+              padding: 20,
+              borderRadius: 16,
+              background: "#1b1b1b",
+            }}
+          >
             <img
               src={optimizeCloudinaryImage(currentImage, {
-                width: 1800,
-                height: 1350,
+                width: 1200,
+                crop: "fit",
               })} alt={cat.name}
               style={{
-                maxWidth: "95vw",
-                maxHeight: "90vh",
-                borderRadius: 12,
+                width: "auto",
+                height: "auto",
+                maxWidth: "80vw",
+                maxHeight: "75vh",
                 objectFit: "contain",
+                borderRadius: 12,
               }}
             />
 
@@ -286,6 +245,58 @@ export default function CatProfilePage() {
 
       {/* ================= CONTENIDO ================= */}
       <div className="catprofile-body">
+        {/* ================= IMAGEN ================= */}
+        <div className="catprofile-img-wrap" style={{ position: "relative" }}>
+          {currentImage ? (
+            <img
+              src={optimizeCloudinaryImage(currentImage)}
+              alt={cat.name}
+              className="catprofile-img"
+              style={{ cursor: "zoom-in" }}
+              onClick={() => setOpen(true)} // 🔥 OPEN MODAL
+            />
+          ) : (
+            <div className="skeleton" style={{ width: "100%", height: "100%" }} />
+          )}
+
+          {images.length > 1 && (
+            <>
+              <button
+                onClick={prev}
+                style={{
+                  position: "absolute",
+                  left: 10,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  zIndex: 2,
+                  background: "transparent",
+                  border: "none",
+                  fontSize: 24,
+                  cursor: "pointer",
+                }}
+              >
+                ◀
+              </button>
+
+              <button
+                onClick={next}
+                style={{
+                  position: "absolute",
+                  right: 10,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  zIndex: 2,
+                  background: "transparent",
+                  border: "none",
+                  fontSize: 24,
+                  cursor: "pointer",
+                }}
+              >
+                ▶
+              </button>
+            </>
+          )}
+        </div>
 
         <div className="catprofile-hero">
           <h1 className="catprofile-name">{cat.name}</h1>

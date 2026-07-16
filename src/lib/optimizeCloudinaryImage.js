@@ -27,12 +27,23 @@ export function optimizeCloudinaryImage(url, options = {}) {
         const rest = /\b(w_|h_|q_|f_|c_|g_)\b/.test(firstSegment)
             ? after.split("/").slice(1).join("/")
             : after;
+        // Cloudinary solo permite aplicar gravity (g_*) en ciertos modos de recorte
+        // como "fill" o "crop". Si se usa con "fit" u otros modos devuelve un 400.
+        const transformations = [];
 
-        return (
-            before +
-            `w_${width},h_${height},c_${crop},g_${gravity},q_${quality},f_${format}/` +
-            rest
-        );
+        if (width) transformations.push(`w_${width}`);
+        if (height) transformations.push(`h_${height}`);
+
+        transformations.push(`c_${crop}`);
+
+        if (gravity && (crop === "fill" || crop === "crop")) {
+            transformations.push(`g_${gravity}`);
+        }
+
+        if (quality) transformations.push(`q_${quality}`);
+        if (format) transformations.push(`f_${format}`);
+
+        return before + transformations.join(",") + "/" + rest;
     } catch (e) {
         console.warn("optimizeCloudinaryImage failed", e);
         return url;

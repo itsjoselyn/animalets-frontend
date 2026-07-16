@@ -36,16 +36,20 @@
 
 /* ---- FOTO ---- */
 .catprofile-img-wrap {
-  width: 100%;
-  aspect-ratio: 4/5;
+  width: calc(100% + 120px);
+  margin-left: -60px;
+  margin-right: -60px;
+
+  height: clamp(300px, 40vw, 450px);
   overflow: hidden;
+  border-radius: 16px;
 }
 
 .catprofile-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  object-position: center;
 }
 
 /* ---- BODY ---- */
@@ -54,7 +58,7 @@
   display: flex;
   flex-direction: column;
   gap: 28px;
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
@@ -219,9 +223,7 @@
    DESKTOP (1125px+)
 ===================== */
 @media (min-width: 1125px) {
-  .catprofile-img-wrap {
-    aspect-ratio: 16/7;
-  }
+
 
   .catprofile-body {
     padding: 40px 80px 120px;

@@ -19,8 +19,11 @@ export default function CatCard({ cat }) {
       <div className="pcat-card-img-wrap" style={{ position: 'relative' }}>
         {current ? (
           <img
-            src={optimizeCloudinaryImage(current, 400)}
-            alt={name}
+            src={optimizeCloudinaryImage(current, {
+              width: 400,
+              height: 400,
+              crop: "fill",
+            })} alt={name}
             className="pcat-card-img"
             onClick={(e) => e.stopPropagation()} />
         ) : (

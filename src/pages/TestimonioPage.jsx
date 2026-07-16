@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./TestimonioPage.css";
-import logo from "../assets/animalets-logo.jpeg";
+import logo from "../assets/animalets-logo.png";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 
