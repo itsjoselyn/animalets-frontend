@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./BlogCard.css";
-import { optimizeCloudinaryImage } from '../../lib/optimizeCloudinaryImage';
+import { optimizeCloudinaryImage } from '../../../lib/optimizeCloudinaryImage';
 import { normalizeBlogImages } from "./blogUtils";
 
 export default function BlogCard({ post }) {

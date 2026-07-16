@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import "./ContactForm.css";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "../../firebase/firebaseConfig";
+import { db } from "../../../firebase/firebaseConfig";
 
 const TIPOS = [
   { value: "adoptar", label: "Adoptar" },

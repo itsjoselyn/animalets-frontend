@@ -1,7 +1,7 @@
 import { useState } from "react";
-import PeludosFilters from "../components/nuestrosPeludos/PeludosFilters";
-import PeludosHeader from "../components/nuestrosPeludos/PeludosHeader";
-import CatGrid from "../components/nuestrosPeludos/CatGrid";
+import PeludosFilters from "../components/sections/OurCats/PeludosFilters";
+import PeludosHeader from "../components/sections/OurCats/PeludosHeader";
+import CatGrid from "../components/sections/OurCats/CatGrid";
 
 export default function NuestrosPeludos() {
   const [filtersOpen, setFiltersOpen] = useState(false);

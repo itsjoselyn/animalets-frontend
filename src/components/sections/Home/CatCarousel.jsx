@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase/firebaseConfig";
+import { db } from "../../../firebase/firebaseConfig";
 import "./CatCarousel.css";
-import { optimizeCloudinaryImage } from '../../lib/optimizeCloudinaryImage';
+import { optimizeCloudinaryImage } from '../../../lib/optimizeCloudinaryImage';
 
 const AUTO_SCROLL_INTERVAL = 3000;
 

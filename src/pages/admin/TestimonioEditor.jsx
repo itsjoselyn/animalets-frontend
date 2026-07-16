@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { addDoc, collection, deleteDoc, doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useNavigate, useParams } from "react-router-dom";
 import { db } from "../../firebase/firebaseConfig";
-import "../../components/contact/ContactForm.css";
+import "../../components/sections/Contact/ContactForm.css";
 import "./GatoEditor.css";
 
 const EMPTY = {

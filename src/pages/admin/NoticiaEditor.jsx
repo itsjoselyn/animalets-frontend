@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { addDoc, collection, deleteDoc, doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
-import "../../components/contact/ContactForm.css";
+import "../../components/sections/Contact/ContactForm.css";
 import "./GatoEditor.css";
-import BlogArticleView from "../../components/blog/BlogArticleView";
+import BlogArticleView from "../../components/sections/Blog/BlogArticleView";
 import { compressForUpload } from "../../lib/imageUtils";
 import { uploadImageToCloudinary } from "../../lib/uploadImageToCloudinary";
 

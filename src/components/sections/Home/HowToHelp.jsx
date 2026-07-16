@@ -1,6 +1,6 @@
 import "./HowToHelp.css";
 import { Link } from "react-router-dom";
-import { optimizeCloudinaryImage } from '../../lib/optimizeCloudinaryImage';
+import { optimizeCloudinaryImage } from '../../../lib/optimizeCloudinaryImage';
 
 const OPTIONS = [
   { id: 1, title: "Voluntariado", link: "/como-ayudar/voluntariado", img: "https://placecats.com/neo/300/400" },

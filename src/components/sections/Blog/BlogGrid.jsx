@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import BlogCard from "./BlogCard";
 import "./BlogGrid.css";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase/firebaseConfig";
+import { db } from "../../../firebase/firebaseConfig";
 import { formatBlogDate, getFirestoreTimestampMs, normalizeBlogImages } from "./blogUtils";
 
 

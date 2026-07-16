@@ -3,7 +3,7 @@ import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../firebase/firebaseConfig";
 import { optimizeCloudinaryImage } from '../../lib/optimizeCloudinaryImage';
-import { formatBlogDate, getFirestoreTimestampMs, normalizeBlogImages } from "../../components/blog/blogUtils";
+import { formatBlogDate, getFirestoreTimestampMs, normalizeBlogImages } from "../../components/sections/Blog/blogUtils";
 
 export default function AdminNoticias() {
     const [posts, setPosts] = useState([]);

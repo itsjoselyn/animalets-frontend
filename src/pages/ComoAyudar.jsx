@@ -1,5 +1,5 @@
-import ComoAyudarHeader from "../components/howToHelp/ComoAyudarHeader";
-import ComoAyudarList from "../components/howToHelp/ComoAyudarList";
+import ComoAyudarHeader from "../components/sections/HowToHelp/ComoAyudarHeader";
+import ComoAyudarList from "../components/sections/HowToHelp/ComoAyudarList";
 
 export default function ComoAyudar() {
     return (

@@ -5,7 +5,7 @@ import { collection, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, serverTi
 import { db } from '../../firebase/firebaseConfig';
 import { uploadImageToCloudinary } from '../../lib/uploadImageToCloudinary';
 import { compressForUpload } from '../../lib/imageUtils';
-import '../../components/contact/ContactForm.css';
+import '../../components/sections/Contact/ContactForm.css';
 import './GatoEditor.css';
 
 const EMPTY = {

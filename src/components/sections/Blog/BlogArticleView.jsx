@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { optimizeCloudinaryImage } from "../../lib/optimizeCloudinaryImage";
+import { optimizeCloudinaryImage } from "../../../lib/optimizeCloudinaryImage";
 import { formatBlogDate } from "./blogUtils";
-import "../../pages/BlogPostPage.css";
+import "../../../pages/BlogPostPage.css";
 
 export default function BlogArticleView({ post: userPost, nextPost = null, preview = false, showDate = true }) {
     const images = Array.isArray(userPost?.imagenes)
