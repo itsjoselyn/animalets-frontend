@@ -2,14 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/animalets-logo.jpeg";
 import "./Navbar.css";
-
-const NAV_LINKS = [
-  { label: "Sobre nosotros", to: "/sobre-nosotros" },
-  { label: "Nuestros peludos", to: "/nuestros-peludos" },
-  { label: "Cómo ayudar", to: "/como-ayudar" },
-  { label: "Blog", to: "/blog" },
-  { label: "Contacto", to: "/contacto" },
-];
+import { NAV_LINKS } from "../../data/navigation";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
