@@ -137,6 +137,7 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
   const hasMore = visible < total;
   const progress = total > 0 ? Math.round((shown.length / total) * 100) : 0;
 
+  // TODO: no logs just error logs if necessary
   console.debug('CatGrid: allCats length', allCats.length, allCats.slice(0, 3));
   console.debug('CatGrid: shown length', shown.length, shown.slice(0, 3));
 

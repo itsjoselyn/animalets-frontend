@@ -4,6 +4,7 @@ import "./ContactForm.css";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 
+// TODO: estas constantes deberían estar en un archivo aparte, y no hardcodeadas aquí
 const TIPOS = [
   { value: "adoptar", label: "Adoptar" },
   { value: "apadrinar", label: "Apadrinar" },
@@ -52,7 +53,7 @@ const initialFormState = {
   personasAdoptar: "",
   experienciaAdoptar: "",
 };
-
+// TODO: REFACTOR: separar en varios componentes, uno por tipo de consulta, y un componente padre que maneje el estado del formulario y la validación. Esto hará que el código sea más mantenible y legible.
 export default function ContactForm() {
   const [searchParams] = useSearchParams();
   const [tipo, setTipo] = useState("");

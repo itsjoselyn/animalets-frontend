@@ -87,6 +87,7 @@ function AppRouter() {
                 </Route>
 
                 {/* Resto — con navbar y footer */}
+                {/* TODO: Esto debería de ir en MainLayout */}
                 <Route path="/*" element={
                     <>
                         <Navbar />

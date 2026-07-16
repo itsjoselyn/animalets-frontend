@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import "./AboutMission.css";
 import { optimizeCloudinaryImage } from '../../../lib/optimizeCloudinaryImage';
 
+// TODO: remove hardcoded img when imgs  are uploaded to cloudinary and stored in firestore
 const CARDS = [
   {
     id: 1,
@@ -15,7 +16,7 @@ const CARDS = [
     num: "02",
     title: "Colonias con corazón",
     text: "200 gatos callejeros en la Llagosta: alimentadores dan su tiempo diario. 6 cathotels los cobijan del frío y protegen su comida.",
-    img: "https://placecats.com/millie/400/500",
+    img: "https://placecats.com/millie/400/500", 
   },
   {
     id: 3,

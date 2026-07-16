@@ -27,7 +27,7 @@ export default function BlogArticleView({ post: userPost, nextPost = null, previ
                     {preview ? <span /> : (
                         <Link to="/blog" className="blogpost-back">
                             <span className="blogpost-dot" />
-                            Todos los artículos
+                            Volver al blog
                         </Link>
                     )}
 

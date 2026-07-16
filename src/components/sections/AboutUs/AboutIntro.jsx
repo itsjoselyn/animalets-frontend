@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./AboutIntro.css";
+import { YOUTUBE_ID, TEXT, COUNT } from "../../../utils/constants";
 
-const YOUTUBE_ID = "dQw4w9WgXcQ";
-const TEXT = "EL HOGAR TEMPORAL QUE TU FUTURO MEJOR AMIGO MERECE · · ·";
-const COUNT = 22;
 
 function randomBalls() {
   return Array.from({ length: COUNT }, (_, i) => ({
