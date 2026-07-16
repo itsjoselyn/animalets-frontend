@@ -14,7 +14,7 @@ import TestimonioPage from "../pages/TestimonioPage";
 import PrivacidadPage from '../pages/PrivacidadPage';
 import CatProfilePage from "../pages/CatProfilePage";
 import BlogPostPage from "../pages/BlogPostPage";
-import ScrollToTop from '../components/common/ScrollToTop';
+import ScrollToTop from '../hooks/ScrollToTop';
 import AdminLogin from '../pages/admin/Login';
 import AdminLayout from '../pages/admin/AdminLayout';
 import AdminGatos from '../pages/admin/Gatos';
