@@ -2,7 +2,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./TestimonioPage.css";
 import logo from "../assets/animalets-logo.jpeg";
-import { optimizeCloudinaryImage } from '../lib/optimizeCloudinaryImage';
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 
@@ -29,11 +28,9 @@ export default function TestimonioPage() {
           const data = docSnap.data();
           setTestimonio({
             id: docSnap.id,
-            name: data.nombre || "",
+            title: data.titulo || data.title || "",
             date: data.createdAt || null,
-            title: data.titulo || "",
-            text: data.descripcion || data.texto || "",
-            img: data.imagen || "",
+            text: data.descripcion || data.texto || data.body || "",
           });
         } else {
           setError("Testimonio no encontrado");
@@ -94,18 +91,12 @@ export default function TestimonioPage() {
 
       {/* Subheader con nombre */}
       <div className="testpage-subheader">
-        <h1 className="testpage-name">{testimonio.name}</h1>
+        <h1 className="testpage-name">{testimonio.title}</h1>
         <span className="testpage-date">{formatDate(testimonio.date)}</span>
       </div>
 
       {/* Contenido */}
       <div className="testpage-body">
-        <div className="testpage-img-wrap">
-          {testimonio.img ? (
-            <img src={optimizeCloudinaryImage(testimonio.img, 600)} alt={testimonio.name} className="testpage-img" />
-          ) : null}
-        </div>
-        <h2 className="testpage-title">{testimonio.title}</h2>
         <p className="testpage-text">{testimonio.text}</p>
       </div>
 

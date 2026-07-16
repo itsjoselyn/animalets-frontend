@@ -11,6 +11,13 @@ function formatDate(value) {
     return new Date(value).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" });
 }
 
+function makePreview(text, maxWords = 15) {
+    if (!text) return "";
+    const words = String(text).trim().split(/\s+/);
+    if (words.length <= maxWords) return words.join(" ") + "...";
+    return words.slice(0, maxWords).join(" ") + "...";
+}
+
 export default function AdminTestimonios() {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -23,14 +30,15 @@ export default function AdminTestimonios() {
                 const list = snap.docs.map((d) => {
                     const data = d.data() || {};
                     const ts = data.updatedAt || data.createdAt;
+                    const preview = data.preview || makePreview(data.descripcion || data.texto || data.body || "");
                     return {
                         id: d.id,
-                        nombre: data.nombre || data.name || "",
-                        preview: data.preview || "",
                         titulo: data.titulo || data.title || "",
-                        imagen: data.imagen || data.image || data.img || "",
+                        preview: data.preview || "",
+                        descripcion: data.descripcion || data.texto || data.body || "",
                         date: formatDate(ts),
                         sortTime: ts,
+                        generatedPreview: preview,
                     };
                 });
                 list.sort((a, b) => {
@@ -64,8 +72,8 @@ export default function AdminTestimonios() {
                         <table style={{ width: "100%", borderCollapse: "collapse" }}>
                             <thead>
                                 <tr>
-                                    <th style={{ textAlign: "left", padding: 8 }}>Nombre</th>
                                     <th style={{ textAlign: "left", padding: 8 }}>Titulo</th>
+                                    <th style={{ textAlign: "left", padding: 8 }}>Preview</th>
                                     <th style={{ textAlign: "left", padding: 8 }}>Fecha</th>
                                     <th style={{ padding: 8 }}>Acciones</th>
                                 </tr>
@@ -73,8 +81,8 @@ export default function AdminTestimonios() {
                             <tbody>
                                 {items.map((item) => (
                                     <tr key={item.id} style={{ borderTop: "1px solid #eee" }}>
-                                        <td style={{ padding: 8 }}>{item.nombre || "-"}</td>
-                                        <td style={{ padding: 8 }}>{item.titulo || item.preview || "-"}</td>
+                                        <td style={{ padding: 8 }}>{item.titulo || "-"}</td>
+                                        <td style={{ padding: 8 }}>{item.preview || item.generatedPreview || "-"}</td>
                                         <td style={{ padding: 8 }}>{item.date}</td>
                                         <td style={{ padding: 8 }}>
                                             <button className="cayudar-btn" onClick={() => navigate(`/admin/testimonios/${item.id}`)}>Editar</button>

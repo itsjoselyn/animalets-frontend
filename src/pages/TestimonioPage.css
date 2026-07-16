@@ -84,7 +84,7 @@
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.75);
+  color: rgba(255, 255, 255, 0.75);
   flex-shrink: 0;
 }
 
@@ -97,19 +97,6 @@
   max-width: 680px;
   margin: 0 auto;
   width: 100%;
-}
-
-.testpage-img-wrap {
-  width: 100%;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.testpage-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
 }
 
 .testpage-title {
