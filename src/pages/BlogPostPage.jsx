@@ -1,13 +1,12 @@
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import "./BlogPostPage.css";
-import { optimizeCloudinaryImage } from '../lib/optimizeCloudinaryImage';
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
+import BlogArticleView from "../components/blog/BlogArticleView";
+import { getFirestoreTimestampMs } from "../components/blog/blogUtils";
 
 export default function BlogPostPage() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [nextPost, setNextPost] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -32,35 +31,36 @@ export default function BlogPostPage() {
           return;
         }
 
-        const data = docSnap.data();
-        const ts = data.updatedAt || data.createdAt;
-        let dateStr = "";
-        if (ts) {
-          if (typeof ts.toDate === "function") {
-            dateStr = ts.toDate().toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" });
-          } else {
-            dateStr = new Date(ts).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" });
-          }
-        }
+        const data = docSnap.data() || {};
 
         const normalized = {
           id: docSnap.id,
           title: data.titulo || data.title || "",
-          img: (Array.isArray(data.imagenes) && data.imagenes[0] && (data.imagenes[0].url || data.imagenes[0])) || data.imagen || data.image || data.img || "",
+          imagenes:
+            Array.isArray(data.imagenes) && data.imagenes.length > 0
+              ? data.imagenes
+                .map((item) => {
+                  if (!item) return null;
+                  if (typeof item === "string") return { url: item };
+                  return { url: item.url || item.src || item.image || null };
+                })
+                .filter((item) => item && item.url)
+              : (data.imagen || data.image || data.img
+                ? [{ url: data.imagen || data.image || data.img }]
+                : []),
           body: data.descripcion || data.body || data.text || "",
-          date: dateStr,
           createdAt: data.createdAt,
           updatedAt: data.updatedAt,
         };
+
 
         if (mounted) setPost(normalized);
 
         // Fetch all posts to determine the "next" article by date
         const snapshot = await getDocs(collection(db, "blog"));
         const docs = snapshot.docs.map((d) => {
-          const dd = d.data();
-          const t = dd.updatedAt || dd.createdAt;
-          const time = t ? (typeof t.toDate === "function" ? t.toDate().getTime() : new Date(t).getTime()) : 0;
+          const dd = d.data() || {};
+          const time = getFirestoreTimestampMs(dd.updatedAt || dd.createdAt);
           return {
             id: d.id,
             title: dd.titulo || dd.title || "",
@@ -120,44 +120,5 @@ export default function BlogPostPage() {
     );
   }
 
-  return (
-    <div className="blogpost">
-
-      {/* Hero verde: título + nav */}
-      <div className="blogpost-hero">
-        <h1 className="blogpost-title">{post.title}</h1>
-        <div className="blogpost-nav-top">
-          <Link to="/blog" className="blogpost-back">
-            <span className="blogpost-dot" />
-            Todos los artículos
-          </Link>
-          <span className="blogpost-date">{post.date}</span>
-        </div>
-      </div>
-
-      {/* Contenido blanco */}
-      <div className="blogpost-body">
-        <div className="blogpost-img-wrap">
-          {post.img ? <img src={optimizeCloudinaryImage(post.img, 1200)} alt={post.title} className="blogpost-img" /> : null}
-        </div>
-
-        <div className="blogpost-text">
-          {String(post.body).split("\n\n").map((p, i) => (
-            <p key={i}>{p}</p>
-          ))}
-        </div>
-
-        {/* Siguiente artículo */}
-        {nextPost && (
-          <div className="blogpost-next">
-            <Link to={`/blog/${nextPost.id}`} className="blogpost-next-link">
-              Siguiente artículo
-              <span className="blogpost-dot blogpost-dot--green" />
-            </Link>
-          </div>
-        )}
-      </div>
-
-    </div>
-  );
+  return <BlogArticleView post={post} nextPost={nextPost} showDate />;
 }

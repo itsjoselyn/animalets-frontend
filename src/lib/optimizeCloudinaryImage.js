@@ -1,17 +1,17 @@
 
-export function optimizeCloudinaryImage(
-    url,
-    {
+export function optimizeCloudinaryImage(url, options = {}) {
+    if (!url || typeof url !== "string") return url;
+    if (!/cloudinary\.com/.test(url)) return url;
+
+    const normalizedOptions = typeof options === "number" ? { width: options } : (options || {});
+    const {
         width = 1200,
         height = 900,
         crop = "fill",
         gravity = "auto",
         quality = "auto",
         format = "auto",
-    } = {}
-) {
-    if (!url || typeof url !== "string") return url;
-    if (!/cloudinary\.com/.test(url)) return url;
+    } = normalizedOptions;
 
     try {
         const uploadMarker = "/upload/";

@@ -44,7 +44,11 @@ export default function CatProfilePage() {
 
       try {
         const ref = doc(db, "gatos", id);
+
         const snap = await getDoc(ref);
+
+
+
 
         if (!snap.exists()) {
           if (mounted) setCat(null);

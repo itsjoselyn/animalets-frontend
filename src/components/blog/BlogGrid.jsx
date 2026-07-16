@@ -3,6 +3,7 @@ import BlogCard from "./BlogCard";
 import "./BlogGrid.css";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
+import { formatBlogDate, getFirestoreTimestampMs, normalizeBlogImages } from "./blogUtils";
 
 
 const PAGE_SIZE = 12;
@@ -21,36 +22,23 @@ export default function BlogGrid() {
         const q = collection(db, "blog");
         const snapshot = await getDocs(q);
         const docs = snapshot.docs.map((doc) => {
-          const data = doc.data();
-          const ts = data.updatedAt || data.createdAt;
-          let dateStr = "";
-          if (ts) {
-            if (typeof ts.toDate === "function") {
-              dateStr = ts.toDate().toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" });
-            } else {
-              dateStr = new Date(ts).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" });
-            }
-          }
-          const imgFromArray = Array.isArray(data.imagenes) && data.imagenes[0] ? (data.imagenes[0].url || data.imagenes[0]) : null;
+          const data = doc.data() || {};
+          const images = normalizeBlogImages(data);
+          const publishedAt = data.createdAt || data.updatedAt;
           return {
             id: doc.id,
             title: data.titulo || data.title || "",
-            img: imgFromArray || data.imagen || data.image || data.img || "",
+            img: images[0] || "",
+            imagenes: images.map(url => ({ url })),
             body: data.descripcion || data.body || data.text || "",
             createdAt: data.createdAt,
             updatedAt: data.updatedAt,
-            date: dateStr,
+            date: formatBlogDate(publishedAt),
+            sortTime: getFirestoreTimestampMs(data.updatedAt || data.createdAt),
           };
         });
 
-        // Sort by updatedAt (or createdAt) descending
-        const getTime = (ts) => {
-          if (!ts) return 0;
-          if (typeof ts.toDate === "function") return ts.toDate().getTime();
-          return new Date(ts).getTime();
-        };
-
-        docs.sort((a, b) => getTime(b.updatedAt || b.createdAt) - getTime(a.updatedAt || a.createdAt));
+        docs.sort((a, b) => b.sortTime - a.sortTime);
 
         if (mounted) {
           setPosts(docs);
