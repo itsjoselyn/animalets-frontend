@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./CatCard.css";
-import { optimizeCloudinaryImage } from '../../lib/optimizeCloudinaryImage';
+import { optimizeCloudinaryImage } from '../../../lib/optimizeCloudinaryImage';
 
 export default function CatCard({ cat }) {
   const { id, name, age, gender, img, status } = cat;

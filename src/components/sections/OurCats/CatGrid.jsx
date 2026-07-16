@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import CatCard from "./CatCard";
 import "./CatGrid.css";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase/firebaseConfig";
+import { db } from "../../../firebase/firebaseConfig";
 
 const PAGE_SIZE = 12;
 

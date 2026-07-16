@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import "./AboutMission.css";
-import { optimizeCloudinaryImage } from '../../lib/optimizeCloudinaryImage';
+import { optimizeCloudinaryImage } from '../../../lib/optimizeCloudinaryImage';
 
 const CARDS = [
   {
