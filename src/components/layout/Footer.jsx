@@ -3,7 +3,7 @@ import logo from "../../assets/animalets-logo.jpeg";
 import "./Footer.css";
 import { NAV_LINKS, SOCIAL_LINKS } from "../../data/navigation";
 
-
+// TODO: esta funcion debería estar en un archivo aparte
 function UnderlineLink({ children, to, href, external }) {
   const cls = "footer-link";
   if (external) {
