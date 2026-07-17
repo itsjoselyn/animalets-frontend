@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./CatCard.css";
 import { optimizeCloudinaryImage } from '../../../lib/optimizeCloudinaryImage';
+import Button from "../../common/Button/Button";
 
 export default function CatCard({ cat }) {
   const { id, name, age, gender, img, status } = cat;
@@ -29,9 +30,8 @@ export default function CatCard({ cat }) {
 
         {images.length > 1 && (
           <>
-            <button aria-label="Anterior" onClick={prev} className="pcat-img-arrow pcat-img-arrow--left" style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)' }}>◀</button>
-            <button aria-label="Siguiente" onClick={next} className="pcat-img-arrow pcat-img-arrow--right" style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)' }}>▶</button>
-          </>
+            <Button variant="img-arrow-left" aria-label="Anterior" onClick={prev} style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)' }}>◀</Button>
+            <Button variant="img-arrow-right" aria-label="Siguiente" onClick={next} style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)' }}>▶</Button>  </>
         )}
 
         {status && <div className="pcat-card-badge">{status}</div>}
@@ -51,12 +51,10 @@ export default function CatCard({ cat }) {
             <img src={optimizeCloudinaryImage(current, 1000)} alt={name} style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: 8 }} />
             {images.length > 1 && (
               <>
-                <button aria-label="Anterior" onClick={prev} style={{ position: 'absolute', left: -40, top: '50%', transform: 'translateY(-50%)', background: 'transparent', color: '#fff', border: 'none', fontSize: 28 }}>◀</button>
-                <button aria-label="Siguiente" onClick={next} style={{ position: 'absolute', right: -40, top: '50%', transform: 'translateY(-50%)', background: 'transparent', color: '#fff', border: 'none', fontSize: 28 }}>▶</button>
-              </>
+                <Button aria-label="Anterior" onClick={prev} style={{ position: 'absolute', left: -40, top: '50%', transform: 'translateY(-50%)', background: 'transparent', color: '#fff', border: 'none', fontSize: 28 }}>◀</Button>
+                <Button aria-label="Siguiente" onClick={next} style={{ position: 'absolute', right: -40, top: '50%', transform: 'translateY(-50%)', background: 'transparent', color: '#fff', border: 'none', fontSize: 28 }}>▶</Button>  </>
             )}
-            <button aria-label="Cerrar" onClick={() => setModalOpen(false)} style={{ position: 'absolute', right: -10, top: -40, background: 'transparent', color: '#fff', border: 'none', fontSize: 28 }}>✕</button>
-          </div>
+            <Button aria-label="Cerrar" onClick={() => setModalOpen(false)} style={{ position: 'absolute', right: -10, top: -40, background: 'transparent', color: '#fff', border: 'none', fontSize: 28 }}>✕</Button>          </div>
         </div>
       )}
     </Link>

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { db } from "../../firebase/firebaseConfig";
 import { optimizeCloudinaryImage } from '../../lib/optimizeCloudinaryImage';
 import { formatBlogDate, getFirestoreTimestampMs, normalizeBlogImages } from "../../components/sections/Blog/blogUtils";
+import Button from "../../components/common/Button/Button";
 
 export default function AdminNoticias() {
     const [posts, setPosts] = useState([]);
@@ -48,8 +49,7 @@ export default function AdminNoticias() {
             {loading ? <p>Cargando...</p> : (
                 <>
                     <div style={{ marginBottom: 12 }}>
-                        <button className="cayudar-btn" onClick={() => navigate("/admin/noticias/new")}>Crear noticia</button>
-                    </div>
+                        <Button variant="admin-btn" onClick={() => navigate('/admin/gatos/new')}>Crear gato</Button>                    </div>
 
                     {posts.length === 0 ? <p>No hay noticias todavia.</p> : (
                         <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -72,9 +72,8 @@ export default function AdminNoticias() {
                                             {post.imagen ? <img src={optimizeCloudinaryImage(post.imagen, 300)} alt={post.titulo} style={{ width: 64, height: 48, objectFit: "cover", borderRadius: 6 }} /> : "-"}
                                         </td>
                                         <td style={{ padding: 8 }}>
-                                            <button className="cayudar-btn" onClick={() => navigate(`/admin/noticias/${post.id}`)}>Editar</button>
-                                            <button
-                                                className="cayudar-btn"
+                                            <Button variant="admin-btn" onClick={() => navigate(`/admin/noticias/${post.id}`)}>Editar</Button>        <Button
+                                                variant="admin-btn"
                                                 style={{ marginLeft: 8, background: "#e53935", color: "#fff" }}
                                                 onClick={async () => {
                                                     if (!confirm("Eliminar esta noticia?")) return;
@@ -88,7 +87,7 @@ export default function AdminNoticias() {
                                                 }}
                                             >
                                                 Borrar
-                                            </button>
+                                            </Button>
                                         </td>
                                     </tr>
                                 ))}

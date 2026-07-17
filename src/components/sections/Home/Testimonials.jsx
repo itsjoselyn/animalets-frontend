@@ -3,21 +3,17 @@ import { Link, useSearchParams } from "react-router-dom";
 import "./Testimonials.css";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
+import Button from "../../common/Button/Button";
 
 function Timeline({ items, active, onSelect }) {
   return (
     <div className="testi-timeline">
       <div className="testi-line" />
       {items.map((t) => (
-        <button
-          key={t.id}
-          className={`testi-node${active === t.id ? " testi-node--active" : ""}`}
-          onClick={() => onSelect(t.id)}
-          aria-label={t.name}
-        >
+        <Button key={t.id} variant="testi-node" active={active === t.id} onClick={() => onSelect(t.id)} aria-label={t.name}>
           <span className="testi-node-dot" />
           <span className="testi-node-name">{t.name}</span>
-        </button>
+        </Button>
       ))}
     </div>
   );

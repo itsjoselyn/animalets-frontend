@@ -7,6 +7,7 @@ import ApadrinarFields from "./fields/ApadrinarFields";
 import AdoptarFields from "./fields/AdoptarFields";
 import PrivacyModal from "./PrivacyModal";
 import Toast from "./Toast";
+import Button from "../../common/Button/Button";
 
 export default function ContactForm() {
   const {
@@ -65,8 +66,9 @@ export default function ContactForm() {
         </label>
         {errors.privacidad && <p className="cform-field-error">{errors.privacidad}</p>}
 
-        <button type="submit" className="cform-submit" disabled={sending}>{sending ? "Enviando..." : "Enviar"}</button>
-      </form>
+        <Button type="submit" variant="submit" disabled={sending}>
+          {sending ? "Enviando..." : "Enviar"}
+        </Button>      </form>
 
       <PrivacyModal open={privacyOpen} onClose={() => setPrivacyOpen(false)} />
       <Toast toast={toast} onClose={dismissToast} />

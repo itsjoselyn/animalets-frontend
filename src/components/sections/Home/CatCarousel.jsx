@@ -5,6 +5,7 @@ import { db } from "../../../firebase/firebaseConfig";
 import "./CatCarousel.css";
 import { optimizeCloudinaryImage } from '../../../lib/optimizeCloudinaryImage';
 import { AUTO_SCROLL_INTERVAL } from "../../../utils/constants";
+import Button from "../../common/Button/Button";
 
 
 export default function CatCarousel() {
@@ -115,9 +116,7 @@ export default function CatCarousel() {
       {/* Carrusel */}
       <div className="cat-carousel-track-wrapper">
         {/* Flecha izquierda */}
-        <button className="cat-carousel-arrow cat-carousel-arrow--left" onClick={prev} aria-label="Anterior">
-          ←
-        </button>
+        <Button variant="carousel-arrow-left" onClick={prev} aria-label="Anterior">←</Button>
 
         {/* Cards */}
         <div className="cat-carousel-track">
@@ -174,10 +173,7 @@ export default function CatCarousel() {
         </div>
 
         {/* Flecha derecha */}
-        <button className="cat-carousel-arrow cat-carousel-arrow--right" onClick={next} aria-label="Siguiente">
-          →
-        </button>
-      </div>
+        <Button variant="carousel-arrow-right" onClick={next} aria-label="Siguiente">→</Button>      </div>
 
       {/* Barra de progreso */}
       <div className="cat-carousel-progress-wrapper">

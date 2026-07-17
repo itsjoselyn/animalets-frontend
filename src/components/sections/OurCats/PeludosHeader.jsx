@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./PeludosHeader.css";
 import PeludosSort from "./PeludosSort";
+import Button from "../../common/Button/Button";
 
 export default function PeludosHeader({ onFilter, sortValue, onSortChange }) {
   const [sortOpen, setSortOpen] = useState(false);
@@ -15,14 +16,9 @@ export default function PeludosHeader({ onFilter, sortValue, onSortChange }) {
 
         {/* Ordenar con dropdown pegado al botón */}
         <div className="peludos-sort-wrap">
-          <button
-            className="peludos-action-btn"
-            onClick={() => setSortOpen((v) => !v)}
-          >
-            <span className="peludos-action-icon">↕</span>
-            Ordenar
-          </button>
-          <PeludosSort
+          <Button variant="peludos-action" onClick={() => setSortOpen((v) => !v)}>
+            <span className="peludos-action-icon">↕</span> Ordenar
+          </Button>          <PeludosSort
             isOpen={sortOpen}
             onClose={() => setSortOpen(false)}
             value={sortValue}
@@ -30,10 +26,9 @@ export default function PeludosHeader({ onFilter, sortValue, onSortChange }) {
           />
         </div>
 
-        <button className="peludos-action-btn" onClick={onFilter}>
-          <span className="peludos-action-icon">⚌</span>
-          Filtrar
-        </button>
+        <Button variant="peludos-action" onClick={onFilter}>
+          <span className="peludos-action-icon">⚌</span> Filtrar
+        </Button>
 
       </div>
     </div>

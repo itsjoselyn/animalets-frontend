@@ -6,7 +6,7 @@ import { TYPE_LABELS } from "../../utils/constants";
 import { STATUS_LABELS } from "../../utils/constants";
 import { STATUS_OPTIONS } from "../../utils/constants";
 import { TYPE_OPTIONS } from "../../utils/constants";
-
+import Button from "../../components/common/Button/Button";
 function formatDate(value) {
     if (!value) return "-";
     if (typeof value === "object" && typeof value.toDate === "function") {
@@ -247,15 +247,19 @@ export default function AdminSolicitudes() {
                                                 <p className="solicitud-card-date">{formatDate(item.createdAtValue)}</p>
                                             </div>
                                             <div className="solicitud-card-actions">
-                                                <button className="cayudar-btn" onClick={(e) => { e.stopPropagation(); setSelectedId(item.id); }}>Ver</button>
-                                                {status !== "leido" && (
-                                                    <button className="cayudar-btn" onClick={(e) => { e.stopPropagation(); markRead(item); }}>
-                                                        Marcar como leído
-                                                    </button>
+                                                <Button variant="admin-btn" onClick={(e) => { e.stopPropagation(); setSelectedId(item.id); }}>Ver</Button>                                                {status !== "leido" && (
+                                                    <Button variant="admin-btn" onClick={(e) => { e.stopPropagation(); markRead(item); }}>Marcar como leído</Button>
                                                 )}
-                                                <button className="cayudar-btn solicitud-delete-btn" onClick={(e) => { e.stopPropagation(); removeItem(item); }}>
+                                                <Button
+                                                    variant="admin-btn"
+                                                    className="solicitud-delete-btn"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        removeItem(item);
+                                                    }}
+                                                >
                                                     Borrar
-                                                </button>
+                                                </Button>
                                             </div>
                                         </article>
                                     );

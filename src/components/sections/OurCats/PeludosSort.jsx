@@ -1,5 +1,6 @@
 import "./PeludosSort.css";
 import { OPTIONS_FILTER } from "../../../utils/constants";
+import Button from "../../common/Button/Button";
 
 export default function PeludosSort({ isOpen, onClose, value, onChange }) {
   return (
@@ -8,14 +9,15 @@ export default function PeludosSort({ isOpen, onClose, value, onChange }) {
       {isOpen && (
         <div className="psort-dropdown">
           {OPTIONS_FILTER.map((opt) => (
-            <button
+            <Button
               key={opt.value}
-              className={`psort-option${value === opt.value ? " psort-option--active" : ""}`}
+              variant="sort-option"
+              active={value === opt.value}
               onClick={() => { onChange(value === opt.value ? null : opt.value); onClose(); }}
             >
               {opt.label}
               {value === opt.value && <span className="psort-check">✓</span>}
-            </button>
+            </Button>
           ))}
         </div>
       )}

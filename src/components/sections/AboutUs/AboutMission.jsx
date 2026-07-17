@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import "./AboutMission.css";
 import { optimizeCloudinaryImage } from '../../../lib/optimizeCloudinaryImage';
 import { CARDS } from "../../../utils/constants";
+import Button from "../../common/Button/Button";
 
 
 
@@ -13,9 +14,10 @@ function Card({ card, active, onDotClick, showDots }) {
         {showDots && (
           <div className="amission-dots">
             {CARDS.map((_, i) => (
-              <button
+              <Button
                 key={i}
-                className={`amission-dot${i === active ? " amission-dot--active" : ""}`}
+                variant="dot"
+                active={i === active}
                 onClick={() => onDotClick(i)}
                 aria-label={`Ver ${CARDS[i].title}`}
               />

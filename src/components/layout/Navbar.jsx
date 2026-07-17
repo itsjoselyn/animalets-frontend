@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/animalets-logo.jpeg";
 import "./Navbar.css";
 import { NAV_LINKS } from "../../data/navigation";
+import Button from "../common/Button/Button";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -34,18 +35,12 @@ export default function Navbar() {
 
         {/* MOBILE: menú hamburguesa izquierda */}
         <div className="navbar-left">
-          <button
-            className="nav-menu-btn"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Abrir menú"
-          >
+          <Button variant="menu" onClick={() => setMenuOpen(!menuOpen)} aria-label="Abrir menú">
             <div className={`hamburger-icon ${menuOpen ? "open" : ""}`}>
-              <span />
-              <span />
-              <span />
+              <span /><span /><span />
             </div>
             MENÚ
-          </button>
+          </Button>
         </div>
 
         {/* Logo */}

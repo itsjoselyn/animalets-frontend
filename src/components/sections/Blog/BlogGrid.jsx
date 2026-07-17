@@ -5,6 +5,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import { formatBlogDate, getFirestoreTimestampMs, normalizeBlogImages } from "./blogUtils";
 import { PAGE_SIZE } from "../../../utils/constants";
+import Button from "../../common/Button/Button";
 
 
 
@@ -97,12 +98,9 @@ export default function BlogGrid() {
             />
           </div>
           {hasMore && (
-            <button
-              className="blog-grid-more-btn"
-              onClick={() => setVisible((v) => Math.min(v + PAGE_SIZE, posts.length))}
-            >
+            <Button variant="more-blog" onClick={() => setVisible((v) => Math.min(v + PAGE_SIZE, posts.length))}>
               Mostrar más
-            </button>
+            </Button>
           )}
         </div>
       )}

@@ -25,7 +25,7 @@ export default function BasicFields({ data, setField }) {
 
             <label className="cform-sublabel">Descripción / Historia</label>
             <textarea className="cform-textarea" rows={6} placeholder="Descripción" value={data.historia || ''} onChange={(e) => setField('historia', e.target.value)} />
-
+            <br />      <label className="cform-sublabel">Necesidades</label>
             <ArrayInput value={data.necesidades || []} onChange={(v) => setField('necesidades', v)} placeholder="Necesidad (ej. comida especial)" />
         </>
     );

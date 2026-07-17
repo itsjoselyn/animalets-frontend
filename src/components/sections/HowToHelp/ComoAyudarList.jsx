@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./ComoAyudarList.css";
+import Button from "../../common/Button/Button";
 
 export const OPTIONS_HELP = [
   {
@@ -126,15 +127,11 @@ export default function ComoAyudarList() {
     const isOpen = open === opt.id;
     return (
       <div key={opt.id} className={`cayudar-item${isOpen ? " cayudar-item--open" : ""}`}>
-        <button
-          className="cayudar-item-header"
-          onClick={() => toggle(opt.id)}
-          aria-expanded={isOpen}
-        >
+        <Button variant="accordion" onClick={() => toggle(opt.id)} isOpen={isOpen}>
           <span className="cayudar-item-icon">{opt.icon}</span>
           <span className="cayudar-item-title">{opt.title}</span>
           <span className="cayudar-item-arrow">{isOpen ? "∧" : "∨"}</span>
-        </button>
+        </Button>
         {isOpen && (
           <div className="cayudar-item-body">
             {opt.content}
