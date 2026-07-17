@@ -4,7 +4,6 @@ import { getAnalytics } from "firebase/analytics";
 import { getFirestore, initializeFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 // Storage removed: use Cloudinary for image uploads instead of Firebase Storage
-// TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration

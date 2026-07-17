@@ -2,6 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import "./Solicitudes.css";
+import { TYPE_LABELS } from "../../utils/constants";
+import { STATUS_LABELS } from "../../utils/constants";
+import { STATUS_OPTIONS } from "../../utils/constants";
+import { TYPE_OPTIONS } from "../../utils/constants";
 
 function formatDate(value) {
     if (!value) return "-";
@@ -17,24 +21,6 @@ function toDisplayValue(value) {
     if (typeof value === "object") return JSON.stringify(value, null, 2);
     return String(value);
 }
-
-const TYPE_LABELS = {
-    acogida: "Acogida",
-    adopcion: "Adopción",
-    apadrinar: "Apadrinamiento",
-    voluntariado: "Voluntariado",
-    otros: "Otros",
-};
-
-const STATUS_LABELS = {
-    nuevo: "Nuevo",
-    leido: "Leído",
-    proceso: "En proceso",
-    cerrado: "Cerrado",
-};
-
-const STATUS_OPTIONS = ["todas", "nuevo", "leido", "proceso", "cerrado"];
-const TYPE_OPTIONS = ["todos", "acogida", "adopcion", "apadrinar", "voluntariado", "otros"];
 
 function getTypeValue(item) {
     return String(item.tipo || item.tipoSolicitud || item.tipo_solicitud || "otros").toLowerCase();

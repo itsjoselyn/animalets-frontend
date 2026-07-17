@@ -4,8 +4,8 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import "./CatCarousel.css";
 import { optimizeCloudinaryImage } from '../../../lib/optimizeCloudinaryImage';
+import { AUTO_SCROLL_INTERVAL } from "../../../utils/constants";
 
-const AUTO_SCROLL_INTERVAL = 3000;
 
 export default function CatCarousel() {
   const [cats, setCats] = useState([]);

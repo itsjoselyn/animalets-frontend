@@ -7,12 +7,8 @@ import "./GatoEditor.css";
 import BlogArticleView from "../../components/sections/Blog/BlogArticleView";
 import { compressForUpload } from "../../lib/imageUtils";
 import { uploadImageToCloudinary } from "../../lib/uploadImageToCloudinary";
+import { EMPTY_NEWS } from "../../utils/constants";
 
-const EMPTY = {
-    titulo: "",
-    descripcion: "",
-    imagenes: [],
-};
 
 export default function NoticiaEditor() {
     const { id } = useParams();
@@ -65,7 +61,7 @@ export default function NoticiaEditor() {
                 }
             })();
         } else {
-            setData(EMPTY);
+            setData(EMPTY_NEWS);
             setImagenPreview(null);
         }
 

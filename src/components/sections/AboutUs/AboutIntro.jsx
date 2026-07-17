@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./AboutIntro.css";
 import { YOUTUBE_ID, TEXT, COUNT } from "../../../utils/constants";
+import { textR } from "../../../utils/constants";
 
 
 function randomBalls() {
@@ -43,7 +44,6 @@ export default function AboutIntro() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const textR = 148;
 
   return (
     <section className="about-intro" ref={sectionRef}>

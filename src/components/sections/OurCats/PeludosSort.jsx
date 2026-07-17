@@ -1,11 +1,5 @@
 import "./PeludosSort.css";
-
-const OPTIONS = [
-  { value: "age_asc",  label: "Jóvenes" },
-  { value: "age_desc", label: "Mayores" },
-  { value: "macho",    label: "Gatos (machos)" },
-  { value: "hembra",   label: "Gatas (hembras)" },
-];
+import { OPTIONS_FILTER } from "../../../utils/constants";
 
 export default function PeludosSort({ isOpen, onClose, value, onChange }) {
   return (
@@ -13,7 +7,7 @@ export default function PeludosSort({ isOpen, onClose, value, onChange }) {
       {isOpen && <div className="psort-overlay" onClick={onClose} />}
       {isOpen && (
         <div className="psort-dropdown">
-          {OPTIONS.map((opt) => (
+          {OPTIONS_FILTER.map((opt) => (
             <button
               key={opt.value}
               className={`psort-option${value === opt.value ? " psort-option--active" : ""}`}

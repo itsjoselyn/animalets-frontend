@@ -1,31 +1,9 @@
 import { useState, useRef } from "react";
 import "./AboutMission.css";
 import { optimizeCloudinaryImage } from '../../../lib/optimizeCloudinaryImage';
+import { CARDS } from "../../../utils/constants";
 
-// TODO: remove hardcoded img when imgs  are uploaded to cloudinary and stored in firestore
-const CARDS = [
-  {
-    id: 1,
-    num: "01",
-    title: "Nacimos del abandono",
-    text: "En 1996, huertos vacíos dejaron gatos solos bajo la lluvia. Un grupo de vecinos levantó refugios improvisados.",
-    img: "https://placecats.com/neo/400/500",
-  },
-  {
-    id: 2,
-    num: "02",
-    title: "Colonias con corazón",
-    text: "200 gatos callejeros en la Llagosta: alimentadores dan su tiempo diario. 6 cathotels los cobijan del frío y protegen su comida.",
-    img: "https://placecats.com/millie/400/500", 
-  },
-  {
-    id: 3,
-    num: "03",
-    title: "Gatera vs cemento",
-    text: "2021: obras desahucian 50 gatos. ADIF construye gatera para 42 en semilibertad, reubicación.",
-    img: "https://placecats.com/bella/400/500",
-  },
-];
+
 
 function Card({ card, active, onDotClick, showDots }) {
   return (

@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import "./ContactCloud.css";
+import { RING_TEXT } from "../../../utils/constants";
+import { textContactR } from "../../../utils/constants";
 
-const RING_TEXT = "ADOPTA YA · ADOPTA YA · ADOPTA YA · ";
 
 export default function ContactCloud() {
   const sectionRef = useRef(null);
@@ -19,7 +20,6 @@ export default function ContactCloud() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const textR = 52;
 
   return (
     <section className="ccloud" ref={sectionRef}>
@@ -52,7 +52,7 @@ export default function ContactCloud() {
             <defs>
               <path
                 id="ringPath"
-                d={`M70,70 m-${textR},0 a${textR},${textR} 0 1,1 ${textR * 2},0 a${textR},${textR} 0 1,1 -${textR * 2},0`}
+                d={`M70,70 m-${textContactR},0 a${textContactR},${textContactR} 0 1,1 ${textContactR * 2},0 a${textContactR},${textContactR} 0 1,1 -${textContactR * 2},0`}
               />
             </defs>
             <text

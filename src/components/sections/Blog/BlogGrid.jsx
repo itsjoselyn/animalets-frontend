@@ -4,9 +4,9 @@ import "./BlogGrid.css";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import { formatBlogDate, getFirestoreTimestampMs, normalizeBlogImages } from "./blogUtils";
+import { PAGE_SIZE } from "../../../utils/constants";
 
 
-const PAGE_SIZE = 12;
 
 export default function BlogGrid() {
   const [visible, setVisible] = useState(PAGE_SIZE);

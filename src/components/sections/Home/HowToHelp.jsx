@@ -1,13 +1,7 @@
 import "./HowToHelp.css";
 import { Link } from "react-router-dom";
 import { optimizeCloudinaryImage } from '../../../lib/optimizeCloudinaryImage';
-
-const OPTIONS = [
-  { id: 1, title: "Voluntariado", link: "/como-ayudar/voluntariado", img: "https://placecats.com/neo/300/400" },
-  { id: 2, title: "Apadrinar un Gato", link: "/como-ayudar/apadrinar", img: "https://placecats.com/millie/300/400" },
-  { id: 3, title: "Hacerse Socio", link: "/como-ayudar/socio", img: "https://placecats.com/bella/300/400" },
-  { id: 4, title: "Casa de Acogida", link: "/como-ayudar/acogida", img: "https://placecats.com/neo_2/300/400" },
-];
+import { OPTIONS } from "../../../utils/constants";
 
 export default function HowToHelp() {
   return (

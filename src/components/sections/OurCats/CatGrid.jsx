@@ -3,8 +3,7 @@ import CatCard from "./CatCard";
 import "./CatGrid.css";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
-
-const PAGE_SIZE = 12;
+import { PAGE_SIZE } from "../../../utils/constants";
 
 function formatAge(value) {
   if (!value && value !== 0) return "";
@@ -37,7 +36,6 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
       try {
         const q = collection(db, "gatos");
         const snapshot = await getDocs(q);
-        console.debug('CatGrid: snapshot size', snapshot.size);
         const docs = snapshot.docs
           .map((doc, idx) => {
             const data = doc.data() || {};
@@ -62,12 +60,6 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
               estado: data.estado || (data.adoptado === true ? 'adoptado' : 'disponible'),
             };
           })
-        // keep all docs (show adopted too). Previously we filtered out adopted cats here;
-        // keep them so admin changes don't hide all cats unintentionally.
-        // .filter((c) => !c.adoptado);
-
-        console.debug('CatGrid: loaded docs count', docs.length, docs.slice(0, 3));
-        console.debug('CatGrid: first mapped doc (raw)', docs[0]);
 
         if (mounted) {
           setAllCats(docs);
@@ -128,7 +120,6 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
     return arr;
   }, [allCats, filters, sortValue]);
 
-  console.debug('CatGrid: processed count', processed.length, processed.slice(0, 3));
 
   const finalProcessed = processed;
 
@@ -136,10 +127,6 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
   const shown = finalProcessed.slice(0, visible);
   const hasMore = visible < total;
   const progress = total > 0 ? Math.round((shown.length / total) * 100) : 0;
-
-  // TODO: no logs just error logs if necessary
-  console.debug('CatGrid: allCats length', allCats.length, allCats.slice(0, 3));
-  console.debug('CatGrid: shown length', shown.length, shown.slice(0, 3));
 
   return (
     <div className="cat-grid-wrap">

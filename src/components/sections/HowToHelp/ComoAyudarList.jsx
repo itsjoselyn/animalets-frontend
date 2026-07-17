@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./ComoAyudarList.css";
 
-const OPTIONS = [
+export const OPTIONS_HELP = [
   {
     id: "voluntariado",
     title: "Haz voluntariado",
@@ -113,13 +113,14 @@ const OPTIONS = [
   },
 ];
 
+
 export default function ComoAyudarList() {
   const [open, setOpen] = useState(null);
 
   const toggle = (id) => setOpen((prev) => (prev === id ? null : id));
 
-  const col1 = OPTIONS.slice(0, Math.ceil(OPTIONS.length / 2));
-  const col2 = OPTIONS.slice(Math.ceil(OPTIONS.length / 2));
+  const col1 = OPTIONS_HELP.slice(0, Math.ceil(OPTIONS_HELP.length / 2));
+  const col2 = OPTIONS_HELP.slice(Math.ceil(OPTIONS_HELP.length / 2));
 
   const renderItem = (opt) => {
     const isOpen = open === opt.id;
@@ -147,7 +148,7 @@ export default function ComoAyudarList() {
     <>
       {/* Mobile: lista única */}
       <div className="cayudar-list cayudar-list--mobile">
-        {OPTIONS.map(renderItem)}
+        {OPTIONS_HELP.map(renderItem)}
       </div>
 
       {/* Desktop: dos columnas */}

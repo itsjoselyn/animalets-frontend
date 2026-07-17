@@ -4,11 +4,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { db } from "../../firebase/firebaseConfig";
 import "../../components/sections/Contact/ContactForm.css";
 import "./GatoEditor.css";
+import { EMPTY_TESTIMONY } from "../../utils/constants";
 
-const EMPTY = {
-    titulo: "",
-    descripcion: "",
-};
+
 
 function makePreview(text, maxWords = 15) {
     if (!text) return "";
@@ -50,7 +48,7 @@ export default function TestimonioEditor() {
                 }
             })();
         } else {
-            setData(EMPTY);
+            setData(EMPTY_TESTIMONY);
         }
         return () => {
             mounted = false;
