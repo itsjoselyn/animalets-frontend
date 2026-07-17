@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navigate } from 'react-router-dom';
-import MainLayout from '../components/layout/MainLayout';
+import MainLayout from '../components/layout/MainLayout.jsx';
 import Home from '../pages/Home';
 import NuestrosPeludos from '../pages/NuestrosPeludos';
 import ComoAyudar from "../pages/ComoAyudar";

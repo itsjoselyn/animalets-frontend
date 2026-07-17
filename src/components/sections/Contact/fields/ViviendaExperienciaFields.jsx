@@ -45,7 +45,7 @@ export default function ViviendaExperienciaFields({ form, errors, setField, togg
           </div>
           {errors.animalesActuales && <p className="cform-field-error">{errors.animalesActuales}</p>}
           {form.animalesActuales.includes('Otros') && (
-            <input data-field="animalesActualesTexto" className={`cform-input${errors.animalesActualesTexto ? ' cform-input--error' : ''}`} type="text" placeholder={`Especifica si hay otros animales${mark}`} value={form.animalesActualesTexto} onChange={(e) => setField("animalesActualesTexto", e.target.value)} />
+            <input data-field="animalesActualesTexto" className={`cform-input${errors.animalesActualesTexto ? ' cform-input--error' : ''}`} type="text" placeholder={`Especifica si hay otros animales`} value={form.animalesActualesTexto} onChange={(e) => setField("animalesActualesTexto", e.target.value)} />
           )}
           {errors.animalesActualesTexto && <p className="cform-field-error">{errors.animalesActualesTexto}</p>}
         </>
@@ -65,7 +65,7 @@ export default function ViviendaExperienciaFields({ form, errors, setField, togg
       {errors.hayPersonasCasa && <p className="cform-field-error">{errors.hayPersonasCasa}</p>}
 
       {form.hayPersonasCasa === 'si' && (
-        <input data-field="personasAdoptar" className={`cform-input${errors.personasAdoptar ? ' cform-input--error' : ''}`} type="text" placeholder={`Especifica cuántas personas y sus edades${mark}`} value={form.personasAdoptar} onChange={(e) => setField("personasAdoptar", e.target.value)} />
+        <input data-field="personasAdoptar" className={`cform-input${errors.personasAdoptar ? ' cform-input--error' : ''}`} type="text" placeholder={`Especifica cuántas personas y sus edades`} value={form.personasAdoptar} onChange={(e) => setField("personasAdoptar", e.target.value)} />
       )}
       {errors.personasAdoptar && <p className="cform-field-error">{errors.personasAdoptar}</p>}
 
@@ -83,7 +83,7 @@ export default function ViviendaExperienciaFields({ form, errors, setField, togg
       {errors.tieneExperienciaGatos && <p className="cform-field-error">{errors.tieneExperienciaGatos}</p>}
 
       {form.tieneExperienciaGatos === 'si' && (
-        <textarea data-field="experienciaAdoptar" className={`cform-textarea${errors.experienciaAdoptar ? ' cform-textarea--error' : ''}`} placeholder={`Cuéntanos un poco de tu experiencia${mark}`} value={form.experienciaAdoptar} onChange={(e) => setField("experienciaAdoptar", e.target.value)} rows={3} />
+        <textarea data-field="experienciaAdoptar" className={`cform-textarea${errors.experienciaAdoptar ? ' cform-textarea--error' : ''}`} placeholder={`Cuéntanos un poco de tu experiencia`} value={form.experienciaAdoptar} onChange={(e) => setField("experienciaAdoptar", e.target.value)} rows={3} />
       )}
       {errors.experienciaAdoptar && <p className="cform-field-error">{errors.experienciaAdoptar}</p>}
     </>
