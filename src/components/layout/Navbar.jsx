@@ -7,23 +7,8 @@ import Button from "../common/Button/Button";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [lastScroll, setLastScroll] = useState(0);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const current = window.scrollY;
-      if (current < lastScroll && current > 60) {
-        setVisible(true);
-      } else {
-        setVisible(false);
-      }
-      setLastScroll(current);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScroll]);
-
+  // Bloquear el scroll de la pantalla únicamente cuando el menú móvil está abierto
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -31,7 +16,8 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className={`navbar at-top ${visible ? "visible" : ""}`}>
+      {/* Fijamos las clases 'at-top visible' para que el fondo blanco nunca desaparezca */}
+      <nav className="navbar at-top visible">
 
         {/* MOBILE: menú hamburguesa izquierda */}
         <div className="navbar-left">
