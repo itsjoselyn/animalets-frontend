@@ -18,7 +18,7 @@ function makePreview(text, maxWords = 15) {
 export default function TestimonioEditor() {
     const { id } = useParams();
     const isNew = id === undefined || id === "new";
-    const [data, setData] = useState(EMPTY);
+    const [data, setData] = useState(EMPTY_TESTIMONY);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 

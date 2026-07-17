@@ -1,4 +1,5 @@
 
+// TODO: no entiendo esta función
 export function optimizeCloudinaryImage(url, options = {}) {
     if (!url || typeof url !== "string") return url;
     if (!/cloudinary\.com/.test(url)) return url;

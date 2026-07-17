@@ -13,7 +13,7 @@ import { EMPTY_NEWS } from "../../utils/constants";
 export default function NoticiaEditor() {
     const { id } = useParams();
     const isNew = id === undefined || id === "new";
-    const [data, setData] = useState(EMPTY);
+    const [data, setData] = useState(EMPTY_NEWS);
     const [imagenPreview, setImagenPreview] = useState(null);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
