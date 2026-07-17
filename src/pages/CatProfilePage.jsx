@@ -245,14 +245,14 @@ export default function CatProfilePage() {
         <div className="catprofile-ctas">
           <a
             className="catprofile-btn catprofile-btn--adopt"
-            href={`/contacto?tipo=adoptar&gato=${encodeURIComponent(cat.name)}`}
+            href={`/contacto`}
           >
             Adóptame
           </a>
 
           <a
             className="catprofile-btn catprofile-btn--foster"
-            href={`/contacto?tipo=acogida&gato=${encodeURIComponent(cat.name)}`}
+            href={`/contacto`}
           >
             Acógeme
           </a>

@@ -12,7 +12,7 @@ export const OPTIONS_HELP = [
       <>
         <p>Si los gatos te roban el corazón, este es tu lugar. Únete al equipo y ayúdanos con lo que más necesitan: limpieza, alimentación, medicación, fotos, vídeos y, sobre todo, cariño.</p>
         <p>Rellena el formulario marcando la opción "Voluntariado" y te contactaremos.</p>
-        <Link to="/contacto?tipo=voluntariado" className="cayudar-btn">Ir al formulario</Link>
+        <Link to="/contacto" className="cayudar-btn">Ir al formulario</Link>
       </>
     ),
   },
@@ -24,7 +24,7 @@ export const OPTIONS_HELP = [
       <>
         <p>¿No puedes adoptar, pero te gustaría ayudar de verdad? Acoger es regalar tiempo, seguridad y amor a un gato que espera su hogar definitivo. Nosotros te acompañamos y cubrimos los gastos veterinarios. Tú solo pon el corazón.</p>
         <p>Rellena el formulario marcando la opción de "acogida" o ven a conocernos al refugio.</p>
-        <Link to="/contacto?tipo=acogida" className="cayudar-btn">Ir al formulario</Link>
+        <Link to="/contacto" className="cayudar-btn">Ir al formulario</Link>
       </>
     ),
   },
@@ -36,7 +36,7 @@ export const OPTIONS_HELP = [
       <>
         <p>Por solo 10€ al mes, conviértete en su persona favorita. Tu ayuda cubre comida, veterinario y cuidados. Nosotros te enviamos fotos y noticias de tu ahijado para que veas cómo crece feliz.</p>
         <p>Elige tu gatito y marca en el formulario "quiero apadrinar".</p>
-        <Link to="/contacto?tipo=apadrinar" className="cayudar-btn">Ir al formulario</Link>
+        <Link to="/contacto" className="cayudar-btn">Ir al formulario</Link>
       </>
     ),
   },
@@ -49,7 +49,7 @@ export const OPTIONS_HELP = [
         <p>Con 15€ al año, formas parte de esta familia peluda. Nos ayudas a rescatar, cuidar y seguir adelante. Recibirás actualizaciones de todo lo que logramos gracias a personas como tú.</p>
         <p>Transferencia a:<br /><strong>ES19 0182 8653 5102 0154 0323 (BBVA)</strong><br />Concepto: "Socio/a + tu nombre"</p>
         <p>Luego rellena el formulario marcando "hacerme socio/a".</p>
-        <Link to="/contacto?tipo=socio" className="cayudar-btn">Ir al formulario</Link>
+        <Link to="/contacto" className="cayudar-btn">Ir al formulario</Link>
       </>
     ),
   },
