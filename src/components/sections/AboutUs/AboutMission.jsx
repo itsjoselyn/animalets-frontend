@@ -10,7 +10,7 @@ function Card({ card, active, onDotClick, showDots }) {
   return (
     <div className="amission-card">
       <div className="amission-card-img-wrap">
-        <img src={optimizeCloudinaryImage(card.img, 300)} alt={card.title} className="amission-card-img" />
+        <img src={optimizeCloudinaryImage(card.img, { width: 300 })} alt={card.title} className="amission-card-img" />
         {showDots && (
           <div className="amission-dots">
             {CARDS.map((_, i) => (

@@ -20,7 +20,7 @@ export default function CatCard({ cat }) {
       <div className="pcat-card-img-wrap" style={{ position: 'relative' }}>
         {current ? (
           <img
-            src={optimizeCloudinaryImage(current, 400)}
+            src={optimizeCloudinaryImage(current, { width: 400 })}
             alt={name}
             className="pcat-card-img"
             onClick={(e) => e.stopPropagation()} />
@@ -48,7 +48,7 @@ export default function CatCard({ cat }) {
       {modalOpen && current && (
         <div className="pcat-modal" onClick={() => setModalOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
           <div onClick={(e) => e.stopPropagation()} style={{ position: 'relative', maxWidth: '95%', maxHeight: '95%' }}>
-            <img src={optimizeCloudinaryImage(current, 1000)} alt={name} style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: 8 }} />
+            <img src={optimizeCloudinaryImage(current, { width: 1000 })} alt={name} style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: 8 }} />
             {images.length > 1 && (
               <>
                 <Button aria-label="Anterior" onClick={prev} style={{ position: 'absolute', left: -40, top: '50%', transform: 'translateY(-50%)', background: 'transparent', color: '#fff', border: 'none', fontSize: 28 }}>◀</Button>

@@ -69,7 +69,7 @@ export default function AdminNoticias() {
                                         <td style={{ padding: 8 }}>{post.date}</td>
                                         <td style={{ padding: 8 }}>{post.updatedAt ? post.updatedDate : "-"}</td>
                                         <td style={{ padding: 8 }}>
-                                            {post.imagen ? <img src={optimizeCloudinaryImage(post.imagen, 300)} alt={post.titulo} style={{ width: 64, height: 48, objectFit: "cover", borderRadius: 6 }} /> : "-"}
+                                            {post.imagen ? <img src={optimizeCloudinaryImage(post.imagen, { width: 300 })} alt={post.titulo} style={{ width: 64, height: 48, objectFit: "cover", borderRadius: 6 }} /> : "-"}
                                         </td>
                                         <td style={{ padding: 8 }}>
                                             <Button variant="admin-btn" onClick={() => navigate(`/admin/noticias/${post.id}`)}>Editar</Button>        <Button
