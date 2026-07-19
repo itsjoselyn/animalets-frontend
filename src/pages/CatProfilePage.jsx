@@ -4,7 +4,7 @@ import "./CatProfilePage.css";
 import { optimizeCloudinaryImage } from "../lib/optimizeCloudinaryImage";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
-import Button from "../components/common/Button/Button";
+import { Button } from "antd";
 
 function formatAge(value) {
   if (value === null || value === undefined || value === "") return "";
@@ -140,7 +140,7 @@ export default function CatProfilePage() {
   return (
     <div className="catprofile">
 
-      <Button variant="close-profile" onClick={() => navigate("/nuestros-peludos")}>✕</Button>
+      <Button onClick={() => navigate("/nuestros-peludos")}>✕</Button>
 
 
 

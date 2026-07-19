@@ -4,7 +4,7 @@ import "./CatGrid.css";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import { PAGE_SIZE } from "../../../utils/constants";
-import Button from "../../common/Button/Button";
+import { Button } from "antd";
 
 function formatAge(value) {
   if (!value && value !== 0) return "";
@@ -163,7 +163,7 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
             />
           </div>
           {hasMore && (
-            <Button variant="more-cat" onClick={() => setVisible((v) => Math.min(v + PAGE_SIZE, processed.length))}>
+            <Button onClick={() => setVisible((v) => Math.min(v + PAGE_SIZE, processed.length))}>
               Mostrar más
             </Button>
           )}

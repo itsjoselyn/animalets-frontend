@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./PeludosFilters.css";
-import Button from "../../common/Button/Button";
+import { Button } from "antd";
 
 export default function PeludosFilters({ isOpen, onClose, onApply }) {
   const [ageRange, setAgeRange] = useState([0, 25]);
@@ -31,7 +31,7 @@ export default function PeludosFilters({ isOpen, onClose, onApply }) {
 
         <div className="pfilters-top">
           <h2 className="pfilters-title">Filtrar</h2>
-          <Button variant="filters-close" onClick={onClose} aria-label="Cerrar">✕</Button>        </div>
+          <Button onClick={onClose} aria-label="Cerrar">✕</Button>        </div>
 
         {/* Edad */}
         <div className="pfilters-section">
@@ -96,8 +96,8 @@ export default function PeludosFilters({ isOpen, onClose, onApply }) {
 
         {/* Acciones */}
         <div className="pfilters-actions">
-          <Button variant="filters-reset" onClick={handleReset}>Limpiar</Button>
-          <Button variant="filters-apply" onClick={handleApply}>Aplicar</Button>
+          <Button onClick={handleReset}>Limpiar</Button>
+          <Button onClick={handleApply}>Aplicar</Button>
         </div>
 
       </div>
