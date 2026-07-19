@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-import { Link } from "react-router-dom";
-=======
->>>>>>> ed262f81f5c72916088dc68dd21e606b7f154287
 import logo from "../../assets/animalets-logo.png";
 import "./Footer.css";
 import { NAV_LINKS, SOCIAL_LINKS } from "../../data/navigation";

@@ -20,16 +20,8 @@ export default function CatCard({ cat }) {
       <div className="pcat-card-img-wrap" style={{ position: 'relative' }}>
         {current ? (
           <img
-<<<<<<< HEAD:src/components/nuestrosPeludos/CatCard.jsx
-            src={optimizeCloudinaryImage(current, {
-              width: 400,
-              height: 400,
-              crop: "fill",
-            })} alt={name}
-=======
             src={optimizeCloudinaryImage(current, { width: 400 })}
             alt={name}
->>>>>>> ed262f81f5c72916088dc68dd21e606b7f154287:src/components/sections/OurCats/CatCard.jsx
             className="pcat-card-img"
             onClick={(e) => e.stopPropagation()} />
         ) : (

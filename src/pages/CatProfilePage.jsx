@@ -143,17 +143,6 @@ export default function CatProfilePage() {
       <Button variant="close-profile" onClick={() => navigate("/nuestros-peludos")}>✕</Button>
 
 
-<<<<<<< HEAD
-=======
-        {images.length > 1 && (
-          <>
-            <Button onClick={prev} style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", zIndex: 2, background: "transparent", border: "none", fontSize: 24, cursor: "pointer" }}>◀</Button>
-
-            <Button onClick={next} style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", zIndex: 2, background: "transparent", border: "none", fontSize: 24, cursor: "pointer" }}>▶</Button>
-          </>
-        )}
-      </div>
->>>>>>> ed262f81f5c72916088dc68dd21e606b7f154287
 
       {/* ================= MODAL ================= */}
       {open && currentImage && (
