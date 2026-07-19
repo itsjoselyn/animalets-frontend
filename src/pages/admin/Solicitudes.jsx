@@ -2,7 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import "./Solicitudes.css";
-
+import { TYPE_LABELS } from "../../utils/constants";
+import { STATUS_LABELS } from "../../utils/constants";
+import { STATUS_OPTIONS } from "../../utils/constants";
+import { TYPE_OPTIONS } from "../../utils/constants";
+import Button from "../../components/common/Button/Button";
 function formatDate(value) {
     if (!value) return "-";
     if (typeof value === "object" && typeof value.toDate === "function") {
@@ -17,24 +21,6 @@ function toDisplayValue(value) {
     if (typeof value === "object") return JSON.stringify(value, null, 2);
     return String(value);
 }
-
-const TYPE_LABELS = {
-    acogida: "Acogida",
-    adopcion: "Adopción",
-    apadrinar: "Apadrinamiento",
-    voluntariado: "Voluntariado",
-    otros: "Otros",
-};
-
-const STATUS_LABELS = {
-    nuevo: "Nuevo",
-    leido: "Leído",
-    proceso: "En proceso",
-    cerrado: "Cerrado",
-};
-
-const STATUS_OPTIONS = ["todas", "nuevo", "leido", "proceso", "cerrado"];
-const TYPE_OPTIONS = ["todos", "acogida", "adopcion", "apadrinar", "voluntariado", "otros"];
 
 function getTypeValue(item) {
     return String(item.tipo || item.tipoSolicitud || item.tipo_solicitud || "otros").toLowerCase();
@@ -261,15 +247,19 @@ export default function AdminSolicitudes() {
                                                 <p className="solicitud-card-date">{formatDate(item.createdAtValue)}</p>
                                             </div>
                                             <div className="solicitud-card-actions">
-                                                <button className="cayudar-btn" onClick={(e) => { e.stopPropagation(); setSelectedId(item.id); }}>Ver</button>
-                                                {status !== "leido" && (
-                                                    <button className="cayudar-btn" onClick={(e) => { e.stopPropagation(); markRead(item); }}>
-                                                        Marcar como leído
-                                                    </button>
+                                                <Button variant="admin-btn" onClick={(e) => { e.stopPropagation(); setSelectedId(item.id); }}>Ver</Button>                                                {status !== "leido" && (
+                                                    <Button variant="admin-btn" onClick={(e) => { e.stopPropagation(); markRead(item); }}>Marcar como leído</Button>
                                                 )}
-                                                <button className="cayudar-btn solicitud-delete-btn" onClick={(e) => { e.stopPropagation(); removeItem(item); }}>
+                                                <Button
+                                                    variant="admin-btn"
+                                                    className="solicitud-delete-btn"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        removeItem(item);
+                                                    }}
+                                                >
                                                     Borrar
-                                                </button>
+                                                </Button>
                                             </div>
                                         </article>
                                     );

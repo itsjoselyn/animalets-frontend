@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebaseConfig";
-import "../../components/contact/ContactForm.css";
+import "../../components/sections/Contact/ContactForm.css";
+import Button from "../../components/common/Button/Button";
 
 export default function AdminLogin() {
     const [email, setEmail] = useState("");
@@ -33,8 +34,9 @@ export default function AdminLogin() {
                 <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="cform-input" />
                 <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} className="cform-input" />
                 {error && <p className="cform-field-error">{error}</p>}
-                <button className="cform-submit" type="submit" disabled={loading}>{loading ? 'Entrando...' : 'Entrar'}</button>
-            </form>
+                <Button type="submit" variant="submit" disabled={loading}>
+                    {loading ? 'Entrando...' : 'Entrar'}
+                </Button>            </form>
         </div>
     );
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../firebase/firebaseConfig";
+import Button from "../../components/common/Button/Button";
 
 function formatDate(value) {
     if (!value) return "-";
@@ -65,8 +66,7 @@ export default function AdminTestimonios() {
             {loading ? <p>Cargando...</p> : (
                 <>
                     <div style={{ marginBottom: 12 }}>
-                        <button className="cayudar-btn" onClick={() => navigate("/admin/testimonios/new")}>Crear testimonio</button>
-                    </div>
+                        <Button variant="admin-btn" onClick={() => navigate('/admin/testimonios/new')}>Crear testimonio</Button>                    </div>
 
                     {items.length === 0 ? <p>No hay testimonios todavia.</p> : (
                         <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -85,9 +85,8 @@ export default function AdminTestimonios() {
                                         <td style={{ padding: 8 }}>{item.preview || item.generatedPreview || "-"}</td>
                                         <td style={{ padding: 8 }}>{item.date}</td>
                                         <td style={{ padding: 8 }}>
-                                            <button className="cayudar-btn" onClick={() => navigate(`/admin/testimonios/${item.id}`)}>Editar</button>
-                                            <button
-                                                className="cayudar-btn"
+                                            <Button variant="admin-btn" onClick={() => navigate(`/admin/testimonios/${item.id}`)}>Editar</Button>                                            <Button
+                                                variant="admin-btn"
                                                 style={{ marginLeft: 8, background: "#e53935", color: "#fff" }}
                                                 onClick={async () => {
                                                     if (!confirm("Eliminar este testimonio?")) return;
@@ -101,7 +100,7 @@ export default function AdminTestimonios() {
                                                 }}
                                             >
                                                 Borrar
-                                            </button>
+                                            </Button>
                                         </td>
                                     </tr>
                                 ))}

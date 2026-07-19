@@ -1,10 +1,10 @@
-import AboutSnippet from "../components/home/AboutSnippet";
-import CatCarousel from "../components/home/CatCarousel";
-import ContactBanner from "../components/home/ContactBanner";
-import HeroSection from "../components/home/HeroSection";
-import HowItWorks from "../components/home/HowItWorks";
-import HowToHelp from "../components/home/HowToHelp";
-import Testimonials from "../components/home/Testimonials";
+import AboutSnippet from "../components/sections/Home/AboutSnippet";
+import CatCarousel from "../components/sections/Home/CatCarousel";
+import ContactBanner from "../components/sections/Home/ContactBanner";
+import HeroSection from "../components/sections/Home/HeroSection";
+import HowItWorks from "../components/sections/Home/HowItWorks";
+import HowToHelp from "../components/sections/Home/HowToHelp";
+import Testimonials from "../components/sections/Home/Testimonials";
 
 export default function Home() {
     return (

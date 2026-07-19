@@ -2,8 +2,10 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
-import BlogArticleView from "../components/blog/BlogArticleView";
-import { getFirestoreTimestampMs } from "../components/blog/blogUtils";
+import BlogArticleView from "../components/sections/Blog/BlogArticleView";
+import { getFirestoreTimestampMs } from "../components/sections/Blog/blogUtils";
+import { Link } from "react-router-dom";
+
 
 export default function BlogPostPage() {
   const { id } = useParams();
