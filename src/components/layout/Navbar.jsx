@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import logo from "../../assets/animalets-logo.jpeg";
+import logo from "../../assets/animalets-logo.png";
 import "./Navbar.css";
 import { NAV_LINKS } from "../../data/navigation";
 import { Button } from 'antd';

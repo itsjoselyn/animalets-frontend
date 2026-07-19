@@ -71,8 +71,14 @@ export default function BlogPostPage() {
         });
         docs.sort((a, b) => b.time - a.time);
         const index = docs.findIndex((p) => p.id === id);
-        if (index >= 0 && index + 1 < docs.length) {
-          if (mounted) setNextPost(docs[index + 1]);
+
+        const next =
+          index >= 0 && index + 1 < docs.length
+            ? docs[index + 1]
+            : null;
+
+        if (mounted) {
+          setNextPost(next);
         }
 
       } catch (err) {
