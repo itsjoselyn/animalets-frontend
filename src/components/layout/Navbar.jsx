@@ -2,34 +2,13 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/animalets-logo.jpeg";
 import "./Navbar.css";
-
-const NAV_LINKS = [
-  { label: "Sobre nosotros", to: "/sobre-nosotros" },
-  { label: "Nuestros peludos", to: "/nuestros-peludos" },
-  { label: "Cómo ayudar", to: "/como-ayudar" },
-  { label: "Blog", to: "/blog" },
-  { label: "Contacto", to: "/contacto" },
-];
+import { NAV_LINKS } from "../../data/navigation";
+import Button from "../common/Button/Button";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [lastScroll, setLastScroll] = useState(0);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const current = window.scrollY;
-      if (current < lastScroll && current > 60) {
-        setVisible(true);
-      } else {
-        setVisible(false);
-      }
-      setLastScroll(current);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScroll]);
-
+  // Bloquear el scroll de la pantalla únicamente cuando el menú móvil está abierto
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -37,22 +16,17 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className={`navbar at-top ${visible ? "visible" : ""}`}>
+      {/* Fijamos las clases 'at-top visible' para que el fondo blanco nunca desaparezca */}
+      <nav className="navbar at-top visible">
 
         {/* MOBILE: menú hamburguesa izquierda */}
         <div className="navbar-left">
-          <button
-            className="nav-menu-btn"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Abrir menú"
-          >
+          <Button variant="menu" onClick={() => setMenuOpen(!menuOpen)} aria-label="Abrir menú">
             <div className={`hamburger-icon ${menuOpen ? "open" : ""}`}>
-              <span />
-              <span />
-              <span />
+              <span /><span /><span />
             </div>
             MENÚ
-          </button>
+          </Button>
         </div>
 
         {/* Logo */}

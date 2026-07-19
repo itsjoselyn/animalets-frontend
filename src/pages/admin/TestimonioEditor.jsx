@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import { addDoc, collection, deleteDoc, doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useNavigate, useParams } from "react-router-dom";
 import { db } from "../../firebase/firebaseConfig";
-import "../../components/contact/ContactForm.css";
-import "./GatoEditor.css";
+import "../../components/sections/Contact/ContactForm.css";
+import "./GatoEditor/GatoEditor.css";
+import { EMPTY_TESTIMONY } from "../../utils/constants";
+import Button from "../../components/common/Button/Button";
 
-const EMPTY = {
-    titulo: "",
-    descripcion: "",
-};
+
 
 function makePreview(text, maxWords = 15) {
     if (!text) return "";
@@ -20,7 +19,7 @@ function makePreview(text, maxWords = 15) {
 export default function TestimonioEditor() {
     const { id } = useParams();
     const isNew = id === undefined || id === "new";
-    const [data, setData] = useState(EMPTY);
+    const [data, setData] = useState(EMPTY_TESTIMONY);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -50,7 +49,7 @@ export default function TestimonioEditor() {
                 }
             })();
         } else {
-            setData(EMPTY);
+            setData(EMPTY_TESTIMONY);
         }
         return () => {
             mounted = false;
@@ -134,19 +133,10 @@ export default function TestimonioEditor() {
             </div>
 
             <div style={{ marginTop: 16, display: "flex", gap: 12 }}>
-                <button className="cform-submit" onClick={handleSave} disabled={loading}>{loading ? "Guardando..." : "Guardar"}</button>
-                {!isNew && (
-                    <button
-                        className="cayudar-btn"
-                        onClick={handleDelete}
-                        disabled={loading}
-                        style={{ background: "#e53935", color: "#fff" }}
-                    >
-                        Eliminar
-                    </button>
+                <Button variant="submit" onClick={handleSave} disabled={loading}>{loading ? "Guardando..." : "Guardar"}</Button>                {!isNew && (
+                    <Button variant="admin-btn" onClick={handleDelete} disabled={loading} style={{ background: '#e53935', color: '#fff' }}>Eliminar</Button>
                 )}
-                <button className="cayudar-btn" onClick={() => navigate("/admin/testimonios")}>Cancelar</button>
-            </div>
+                <Button variant="admin-btn" onClick={() => navigate("/admin/testimonios")}>Cancelar</Button>            </div>
         </div>
     );
 }

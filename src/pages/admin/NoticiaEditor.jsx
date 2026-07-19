@@ -2,22 +2,19 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { addDoc, collection, deleteDoc, doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
-import "../../components/contact/ContactForm.css";
-import "./GatoEditor.css";
-import BlogArticleView from "../../components/blog/BlogArticleView";
+import "../../components/sections/Contact/ContactForm.css";
+import "./GatoEditor/GatoEditor.css";
+import BlogArticleView from "../../components/sections/Blog/BlogArticleView";
 import { compressForUpload } from "../../lib/imageUtils";
 import { uploadImageToCloudinary } from "../../lib/uploadImageToCloudinary";
+import { EMPTY_NEWS } from "../../utils/constants";
+import Button from "../../components/common/Button/Button";
 
-const EMPTY = {
-    titulo: "",
-    descripcion: "",
-    imagenes: [],
-};
 
 export default function NoticiaEditor() {
     const { id } = useParams();
     const isNew = id === undefined || id === "new";
-    const [data, setData] = useState(EMPTY);
+    const [data, setData] = useState(EMPTY_NEWS);
     const [imagenPreview, setImagenPreview] = useState(null);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -65,7 +62,7 @@ export default function NoticiaEditor() {
                 }
             })();
         } else {
-            setData(EMPTY);
+            setData(EMPTY_NEWS);
             setImagenPreview(null);
         }
 
@@ -200,17 +197,13 @@ export default function NoticiaEditor() {
                     {imagenPreview && (
                         <div style={{ width: 220, marginTop: 8 }}>
                             <img src={imagenPreview.url} alt={data.titulo || "Vista previa"} style={{ width: "100%", borderRadius: 8 }} />
-                            <button type="button" className="cayudar-btn" onClick={() => handleDeleteImage(imagenPreview)}>
-                                Eliminar
-                            </button>
+                            <Button type="button" variant="admin-btn" onClick={() => handleDeleteImage(imagenPreview)}>Eliminar</Button>
                         </div>
                     )}
 
                     <div style={{ marginTop: 16, display: "flex", gap: 12 }}>
-                        <button className="cform-submit" onClick={handleSave} disabled={loading}>{loading ? "Guardando..." : "Guardar"}</button>
-                        {!isNew && <button className="cayudar-btn" onClick={handleDelete} disabled={loading} style={{ background: "#e53935", color: "#fff" }}>Eliminar</button>}
-                        <button className="cayudar-btn" onClick={() => navigate("/admin/noticias")}>Cancelar</button>
-                    </div>
+                        <Button variant="submit" onClick={handleSave} disabled={loading}>{loading ? "Guardando..." : "Guardar"}</Button>                        {!isNew && <button className="cayudar-btn" onClick={handleDelete} disabled={loading} style={{ background: "#e53935", color: "#fff" }}>Eliminar</button>}
+                        <Button variant="admin-btn" onClick={() => navigate("/admin/noticias")}>Cancelar</Button>                    </div>
                 </div>
 
                 <aside className="gato-editor-preview">

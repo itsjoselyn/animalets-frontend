@@ -1,6 +1,6 @@
-import ContactCloud from "../components/contact/ContactCloud";
-import ContactForm from "../components/contact/ContactForm";
-import ContactHeader from "../components/contact/ContactHeader";
+import ContactCloud from "../components/sections/Contact/ContactCloud";
+import ContactForm from "../components/sections/Contact/ContactForm";
+import ContactHeader from "../components/sections/Contact/ContactHeader";
 
 export default function Contacto() {
     return (

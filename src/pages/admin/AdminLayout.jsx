@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../firebase/firebaseConfig";
 import { Outlet, useNavigate, Link } from "react-router-dom";
+import Button from "../../components/common/Button/Button";
 
 export default function AdminLayout() {
     const [user, setUser] = useState(null);
@@ -31,8 +32,7 @@ export default function AdminLayout() {
                     <Link to="/admin/testimonios" style={{ marginRight: 12 }}>Testimonios</Link>
                     <Link to="/admin/noticias" style={{ marginRight: 12 }}>Noticias</Link>
                     <Link to="/admin/solicitudes" style={{ marginRight: 12 }}>Solicitudes</Link>
-                    <button onClick={handleSignOut} style={{ background: '#e53935', color: '#fff', border: 'none', padding: '6px 10px', borderRadius: 6 }}>Salir</button>
-                </nav>
+                    <Button onClick={handleSignOut} style={{ background: '#e53935', color: '#fff', border: 'none', padding: '6px 10px', borderRadius: 6 }}>Salir</Button>                </nav>
             </header>
 
             <main>

@@ -4,6 +4,7 @@ import "./CatProfilePage.css";
 import { optimizeCloudinaryImage } from "../lib/optimizeCloudinaryImage";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
+import Button from "../components/common/Button/Button";
 
 function formatAge(value) {
   if (value === null || value === undefined || value === "") return "";
@@ -114,9 +115,7 @@ export default function CatProfilePage() {
     return (
       <div className="catprofile-notfound">
         <p>Gato no encontrado.</p>
-        <button onClick={() => navigate("/nuestros-peludos")}>
-          Volver
-        </button>
+        <Button onClick={() => navigate("/nuestros-peludos")}>Volver</Button>
       </div>
     );
   }
@@ -141,12 +140,7 @@ export default function CatProfilePage() {
   return (
     <div className="catprofile">
 
-      <button
-        className="catprofile-close"
-        onClick={() => navigate("/nuestros-peludos")}
-      >
-        ✕
-      </button>
+      <Button variant="close-profile" onClick={() => navigate("/nuestros-peludos")}>✕</Button>
 
       {/* ================= IMAGEN ================= */}
       <div className="catprofile-img-wrap" style={{ position: "relative" }}>
@@ -164,39 +158,9 @@ export default function CatProfilePage() {
 
         {images.length > 1 && (
           <>
-            <button
-              onClick={prev}
-              style={{
-                position: "absolute",
-                left: 10,
-                top: "50%",
-                transform: "translateY(-50%)",
-                zIndex: 2,
-                background: "transparent",
-                border: "none",
-                fontSize: 24,
-                cursor: "pointer",
-              }}
-            >
-              ◀
-            </button>
+            <Button onClick={prev} style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", zIndex: 2, background: "transparent", border: "none", fontSize: 24, cursor: "pointer" }}>◀</Button>
 
-            <button
-              onClick={next}
-              style={{
-                position: "absolute",
-                right: 10,
-                top: "50%",
-                transform: "translateY(-50%)",
-                zIndex: 2,
-                background: "transparent",
-                border: "none",
-                fontSize: 24,
-                cursor: "pointer",
-              }}
-            >
-              ▶
-            </button>
+            <Button onClick={next} style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", zIndex: 2, background: "transparent", border: "none", fontSize: 24, cursor: "pointer" }}>▶</Button>
           </>
         )}
       </div>
@@ -231,53 +195,11 @@ export default function CatProfilePage() {
 
             {images.length > 1 && (
               <>
-                <button
-                  onClick={prev}
-                  style={{
-                    position: "absolute",
-                    left: -50,
-                    top: "50%",
-                    fontSize: 30,
-                    color: "#fff",
-                    background: "transparent",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  ◀
-                </button>
+                <Button onClick={prev} style={{ position: "absolute", left: -50, top: "50%", fontSize: 30, color: "#fff", background: "transparent", border: "none", cursor: "pointer" }}>◀</Button>
 
-                <button
-                  onClick={next}
-                  style={{
-                    position: "absolute",
-                    right: -50,
-                    top: "50%",
-                    fontSize: 30,
-                    color: "#fff",
-                    background: "transparent",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  ▶
-                </button>
+                <Button onClick={next} style={{ position: "absolute", right: -50, top: "50%", fontSize: 30, color: "#fff", background: "transparent", border: "none", cursor: "pointer" }}>▶</Button>
 
-                <button
-                  onClick={() => setOpen(false)}
-                  style={{
-                    position: "absolute",
-                    top: -40,
-                    right: 0,
-                    fontSize: 26,
-                    color: "#fff",
-                    background: "transparent",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  ✕
-                </button>
+                <Button onClick={() => setOpen(false)} style={{ position: "absolute", top: -40, right: 0, fontSize: 26, color: "#fff", background: "transparent", border: "none", cursor: "pointer" }}>✕</Button>
               </>
             )}
           </div>
@@ -323,14 +245,14 @@ export default function CatProfilePage() {
         <div className="catprofile-ctas">
           <a
             className="catprofile-btn catprofile-btn--adopt"
-            href={`/contacto?tipo=adoptar&gato=${encodeURIComponent(cat.name)}`}
+            href={`/contacto`}
           >
             Adóptame
           </a>
 
           <a
             className="catprofile-btn catprofile-btn--foster"
-            href={`/contacto?tipo=acogida&gato=${encodeURIComponent(cat.name)}`}
+            href={`/contacto`}
           >
             Acógeme
           </a>

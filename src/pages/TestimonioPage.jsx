@@ -4,7 +4,7 @@ import "./TestimonioPage.css";
 import logo from "../assets/animalets-logo.jpeg";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
-
+import Button from "../components/common/Button/Button";
 export default function TestimonioPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -70,8 +70,7 @@ export default function TestimonioPage() {
     return (
       <div className="testpage-notfound">
         <p>{error || "Testimonio no encontrado."}</p>
-        <button onClick={() => navigate("/")}>Volver</button>
-      </div>
+        <Button onClick={() => navigate("/")}>Volver</Button>      </div>
     );
   }
 
@@ -81,12 +80,9 @@ export default function TestimonioPage() {
       {/* Header */}
       <header className="testpage-header">
         <img src={logo} alt="Animalets" className="testpage-logo" />
-        <button
-          className="testpage-close"
-          onClick={() => navigate("/")}
-        >
+        <Button variant="close-testi-page" onClick={() => navigate("/")}>
           Cerrar
-        </button>
+        </Button>
       </header>
 
       {/* Subheader con nombre */}

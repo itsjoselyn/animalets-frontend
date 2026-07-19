@@ -1,31 +1,10 @@
-import { Link } from "react-router-dom";
 import logo from "../../assets/animalets-logo.jpeg";
 import "./Footer.css";
+import { NAV_LINKS, SOCIAL_LINKS } from "../../data/navigation";
+import { UnderlineLink } from "../common/UnderlineLink";
 
-const NAV_LINKS = [
-  { label: "Sobre nosotros", to: "/sobre-nosotros" },
-  { label: "Nuestros peludos", to: "/nuestros-peludos" },
-  { label: "Cómo ayudar", to: "/como-ayudar" },
-  { label: "Blog", to: "/blog" },
-  { label: "Contacto", to: "/contacto" },
-];
 
-const SOCIAL_LINKS = [
-  { label: "Política de privacidad", to: "/privacidad", external: false },
-  { label: "Instagram", href: "https://instagram.com/animaletslallagosta", external: true },
-  { label: "Facebook", href: "https://facebook.com/animaletslallagosta", external: true },
-  { label: "TikTok", href: "https://tiktok.com/@animaletslallagosta", external: true },
-];
-
-function UnderlineLink({ children, to, href, external }) {
-  const cls = "footer-link";
-  if (external) {
-    return <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>{children}</a>;
-  }
-  return <Link to={to} className={cls}>{children}</Link>;
-}
-
-export default function Footer() {
+function Footer() {
   return (
     <footer className="footer">
       {/* Línea verde superior */}
@@ -68,3 +47,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+export default Footer;
