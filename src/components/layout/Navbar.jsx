@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/animalets-logo.jpeg";
 import "./Navbar.css";
 import { NAV_LINKS } from "../../data/navigation";
-import Button from "../common/Button/Button";
+import { Button } from 'antd';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -48,11 +48,9 @@ export default function Navbar() {
         </ul>
 
         {/* Adopta ya */}
-        <div className="navbar-right">
-          <Link to="/nuestros-peludos" className="adopt-btn">
-            Adopta ya
-          </Link>
-        </div>
+        <Button type="primary" onClick={() => window.location.href = '/nuestros-peludos'}>
+          Adopta ya
+        </Button>
 
       </nav>
 
@@ -68,15 +66,6 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-          <div className="mobile-menu-footer">
-            <Link
-              to="/nuestros-peludos"
-              className="adopt-cta"
-              onClick={() => setMenuOpen(false)}
-            >
-              Adopta ya
-            </Link>
-          </div>
         </nav>
         <div className="menu-bg-accent" />
       </div>
