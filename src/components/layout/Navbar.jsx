@@ -48,7 +48,7 @@ export default function Navbar() {
         </ul>
 
         {/* Adopta ya */}
-        <Button type="primary" onClick={() => window.location.href = '/nuestros-peludos'}>
+        <Button type="primary" href="/nuestros-peludos" target="_blank">
           Adopta ya
         </Button>
 
