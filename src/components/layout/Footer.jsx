@@ -1,4 +1,4 @@
-import logo from "../../assets/animalets-logo.jpeg";
+import logo from "../../assets/animalets-logo.png";
 import "./Footer.css";
 import { NAV_LINKS, SOCIAL_LINKS } from "../../data/navigation";
 import { UnderlineLink } from "../common/UnderlineLink";
