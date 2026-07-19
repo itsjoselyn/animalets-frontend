@@ -213,7 +213,7 @@ export default function CatProfilePage() {
 
           {images.length > 1 && (
             <>
-              <button
+              <Button
                 onClick={prev}
                 style={{
                   position: "absolute",
@@ -228,9 +228,9 @@ export default function CatProfilePage() {
                 }}
               >
                 ◀
-              </button>
+              </Button>
 
-              <button
+              <Button
                 onClick={next}
                 style={{
                   position: "absolute",
@@ -245,7 +245,7 @@ export default function CatProfilePage() {
                 }}
               >
                 ▶
-              </button>
+              </Button>
             </>
           )}
         </div>
@@ -284,19 +284,17 @@ export default function CatProfilePage() {
         </div>
 
         <div className="catprofile-ctas">
-          <a
-            className="catprofile-btn catprofile-btn--adopt"
+          <Button type="link"
             href={`/contacto`}
           >
             Adóptame
-          </a>
+          </Button>
 
-          <a
-            className="catprofile-btn catprofile-btn--foster"
+          <Button type="link"
             href={`/contacto`}
           >
             Acógeme
-          </a>
+          </Button>
         </div>
 
       </div>
