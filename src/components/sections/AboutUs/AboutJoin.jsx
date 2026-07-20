@@ -9,8 +9,8 @@ export default function AboutJoin() {
         <h2 className="aboutjoin-title">Únete a nuestra manada</h2>
         <p className="aboutjoin-text">Cada adopción, cada voluntario y cada donación salva vidas</p>
         <div className="aboutjoin-btns">
-          <Button href='/nuestros-peludos' target="_blank">Adoptar</Button>
-          <Button href='/como-ayudar' target="_blank">Ayudar</Button>
+          <Button type="primary" href='/nuestros-peludos' target="_blank">Adoptar</Button>
+          <Button type="primary" href='/como-ayudar' target="_blank">Ayudar</Button>
         </div>
       </div>
     </section>

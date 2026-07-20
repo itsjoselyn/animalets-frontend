@@ -49,7 +49,7 @@ export default function AdminNoticias() {
             {loading ? <p>Cargando...</p> : (
                 <>
                     <div style={{ marginBottom: 12 }}>
-                        <Button variant="admin-btn" onClick={() => navigate('/admin/gatos/new')}>Crear gato</Button>                    </div>
+                        <Button variant="admin-btn" onClick={() => navigate('/admin/noticias/new')}>Crear noticia</Button>                    </div>
 
                     {posts.length === 0 ? <p>No hay noticias todavia.</p> : (
                         <table style={{ width: "100%", borderCollapse: "collapse" }}>

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { optimizeCloudinaryImage } from "../../../lib/optimizeCloudinaryImage";
 import { formatBlogDate } from "./blogUtils";
 import "../../../pages/BlogPostPage.css";
+import { Button } from "antd";
 
 export default function BlogArticleView({ post: userPost, nextPost = null, preview = false, showDate = true }) {
     const images = Array.isArray(userPost?.imagenes)
@@ -25,10 +26,10 @@ export default function BlogArticleView({ post: userPost, nextPost = null, previ
                 <h1 className="blogpost-title">{title}</h1>
                 <div className="blogpost-nav-top" style={{ alignItems: "flex-start" }}>
                     {preview ? <span /> : (
-                        <Link to="/blog" className="blogpost-back">
+                        <Button type="link" href="/blog">
                             <span className="blogpost-dot" />
                             Volver al blog
-                        </Link>
+                        </Button>
                     )}
 
                     {preview || !showDate ? <span /> : <span className="blogpost-date">{createdLabel}</span>}
@@ -60,10 +61,10 @@ export default function BlogArticleView({ post: userPost, nextPost = null, previ
 
                 {!preview && nextPost?.id && (
                     <div className="blogpost-next">
-                        <Link to={`/blog/${nextPost.id}`} className="blogpost-next-link">
+                        <Button href={`/blog/${nextPost.id}`}>
                             Siguiente artículo
                             <span className="blogpost-dot blogpost-dot--green" />
-                        </Link>
+                        </Button>
                     </div>
                 )}
             </div>

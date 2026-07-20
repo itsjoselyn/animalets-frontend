@@ -97,7 +97,7 @@ export default function PeludosFilters({ isOpen, onClose, onApply }) {
         {/* Acciones */}
         <div className="pfilters-actions">
           <Button onClick={handleReset}>Limpiar</Button>
-          <Button onClick={handleApply}>Aplicar</Button>
+          <Button type="primary" onClick={handleApply}>Aplicar</Button>
         </div>
 
       </div>

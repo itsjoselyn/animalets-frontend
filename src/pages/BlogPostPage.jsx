@@ -123,7 +123,7 @@ export default function BlogPostPage() {
     return (
       <div className="blogpost-notfound">
         <p>{error || "Artículo no encontrado."}</p>
-        <Link to="/blog">Volver al blog</Link>
+        <Button type="link" href="/blog">Volver al blog</Button>
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "./AboutSnippet.css";
+import { Button } from 'antd';
 
 export default function AboutSnippet() {
   return (
@@ -8,10 +9,10 @@ export default function AboutSnippet() {
       {/* Nube blanca saliendo del hero */}
       <div className="cloud-white">
         {/* Burbujita flotante */}
-        <Link to="/sobre-nosotros" className="about-bubble">
+        <Button href="/sobre-nosotros" className="about-bubble">
           Sobre nosotros
           <span className="about-bubble-arrow">→</span>
-        </Link>
+        </Button>
       </div>
 
       {/* Nube verde que da paso al carrusel */}

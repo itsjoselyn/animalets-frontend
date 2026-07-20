@@ -5,8 +5,8 @@ import { db } from "../../../firebase/firebaseConfig";
 import "./CatCarousel.css";
 import { optimizeCloudinaryImage } from '../../../lib/optimizeCloudinaryImage';
 import { AUTO_SCROLL_INTERVAL } from "../../../utils/constants";
-import Button from "../../common/Button/Button";
-
+import { Button } from "antd";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 
 export default function CatCarousel() {
   const [cats, setCats] = useState([]);
@@ -113,10 +113,17 @@ export default function CatCarousel() {
         <h2 className="cat-carousel-title">Nuestros peludos</h2>
       </div>
 
-      {/* Carrusel */}
+      {/* Fila del Carrusel (Flechas + Tarjetas) */}
       <div className="cat-carousel-track-wrapper">
         {/* Flecha izquierda */}
-        <Button variant="carousel-arrow-left" onClick={prev} aria-label="Anterior">←</Button>
+        <Button
+          type="default"
+          shape="circle"
+          icon={<LeftOutlined />}
+          onClick={prev}
+          aria-label="Anterior"
+          className="carousel-arrow-left"
+        />
 
         {/* Cards */}
         <div className="cat-carousel-track">
@@ -173,28 +180,37 @@ export default function CatCarousel() {
         </div>
 
         {/* Flecha derecha */}
-        <Button variant="carousel-arrow-right" onClick={next} aria-label="Siguiente">→</Button>      </div>
-
-      {/* Barra de progreso */}
-      <div className="cat-carousel-progress-wrapper">
-        <div className="cat-carousel-progress-bar">
-          <div
-            className="cat-carousel-progress-fill"
-            style={{ width: totalSlides ? `${((current + 1) / totalSlides) * 100}%` : "0%" }}
-          />
-        </div>
-        <div className="cat-carousel-progress-auto">
-          <div
-            className="cat-carousel-progress-auto-fill"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
+        <Button
+          type="default"
+          shape="circle"
+          icon={<RightOutlined />}
+          onClick={next}
+          aria-label="Siguiente"
+          className="carousel-arrow-right"
+        />
       </div>
 
-      {/* Contador */}
-      <p className="cat-carousel-counter">
-        {totalSlides ? `${String(current + 1).padStart(2, "0")} / ${String(totalSlides).padStart(2, "0")}` : "00 / 00"}
-      </p>
+      {/* Footer del carrusel: Barra de progreso y Contador (Debajo) */}
+      <div className="cat-carousel-footer">
+        <div className="cat-carousel-progress-wrapper">
+          <div className="cat-carousel-progress-bar">
+            <div
+              className="cat-carousel-progress-fill"
+              style={{ width: totalSlides ? `${((current + 1) / totalSlides) * 100}%` : "0%" }}
+            />
+          </div>
+          <div className="cat-carousel-progress-auto">
+            <div
+              className="cat-carousel-progress-auto-fill"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
+
+        <p className="cat-carousel-counter">
+          {totalSlides ? `${String(current + 1).padStart(2, "0")} / ${String(totalSlides).padStart(2, "0")}` : "00 / 00"}
+        </p>
+      </div>
 
     </section>
   );

@@ -3,14 +3,20 @@ import { Link, useSearchParams } from "react-router-dom";
 import "./Testimonials.css";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
-import Button from "../../common/Button/Button";
+import { Button } from "antd";
 
 function Timeline({ items, active, onSelect }) {
   return (
     <div className="testi-timeline">
       <div className="testi-line" />
       {items.map((t) => (
-        <Button key={t.id} variant="testi-node" active={active === t.id} onClick={() => onSelect(t.id)} aria-label={t.name}>
+        <Button
+          key={t.id}
+          type={active === t.id ? "primary" : "default"} // Cambia el aspecto si está activo
+          onClick={() => onSelect(t.id)}
+          aria-label={t.name}
+          className="testi-node" // Conserva tus estilos CSS para el punto y el texto
+        >
           <span className="testi-node-dot" />
           <span className="testi-node-name">{t.name}</span>
         </Button>
