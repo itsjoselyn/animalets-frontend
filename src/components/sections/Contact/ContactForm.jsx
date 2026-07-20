@@ -32,8 +32,6 @@ export default function ContactForm() {
 
   return (
     <section className="cform-wrap">
-      <h2 className="cform-title">¿En qué podemos ayudarte?</h2>
-
       <form ref={formRef} className="cform" onSubmit={handleSubmit} noValidate>
         <CommonFields
           form={form}

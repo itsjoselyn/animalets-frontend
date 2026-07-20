@@ -2,6 +2,7 @@
    CONTACT CLOUD
 ===================== */
 
+
 .ccloud {
   background: #ffffff;
   padding: 8px 28px 48px;
@@ -12,30 +13,22 @@
 }
 
 /* ---- EMAIL ---- */
-.ccloud-email {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.ccloud-email-container {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ccloud-email-icon {
+  background-color: #e8f5e9;
+  border-radius: 8px;
+  font-size: 24px;
   color: #4caf50;
-  text-decoration: none;
-  position: relative;
+  padding: 4px 8px;
 }
-
-.ccloud-email::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 1.5px;
-  background: #4caf50;
-  transition: width 0.3s ease;
-}
-
-.ccloud-email:hover::after {
-  width: 100%;
+.ccloud-email-text {
+  display: flex;
+  flex-direction: column;
 }
 
 /* ---- ZONA CENTRAL ---- */

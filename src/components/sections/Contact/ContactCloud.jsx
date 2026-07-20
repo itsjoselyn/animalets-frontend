@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import "./ContactCloud.css";
 import { RING_TEXT } from "../../../utils/constants";
 import { textContactR } from "../../../utils/constants";
+import { MailFilled, InstagramFilled, FacebookFilled } from '@ant-design/icons';
+import { Button } from "antd";
 
 
 export default function ContactCloud() {
@@ -22,27 +24,42 @@ export default function ContactCloud() {
 
 
   return (
-    <section className="ccloud" ref={sectionRef}>
+    <section ref={sectionRef}>
+      <h2 className="cform-title">¿En qué podemos ayudarte?</h2>
+      <p>Contáctanos y te ayudaremos lo antes posible. Puedes contactarnos a través de nuestras redes sociales o enviarnos un mensaje por el formulario.</p>
 
-      {/* Email */}
-      <a href="mailto:animaletslallagosta@gmail.com" className="ccloud-email">
-        animaletslallagosta@gmail.com
-      </a>
+      <div className="ccloud-email-container">
+        <span className="ccloud-email-icon">
+          <MailFilled /></span>
+        <div className="ccloud-email-text">
+          <span>Email:</span>
+          <a href="mailto:animaletslallagosta@gmail.com">animaletslallagosta@gmail.com</a>
+        </div>
+      </div>
+      <div className="ccloud-email-container">
+        <span className="ccloud-email-icon">
+          <InstagramFilled /></span>
+        <div className="ccloud-email-text">
+          <span>Instagram:</span>
+          <a href="https://instagram.com/animaletslallagosta" className="ccloud-email">
+            @animaletslallagosta
+          </a>
+        </div>
+      </div>
+      <div className="ccloud-email-container">
+        <span className="ccloud-email-icon">
+          <FacebookFilled /></span>
+        <div className="ccloud-email-text">
+          <span>Facebook:</span>
+          <a href="https://facebook.com/animaletslallagosta" className="ccloud-email">
+            @animaletslallagosta
+          </a>
+        </div>
+      </div>
+
 
       {/* Zona central: Instagram + círculo giratorio + Facebook */}
-      <div className="ccloud-middle">
-
-        {/* Instagram */}
-        <a
-          href="https://instagram.com/animaletslallagosta"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="ccloud-social ccloud-social--ig"
-        >
-          <div className="ccloud-social-circle">Instagram</div>
-        </a>
-
-        {/* Círculo giratorio Adopta Ya */}
+      {/* <div className="ccloud-middle">
         <div className="ccloud-ring-wrap">
           <svg
             className="ccloud-svg"
@@ -65,23 +82,12 @@ export default function ContactCloud() {
             </text>
           </svg>
 
-          {/* Ovillo en el centro */}
           <div className="ccloud-yarn">
             🧶
           </div>
         </div>
 
-        {/* Facebook */}
-        <a
-          href="https://facebook.com/animaletslallagosta"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="ccloud-social ccloud-social--fb"
-        >
-          <div className="ccloud-social-circle">Facebook</div>
-        </a>
-
-      </div>
+      </div> */}
 
     </section>
   );
