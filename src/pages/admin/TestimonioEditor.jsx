@@ -5,7 +5,7 @@ import { db } from "../../firebase/firebaseConfig";
 import "../../components/sections/Contact/ContactForm.css";
 import "./GatoEditor/GatoEditor.css";
 import { EMPTY_TESTIMONY } from "../../utils/constants";
-import Button from "../../components/common/Button/Button";
+import { Button } from "antd";
 
 
 
@@ -133,10 +133,18 @@ export default function TestimonioEditor() {
             </div>
 
             <div style={{ marginTop: 16, display: "flex", gap: 12 }}>
-                <Button variant="submit" onClick={handleSave} disabled={loading}>{loading ? "Guardando..." : "Guardar"}</Button>                {!isNew && (
-                    <Button variant="admin-btn" onClick={handleDelete} disabled={loading} style={{ background: '#e53935', color: '#fff' }}>Eliminar</Button>
+                <Button
+                    type="primary"
+                    htmlType="button"
+                    onClick={handleSave}
+                    loading={loading}
+                >
+                    {loading ? "Guardando..." : "Guardar"}
+                </Button>
+                {!isNew && (
+                    <Button type="primary" onClick={handleDelete} disabled={loading} danger>Eliminar</Button>
                 )}
-                <Button variant="admin-btn" onClick={() => navigate("/admin/testimonios")}>Cancelar</Button>            </div>
+                <Button onClick={() => navigate("/admin/testimonios")}>Cancelar</Button>            </div>
         </div>
     );
 }

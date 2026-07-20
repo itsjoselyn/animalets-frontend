@@ -1,4 +1,4 @@
-import Button from "../../../../components/common/Button/Button";
+import { Button } from "antd";
 export default function ArrayInput({ label, value = [], onChange, placeholder = '' }) {
     const v = Array.isArray(value) ? value : [];
     const setAt = (idx, val) => {
@@ -13,13 +13,12 @@ export default function ArrayInput({ label, value = [], onChange, placeholder = 
                 <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
                     <input className="cform-input" value={item} onChange={(e) => setAt(i, e.target.value)} placeholder={placeholder} />
                     <Button
-                        type="button"
-                        variant="admin-btn"
+                        type="primary"
                         onClick={() => onChange(v.filter((_, idx) => idx !== i))}
-                    >
+                        danger>
                         Eliminar
                     </Button>              </div>
             ))}
-            <Button type="button" variant="admin-btn" onClick={() => onChange([...v, ''])}>Añadir</Button>        </div>
+            <Button onClick={() => onChange([...v, ''])}>Añadir</Button>        </div>
     );
 }

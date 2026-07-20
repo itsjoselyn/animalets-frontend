@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import { db } from "../../firebase/firebaseConfig";
-import Button from "../../components/common/Button/Button";
+import { Button } from "antd";
 
 export default function AdminGatos() {
     const [gatos, setGatos] = useState([]);
@@ -36,7 +36,7 @@ export default function AdminGatos() {
             {loading ? <p>Cargando...</p> : (
                 <>
                     <div style={{ marginBottom: 12 }}>
-                        <Button variant="admin-btn" onClick={() => navigate('/admin/gatos/new')}>Crear gato</Button>                    </div>
+                        <Button type="primary" onClick={() => navigate('/admin/gatos/new')}>Crear gato</Button>                    </div>
 
                     {gatos.length === 0 ? <p>No hay gatos todavía.</p> : (
                         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -57,11 +57,11 @@ export default function AdminGatos() {
                                         <td style={{ padding: 8 }}>{g.sexo ?? g.gender ?? '-'}</td>
                                         <td style={{ padding: 8 }}>{g.estado ?? '-'}</td>
                                         <td style={{ padding: 8 }}>
-                                            <Button variant="admin-btn" onClick={() => navigate(`/admin/gatos/${g.id}`)}>
+                                            <Button onClick={() => navigate(`/admin/gatos/${g.id}`)}>
                                                 Editar
-                                            </Button>                                            <Button
-                                                variant="admin-btn"
-                                                style={{ marginLeft: 8, background: '#e53935', color: '#fff' }}
+                                            </Button>
+                                            <Button
+                                                type="primary"
                                                 onClick={async () => {
                                                     if (!confirm('Eliminar este gato?')) return;
                                                     try {
@@ -73,7 +73,7 @@ export default function AdminGatos() {
                                                         alert('Error borrando');
                                                     }
                                                 }}
-                                            >
+                                                danger >
                                                 Borrar
                                             </Button>
                                         </td>

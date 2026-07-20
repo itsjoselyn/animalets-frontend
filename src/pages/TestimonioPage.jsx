@@ -4,7 +4,7 @@ import "./TestimonioPage.css";
 import logo from "../assets/animalets-logo.png";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
-import Button from "../components/common/Button/Button";
+import { Button } from "antd";
 export default function TestimonioPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -80,7 +80,7 @@ export default function TestimonioPage() {
       {/* Header */}
       <header className="testpage-header">
         <img src={logo} alt="Animalets" className="testpage-logo" />
-        <Button variant="close-testi-page" onClick={() => navigate("/")}>
+        <Button onClick={() => navigate("/")}>
           Cerrar
         </Button>
       </header>

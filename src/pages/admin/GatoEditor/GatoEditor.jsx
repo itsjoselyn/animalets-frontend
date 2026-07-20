@@ -6,7 +6,7 @@ import SuperpowersFields from './fields/SuperpowersFields';
 import GatoPreview from './components/GatoPreview';
 import "../../../components/sections/Contact/ContactForm.css";
 import './GatoEditor.css';
-import Button from "../../../components/common/Button/Button";
+import { Button } from "antd";
 
 export default function GatoEditor() {
     const { id } = useParams();
@@ -39,11 +39,17 @@ export default function GatoEditor() {
                     />
 
                     <div style={{ marginTop: 16, display: 'flex', gap: 12 }}>
-                        <Button variant="submit" onClick={handleSave} disabled={loading}>{loading ? "Guardando..." : "Guardar"}</Button>
+                        <Button
+                            type="primary"
+                            onClick={handleSave}
+                            loading={loading}
+                        >
+                            {loading ? "Guardando..." : "Guardar"}
+                        </Button>
                         {!isNew && (
-                            <Button variant="admin-btn" onClick={handleDelete} disabled={loading} style={{ background: '#e53935', color: '#fff' }}>Eliminar</Button>
+                            <Button type="primary" onClick={handleDelete} disabled={loading} danger>Eliminar</Button>
                         )}
-                        <Button variant="admin-btn" onClick={() => navigate('/admin/gatos')}>Cancelar</Button>                    </div>
+                        <Button onClick={() => navigate('/admin/gatos')}>Cancelar</Button>                    </div>
                 </div>
 
                 <GatoPreview

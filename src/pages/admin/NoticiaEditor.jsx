@@ -8,7 +8,7 @@ import BlogArticleView from "../../components/sections/Blog/BlogArticleView";
 import { compressForUpload } from "../../lib/imageUtils";
 import { uploadImageToCloudinary } from "../../lib/uploadImageToCloudinary";
 import { EMPTY_NEWS } from "../../utils/constants";
-import Button from "../../components/common/Button/Button";
+import { Button } from "antd";
 
 
 export default function NoticiaEditor() {
@@ -197,13 +197,13 @@ export default function NoticiaEditor() {
                     {imagenPreview && (
                         <div style={{ width: 220, marginTop: 8 }}>
                             <img src={imagenPreview.url} alt={data.titulo || "Vista previa"} style={{ width: "100%", borderRadius: 8 }} />
-                            <Button type="button" variant="admin-btn" onClick={() => handleDeleteImage(imagenPreview)}>Eliminar</Button>
+                            <Button type="primary" onClick={() => handleDeleteImage(imagenPreview)} danger>Eliminar</Button>
                         </div>
                     )}
 
                     <div style={{ marginTop: 16, display: "flex", gap: 12 }}>
-                        <Button variant="submit" onClick={handleSave} disabled={loading}>{loading ? "Guardando..." : "Guardar"}</Button>                        {!isNew && <button className="cayudar-btn" onClick={handleDelete} disabled={loading} style={{ background: "#e53935", color: "#fff" }}>Eliminar</button>}
-                        <Button variant="admin-btn" onClick={() => navigate("/admin/noticias")}>Cancelar</Button>                    </div>
+                        <Button type="primary" onClick={handleSave} disabled={loading}>{loading ? "Guardando..." : "Guardar"}</Button>                        {!isNew && <button className="cayudar-btn" onClick={handleDelete} disabled={loading} style={{ background: "#e53935", color: "#fff" }}>Eliminar</button>}
+                        <Button onClick={() => navigate("/admin/noticias")}>Cancelar</Button>                    </div>
                 </div>
 
                 <aside className="gato-editor-preview">

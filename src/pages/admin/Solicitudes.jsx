@@ -6,7 +6,7 @@ import { TYPE_LABELS } from "../../utils/constants";
 import { STATUS_LABELS } from "../../utils/constants";
 import { STATUS_OPTIONS } from "../../utils/constants";
 import { TYPE_OPTIONS } from "../../utils/constants";
-import Button from "../../components/common/Button/Button";
+import { Button } from "antd";
 function formatDate(value) {
     if (!value) return "-";
     if (typeof value === "object" && typeof value.toDate === "function") {
@@ -247,12 +247,20 @@ export default function AdminSolicitudes() {
                                                 <p className="solicitud-card-date">{formatDate(item.createdAtValue)}</p>
                                             </div>
                                             <div className="solicitud-card-actions">
-                                                <Button variant="admin-btn" onClick={(e) => { e.stopPropagation(); setSelectedId(item.id); }}>Ver</Button>                                                {status !== "leido" && (
-                                                    <Button variant="admin-btn" onClick={(e) => { e.stopPropagation(); markRead(item); }}>Marcar como leído</Button>
+                                                {status === "nuevo" && (
+                                                    <Button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            markRead(item);
+                                                        }}
+                                                    >
+                                                        Marcar como leído
+                                                    </Button>
                                                 )}
+
                                                 <Button
-                                                    variant="admin-btn"
-                                                    className="solicitud-delete-btn"
+                                                    type="primary"
+                                                    danger
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         removeItem(item);

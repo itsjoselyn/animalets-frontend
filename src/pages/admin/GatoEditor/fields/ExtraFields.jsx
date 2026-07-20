@@ -1,4 +1,4 @@
-import Button from "../../../../components/common/Button/Button";
+import { Button } from "antd";
 export default function ExtraFields({ data, setField, imagenesPreview, setImagenesPreview, handleDeleteImage }) {
     const handleFileChange = (e) => {
         if (!e.target.files) return;
@@ -25,7 +25,7 @@ export default function ExtraFields({ data, setField, imagenesPreview, setImagen
                     {imagenesPreview.map((img, i) => (
                         <div key={i} style={{ width: 120 }}>
                             <img src={img.url} alt={`img-${i}`} style={{ width: '100%', borderRadius: 8 }} />
-                            <Button type="button" variant="admin-btn" onClick={() => handleDeleteImage(img)}>Eliminar</Button>                        </div>
+                            <Button type="primary" onClick={() => handleDeleteImage(img)} danger>Eliminar</Button>                        </div>
                     ))}
                 </div>
             )}
