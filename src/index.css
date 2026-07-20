@@ -1,16 +1,19 @@
-/* TODO: REMOVE */
-/* *,
+*,
 *::before,
 *::after {
   box-sizing: border-box;
-}
-
-body {
   margin: 0;
   padding: 0;
+}
+
+main {
+  background-color: #ffffff;
+}
+/*
+body {
+
   min-width: 320px;
   min-height: 100vh;
-  background-color: #ffffff;
   color: #1a1a1a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
