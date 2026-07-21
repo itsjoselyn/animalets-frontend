@@ -115,10 +115,10 @@ export const STEPS = [
 ];
 
 export const OPTIONS = [
-    { id: 1, title: "Voluntariado", link: "/como-ayudar/voluntariado", img: "https://placecats.com/neo/300/400" },
-    { id: 2, title: "Apadrinar un Gato", link: "/como-ayudar/apadrinar", img: "https://placecats.com/millie/300/400" },
-    { id: 3, title: "Hacerse Socio", link: "/como-ayudar/socio", img: "https://placecats.com/bella/300/400" },
-    { id: 4, title: "Casa de Acogida", link: "/como-ayudar/acogida", img: "https://placecats.com/neo_2/300/400" },
+    { id: 1, title: "Voluntariado", link: "/como-ayudar", img: "https://placecats.com/neo/300/400" },
+    { id: 2, title: "Apadrinar un Gato", link: "/como-ayudar", img: "https://placecats.com/millie/300/400" },
+    { id: 3, title: "Hacerse Socio", link: "/como-ayudar", img: "https://placecats.com/bella/300/400" },
+    { id: 4, title: "Casa de Acogida", link: "/como-ayudar", img: "https://placecats.com/neo_2/300/400" },
 ];
 
 

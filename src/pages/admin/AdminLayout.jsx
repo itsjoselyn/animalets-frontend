@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../firebase/firebaseConfig";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import { Button, Menu, Drawer, Grid } from "antd";
+import { Button, Menu, Drawer, Grid, Spin } from "antd";
 import {
     HomeOutlined,
     HeartOutlined,
@@ -14,6 +14,7 @@ import {
 
 export default function AdminLayout() {
     const [user, setUser] = useState(null);
+    const [initializing, setInitializing] = useState(true);
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     const navigate = useNavigate();
@@ -26,18 +27,31 @@ export default function AdminLayout() {
     useEffect(() => {
         const unsub = onAuthStateChanged(auth, (u) => {
             setUser(u);
-            if (!u) navigate("/admin/login");
+            setInitializing(false);
+
+            if (!u) {
+                navigate("/admin/login", { replace: true });
+            }
         });
 
         return unsub;
     }, [navigate]);
 
-    const handleSignOut = async () => {
-        await signOut(auth);
-        navigate("/admin/login");
-    };
+    // Redirigir a la vista principal del admin si entra en la raíz /admin o /admin/
+    useEffect(() => {
+        if (user && (location.pathname === "/admin" || location.pathname === "/admin/")) {
+            navigate("/admin/gatos", { replace: true });
+        }
+    }, [user, location.pathname, navigate]);
 
-    if (!user) return null;
+    const handleSignOut = async () => {
+        try {
+            await signOut(auth);
+            navigate("/admin/login", { replace: true });
+        } catch (err) {
+            console.error("Error al cerrar sesión:", err);
+        }
+    };
 
     const menuItems = [
         {
@@ -62,8 +76,27 @@ export default function AdminLayout() {
         },
     ];
 
+    // Estado de carga inicial mientras Firebase comprueba el token guardado en LocalStorage
+    if (initializing) {
+        return (
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    minHeight: "100vh",
+                }}
+            >
+                <Spin size="large" tip="Cargando panel de administración..." />
+            </div>
+        );
+    }
+
+    // Si no hay usuario autenticado después de la inicialización
+    if (!user) return null;
+
     return (
-        <div style={{ padding: 20 }}>
+        <div style={{ padding: 20, minHeight: "100vh" }}>
             <header
                 style={{
                     display: "flex",
@@ -71,13 +104,16 @@ export default function AdminLayout() {
                     alignItems: "center",
                     gap: 24,
                     marginBottom: 24,
+                    borderBottom: "1px solid #f0f0f0",
+                    paddingBottom: 12,
                 }}
             >
                 <h2
                     style={{
                         margin: 0,
-                        color: "#4caf50",
+                        color: "#2e7d32",
                         whiteSpace: "nowrap",
+                        fontWeight: 700,
                     }}
                 >
                     Admin Panel
@@ -88,6 +124,7 @@ export default function AdminLayout() {
                         type="text"
                         icon={<MenuOutlined style={{ fontSize: 22 }} />}
                         onClick={() => setDrawerOpen(true)}
+                        aria-label="Abrir menú de navegación"
                     />
                 ) : (
                     <div
@@ -121,6 +158,7 @@ export default function AdminLayout() {
                 )}
             </header>
 
+            {/* Drawer para vista móvil */}
             <Drawer
                 title="Admin Panel"
                 placement="left"
@@ -149,7 +187,7 @@ export default function AdminLayout() {
                 </Button>
             </Drawer>
 
-            <main>
+            <main style={{ width: "100%" }}>
                 <Outlet />
             </main>
         </div>

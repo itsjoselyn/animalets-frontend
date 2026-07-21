@@ -10,14 +10,21 @@ export function prepareCatPayload(data, isNew) {
     }
 
     // Derivar canonical 'estado' desde el checkbox de compatibilidad UI anterior
-    if (data.adoptado) payload.estado = 'adoptado';
+    if (data.adoptado) {
+        payload.estado = 'adoptado';
+    }
 
     // Quitar campos legacy que ya no queremos escribir en la DB
     delete payload.adoptado;
 
+    // Asegurar que campos clave estén limpios si vienen vacíos
+    if (payload.nombre) payload.nombre = payload.nombre.trim();
+    if (payload.sexo) payload.sexo = payload.sexo.trim();
+
     // Agregar timestamps del servidor de Firebase según corresponda
     if (isNew) {
         payload.createdAt = serverTimestamp();
+        payload.updatedAt = serverTimestamp(); // Opcional: útil para tener ambos desde el inicio
     } else {
         payload.updatedAt = serverTimestamp();
     }

@@ -3,10 +3,11 @@ import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore"
 import { db } from "../../firebase/firebaseConfig";
 import "./Solicitudes.css";
 import { TYPE_LABELS, STATUS_LABELS } from "../../utils/constants";
-import { Button, Grid } from "antd";
-import { LeftOutlined } from "@ant-design/icons";
+import { Button, Grid, Select, Popconfirm, message, Card, Typography, Space, Empty } from "antd";
+import { LeftOutlined, DeleteOutlined, CheckOutlined, ExclamationCircleOutlined, MailOutlined } from "@ant-design/icons";
 
 const { useBreakpoint } = Grid;
+const { Title, Text } = Typography;
 
 function formatDate(value) {
     if (!value) return "-";
@@ -86,14 +87,13 @@ function renderExtraValue(key, value) {
 }
 
 function getExtraFields(item) {
-    // 1. Añadimos a la lista de ignorados los campos que ya se muestran en otras secciones
     const ignored = new Set([
         "id", "createdAtValue", "createdAt", "estado", "tipo", "tipoSolicitud",
         "tipo_solicitud", "nombre", "name", "correo", "email", "telefono",
         "edad", "mensaje", "text", "preview", "titulo", "title", "descripcion", "body"
     ]);
 
-    const seenLabels = new Set(); // Para controlar que no se repitan los nombres en pantalla
+    const seenLabels = new Set();
 
     return Object.entries(item)
         .filter(([key, value]) => !ignored.has(key) && value !== null && value !== undefined && value !== "")
@@ -104,7 +104,6 @@ function getExtraFields(item) {
             return { key, label, value: formattedValue };
         })
         .filter((field) => field.value !== "")
-        // 2. Filtramos para eliminar etiquetas que ya hayan salido antes 
         .filter((field) => {
             if (seenLabels.has(field.label)) return false;
             seenLabels.add(field.label);
@@ -119,9 +118,8 @@ export default function AdminSolicitudes() {
     const [statusFilter, setStatusFilter] = useState("todas");
     const [typeFilter, setTypeFilter] = useState("todos");
 
-    // Hook nativo de Ant Design para detectar pantalla
     const screens = useBreakpoint();
-    const isMobile = !screens.md; // Es móvil si el breakpoint es menor a 'md' (768px)
+    const isMobile = !screens.md;
 
     useEffect(() => {
         const load = async () => {
@@ -138,12 +136,12 @@ export default function AdminSolicitudes() {
                 list.sort((a, b) => getTimestampMs(b.createdAtValue) - getTimestampMs(a.createdAtValue));
                 setItems(list);
 
-                // En escritorio selecciona por defecto la primera; en móvil lo deja null
                 if (screens.md) {
                     setSelectedId(list[0]?.id || null);
                 }
             } catch (err) {
                 console.error(err);
+                message.error("Error al cargar las solicitudes");
             } finally {
                 setLoading(false);
             }
@@ -196,21 +194,22 @@ export default function AdminSolicitudes() {
         try {
             await setDoc(doc(db, "contactRequests", item.id), { estado: "leido" }, { merge: true });
             setItems((prev) => prev.map((current) => current.id === item.id ? { ...current, estado: "leido" } : current));
+            message.success("Marcado como leído");
         } catch (err) {
             console.error(err);
-            alert("No se pudo actualizar la solicitud");
+            message.error("No se pudo actualizar la solicitud");
         }
     };
 
     const removeItem = async (item) => {
-        if (!confirm("Eliminar esta solicitud?")) return;
         try {
             await deleteDoc(doc(db, "contactRequests", item.id));
             setItems((prev) => prev.filter((current) => current.id !== item.id));
             setSelectedId((current) => (current === item.id ? null : current));
+            message.success("Solicitud eliminada correctamente");
         } catch (err) {
             console.error(err);
-            alert("Error borrando");
+            message.error("Error al borrar la solicitud");
         }
     };
 
@@ -218,8 +217,10 @@ export default function AdminSolicitudes() {
         <div className="solicitudes-panel">
             <div className="solicitudes-header">
                 <div>
-                    <h3>Solicitudes de contacto</h3>
-                    <p className="solicitudes-subtitle">Gestiona aquí todas las peticiones recibidas desde la web.</p>
+                    <Title level={3} style={{ color: "#2e7d32", margin: 0 }}>
+                        Solicitudes de contacto
+                    </Title>
+                    <Text type="secondary">Gestiona aquí todas las peticiones recibidas desde la web.</Text>
                 </div>
                 <div className="solicitudes-counter">
                     <span className="solicitudes-counter-label">Pendientes</span>
@@ -232,29 +233,41 @@ export default function AdminSolicitudes() {
                     {/* Lista: Se oculta en móvil si hay una solicitud seleccionada */}
                     {(!isMobile || !selectedId) && (
                         <section className="solicitudes-list-panel">
-                            <div className="solicitudes-filters">
-                                <label>
-                                    Estado
-                                    <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-                                        <option value="todas">Todas</option>
-                                        <option value="nuevo">Nuevas</option>
-                                        <option value="leido">Leídas</option>
-                                    </select>
-                                </label>
-                                <label>
-                                    Tipo
-                                    <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
-                                        <option value="todos">Todos</option>
-                                        <option value="acogida">Acogida</option>
-                                        <option value="adopcion">Adopción</option>
-                                        <option value="apadrinar">Apadrinamiento</option>
-                                        <option value="voluntariado">Voluntariado</option>
-                                        <option value="otros">Otros</option>
-                                    </select>
-                                </label>
+                            <div className="solicitudes-filters" style={{ display: "flex", gap: 12, marginBottom: 16 }}>
+                                <div style={{ flex: 1 }}>
+                                    <span style={{ display: "block", fontSize: 12, color: "#595959", marginBottom: 4 }}>Estado</span>
+                                    <Select
+                                        style={{ width: "100%" }}
+                                        value={statusFilter}
+                                        onChange={(val) => setStatusFilter(val)}
+                                        options={[
+                                            { value: "todas", label: "Todas" },
+                                            { value: "nuevo", label: "Nuevas" },
+                                            { value: "leido", label: "Leídas" },
+                                        ]}
+                                    />
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                    <span style={{ display: "block", fontSize: 12, color: "#595959", marginBottom: 4 }}>Tipo</span>
+                                    <Select
+                                        style={{ width: "100%" }}
+                                        value={typeFilter}
+                                        onChange={(val) => setTypeFilter(val)}
+                                        options={[
+                                            { value: "todos", label: "Todos" },
+                                            { value: "acogida", label: "Acogida" },
+                                            { value: "adopcion", label: "Adopción" },
+                                            { value: "apadrinar", label: "Apadrinamiento" },
+                                            { value: "voluntariado", label: "Voluntariado" },
+                                            { value: "otros", label: "Otros" },
+                                        ]}
+                                    />
+                                </div>
                             </div>
 
-                            {filteredItems.length === 0 ? <p>No hay solicitudes para los filtros seleccionados.</p> : (
+                            {filteredItems.length === 0 ? (
+                                <Empty description="No hay solicitudes para los filtros seleccionados." style={{ margin: "40px 0" }} />
+                            ) : (
                                 <div className="solicitudes-cards">
                                     {filteredItems.map((item) => {
                                         const status = getStatusValue(item);
@@ -276,25 +289,36 @@ export default function AdminSolicitudes() {
                                                 <div className="solicitud-card-actions">
                                                     {status === "nuevo" && (
                                                         <Button
+                                                            size="small"
+                                                            icon={<CheckOutlined />}
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
                                                                 markRead(item);
                                                             }}
                                                         >
-                                                            Marcar como leído
+                                                            Marcar leído
                                                         </Button>
                                                     )}
 
-                                                    <Button
-                                                        type="primary"
-                                                        danger
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            removeItem(item);
-                                                        }}
+                                                    <Popconfirm
+                                                        title="Eliminar solicitud"
+                                                        description="¿Estás seguro de eliminar esta solicitud?"
+                                                        icon={<ExclamationCircleOutlined style={{ color: "red" }} />}
+                                                        onConfirm={() => removeItem(item)}
+                                                        okText="Sí, eliminar"
+                                                        cancelText="Cancelar"
+                                                        okButtonProps={{ danger: true }}
                                                     >
-                                                        Borrar
-                                                    </Button>
+                                                        <Button
+                                                            type="primary"
+                                                            danger
+                                                            size="small"
+                                                            icon={<DeleteOutlined />}
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        >
+                                                            Borrar
+                                                        </Button>
+                                                    </Popconfirm>
                                                 </div>
                                             </article>
                                         );
@@ -317,9 +341,9 @@ export default function AdminSolicitudes() {
                                 </Button>
                             )}
 
-                            <h4>Detalle</h4>
+                            <Title level={4} style={{ marginTop: 0 }}>Detalle de solicitud</Title>
                             {!visibleSelected ? (
-                                <p>Selecciona una solicitud.</p>
+                                <Text type="secondary">Selecciona una solicitud para ver sus detalles.</Text>
                             ) : (
                                 <div className="solicitudes-detail">
                                     <div className="solicitudes-detail-meta">
