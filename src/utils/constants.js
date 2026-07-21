@@ -159,11 +159,9 @@ export const TYPE_LABELS = {
 export const STATUS_LABELS = {
     nuevo: "Nuevo",
     leido: "Leído",
-    proceso: "En proceso",
-    cerrado: "Cerrado",
 };
 
-export const STATUS_OPTIONS = ["todas", "nuevo", "leido", "proceso", "cerrado"];
+export const STATUS_OPTIONS = ["todas", "nuevo", "leido"];
 export const TYPE_OPTIONS = ["todos", "acogida", "adopcion", "apadrinar", "voluntariado", "otros"];
 
 export const EMPTY_TESTIMONY = {

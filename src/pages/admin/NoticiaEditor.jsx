@@ -202,7 +202,8 @@ export default function NoticiaEditor() {
                     )}
 
                     <div style={{ marginTop: 16, display: "flex", gap: 12 }}>
-                        <Button type="primary" onClick={handleSave} disabled={loading}>{loading ? "Guardando..." : "Guardar"}</Button>                        {!isNew && <button className="cayudar-btn" onClick={handleDelete} disabled={loading} style={{ background: "#e53935", color: "#fff" }}>Eliminar</button>}
+                        <Button type="primary" onClick={handleSave} disabled={loading}>{loading ? "Guardando..." : "Guardar"}</Button>
+                        {!isNew && <Button type="primary" onClick={handleDelete} disabled={loading} danger>Eliminar</Button>}
                         <Button onClick={() => navigate("/admin/noticias")}>Cancelar</Button>                    </div>
                 </div>
 

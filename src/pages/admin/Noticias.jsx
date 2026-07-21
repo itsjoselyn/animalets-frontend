@@ -57,7 +57,6 @@ export default function AdminNoticias() {
                                 <tr>
                                     <th style={{ textAlign: "left", padding: 8 }}>Titulo</th>
                                     <th style={{ textAlign: "left", padding: 8 }}>Creada</th>
-                                    <th style={{ textAlign: "left", padding: 8 }}>Actualizada</th>
                                     <th style={{ textAlign: "left", padding: 8 }}>Imagen</th>
                                     <th style={{ padding: 8 }}>Acciones</th>
                                 </tr>
@@ -67,7 +66,6 @@ export default function AdminNoticias() {
                                     <tr key={post.id} style={{ borderTop: "1px solid #eee" }}>
                                         <td style={{ padding: 8 }}>{post.titulo || "-"}</td>
                                         <td style={{ padding: 8 }}>{post.date}</td>
-                                        <td style={{ padding: 8 }}>{post.updatedAt ? post.updatedDate : "-"}</td>
                                         <td style={{ padding: 8 }}>
                                             {post.imagen ? <img src={optimizeCloudinaryImage(post.imagen, { width: 300 })} alt={post.titulo} style={{ width: 64, height: 48, objectFit: "cover", borderRadius: 6 }} /> : "-"}
                                         </td>

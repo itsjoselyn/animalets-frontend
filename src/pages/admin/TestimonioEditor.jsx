@@ -109,19 +109,35 @@ export default function TestimonioEditor() {
 
     return (
         <div>
-            <h3>{isNew ? "Crear testimonio" : `Editar testimonio ${data.titulo || id}`}</h3>
+            <h3>{isNew ? "Crear testimonio" : "Editar testimonio"}</h3>
             {loading && <p>Cargando...</p>}
-            <div className="gato-editor-grid">
-                <div className="gato-editor-form">
-                    <label className="cform-sublabel">Titulo</label>
-                    <input className="cform-input" placeholder="Titulo" value={data.titulo} onChange={(e) => setField("titulo", e.target.value)} />
 
-                    <label className="cform-sublabel">Descripcion</label>
-                    <textarea className="cform-textarea" rows={10} placeholder="Descripcion" value={data.descripcion} onChange={(e) => setField("descripcion", e.target.value)} />
+            {/* Usamos un contendor Flex directo en lugar de la clase con estilos heredados */}
+            <div style={{ display: "flex", gap: "24px", alignItems: "flex-start", flexWrap: "wrap" }}>
+
+                {/* Formulario a la izquierda */}
+                <div style={{ flex: "1 1 400px" }}>
+                    <label className="cform-sublabel">Título</label>
+                    <input
+                        className="cform-input"
+                        placeholder="Título"
+                        value={data.titulo}
+                        onChange={(e) => setField("titulo", e.target.value)}
+                    />
+
+                    <label className="cform-sublabel">Descripción</label>
+                    <textarea
+                        className="cform-textarea"
+                        rows={10}
+                        placeholder="Descripción"
+                        value={data.descripcion}
+                        onChange={(e) => setField("descripcion", e.target.value)}
+                    />
                 </div>
 
-                <aside className="gato-editor-preview">
-                    <div className="catprofile">
+                {/* Preview a la derecha (sin estilos que lo estiren hacia abajo) */}
+                <aside style={{ flex: "1 1 300px", maxWidth: "450px" }}>
+                    <div className="catprofile" style={{ minHeight: "auto" }}>
                         <div className="catprofile-body" style={{ paddingTop: 0 }}>
                             <div className="catprofile-hero">
                                 <h1 className="catprofile-name">{data.titulo || "Título del testimonio"}</h1>
@@ -132,19 +148,23 @@ export default function TestimonioEditor() {
                 </aside>
             </div>
 
-            <div style={{ marginTop: 16, display: "flex", gap: 12 }}>
+            {/* Botones pegados justo debajo */}
+            <div style={{ marginTop: 24, display: "flex", gap: 12 }}>
                 <Button
                     type="primary"
                     htmlType="button"
                     onClick={handleSave}
                     loading={loading}
                 >
-                    {loading ? "Guardando..." : "Guardar"}
+                    Guardar
                 </Button>
                 {!isNew && (
-                    <Button type="primary" onClick={handleDelete} disabled={loading} danger>Eliminar</Button>
+                    <Button type="primary" onClick={handleDelete} disabled={loading} danger>
+                        Eliminar
+                    </Button>
                 )}
-                <Button onClick={() => navigate("/admin/testimonios")}>Cancelar</Button>            </div>
+                <Button onClick={() => navigate("/admin/testimonios")}>Cancelar</Button>
+            </div>
         </div>
     );
 }
