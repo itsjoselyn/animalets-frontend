@@ -9,29 +9,29 @@ export default function ContactCloud() {
       <h2 className="cform-title">¿En qué podemos ayudarte?</h2>
       <p>Contáctanos y te ayudaremos lo antes posible. Puedes contactarnos a través de nuestras redes sociales o enviarnos un mensaje por el formulario.</p>
 
-      <div className="ccloud-email-container">
-        <span className="ccloud-email-icon">
+      <div className="ccloud-container">
+        <span className="ccloud-icon">
           <MailFilled />
         </span>
-        <div className="ccloud-email-text">
+        <div className="ccloud-text">
           <span>Email:</span>
           <a href="mailto:animaletslallagosta@gmail.com">animaletslallagosta@gmail.com</a>
         </div>
       </div>
-      <div className="ccloud-email-container">
-        <span className="ccloud-email-icon">
+      <div className="ccloud-container">
+        <span className="ccloud-icon">
           <InstagramFilled /></span>
-        <div className="ccloud-email-text">
+        <div className="ccloud-text">
           <span>Instagram:</span>
           <a href="https://instagram.com/animaletslallagosta" className="ccloud-email">
             @animaletslallagosta
           </a>
         </div>
       </div>
-      <div className="ccloud-email-container">
-        <span className="ccloud-email-icon">
+      <div className="ccloud-container">
+        <span className="ccloud-icon">
           <FacebookFilled /></span>
-        <div className="ccloud-email-text">
+        <div className="ccloud-text">
           <span>Facebook:</span>
           <a href="https://facebook.com/animaletslallagosta" className="ccloud-email">
             @animaletslallagosta
