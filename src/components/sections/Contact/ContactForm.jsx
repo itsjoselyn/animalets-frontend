@@ -86,6 +86,7 @@ export default function ContactForm() {
         layout='vertical'
         style={{ padding: '1.5rem 2rem', border: '1px solid #4caf50', borderRadius: '16px', backgroundColor: '#f9fdf9' }}
         onFinish={onFinish}
+        requiredMark="optional"
       >
         <Row gutter={[16, 0]}>
           <Col xs={24} md={12}>
