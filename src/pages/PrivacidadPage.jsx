@@ -2,10 +2,10 @@ import "./PrivacidadPage.css";
 
 export default function PrivacidadPage() {
   return (
-    <div className="privacidad">
-      <div className="privacidad-body">
+    <div>
+      <div>
 
-        <h1 className="privacidad-title">Política de Privacidad</h1>
+        {/* <h1 className="privacidad-title">Política de Privacidad</h1> */}
         <p className="privacidad-date">Última modificación: 12/01/2023</p>
 
         <div className="privacidad-content">

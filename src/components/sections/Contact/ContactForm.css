@@ -3,11 +3,8 @@
 ===================== */
 
 .cform-wrap {
-  background: #ffffff;
-  padding: 8px 28px 64px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  background-color: #f9fdf9;
+  margin: 2rem auto;
 }
 
 .cform-title {
@@ -341,7 +338,7 @@
 ===================== */
 @media (min-width: 1125px) {
   .cform-wrap {
-    padding: 8px 80px 80px;
+    /* padding: 8px 80px 80px; */
   }
 
   .cform-title {
