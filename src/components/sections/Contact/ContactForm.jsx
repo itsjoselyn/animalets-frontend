@@ -34,7 +34,9 @@ const ADOPTION_FIELDS = [
 const FORM_FIELDS_BY_TYPE = {
   adoptar: ADOPTION_FIELDS,
   apadrinar: [{ name: 'cat', label: 'Gato a apadrinar', options: [] }, { name: 'donation', label: 'Tipo de aportación', options: ['10€/mes', 'Otra cantidad'] }],
-  acogida: [...ADOPTION_FIELDS, { name: 'duration', label: 'Duración de la acogida', options: ['Temporal', 'Indefinida'] }],
+  acogida: [...ADOPTION_FIELDS, {
+    name: 'duration', label: '¿Cuánto tiempo puedes acoger?', options: ['Temporal', 'Indefinida']
+  }],
   voluntariado: [
     { name: 'availability', label: '¿Cuál sería tu disponibilidad?', options: ['Mañana', 'Tarde', 'Fin de semana'] },
     { name: 'tasks', label: '¿Qué tareas te gustaría realizar?', options: ['Limpieza', 'Alimentación', 'Medicación', 'Fotos', 'Socialización', 'Otros'] },
@@ -106,12 +108,12 @@ export default function ContactForm() {
               <Input placeholder="Introduce tu teléfono" />
             </Form.Item>
           </Col>
-          <Col xs={24} md={8}>
+          <Col xs={24} md={6}>
             <Form.Item label="Edad" name="age">
               <Input placeholder="Introduce tu edad" />
             </Form.Item>
           </Col>
-          <Col xs={24} md={8}>
+          <Col xs={24} md={10}>
             <Form.Item name="contact" label="¿Cómo nos conociste?">
               <Select
                 allowClear
