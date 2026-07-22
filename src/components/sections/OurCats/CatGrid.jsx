@@ -4,7 +4,7 @@ import "./CatGrid.css";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import { PAGE_SIZE } from "../../../utils/constants";
-import { Button } from "antd";
+import { Pagination, Empty, Card } from "antd";
 
 function formatAge(value) {
   if (!value && value !== 0) return "";
@@ -26,10 +26,12 @@ function mapSuperpowers(obj) {
 }
 
 export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: false, hembra: false } }, sortValue = null }) {
-  const [visible, setVisible] = useState(PAGE_SIZE);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(PAGE_SIZE);
   const [allCats, setAllCats] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Carga inicial desde Firebase
   useEffect(() => {
     let mounted = true;
     async function loadCats() {
@@ -37,11 +39,14 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
       try {
         const q = collection(db, "gatos");
         const snapshot = await getDocs(q);
+
         const docs = snapshot.docs
           .map((doc, idx) => {
             const data = doc.data() || {};
             const rawAge = data.edad ?? data.age ?? null;
             const ageValue = typeof rawAge === "number" ? rawAge : parseInt(String(rawAge || ""), 10) || 0;
+            const estado = data.estado || (data.adoptado === true ? 'adoptado' : 'disponible');
+
             return {
               id: doc.id,
               name: data.nombre || data.name || `Gato ${idx + 1}`,
@@ -50,17 +55,19 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
               origIndex: idx,
               gender: data.sexo || data.gender || "",
               img: (Array.isArray(data.imagenes) && data.imagenes[0] && data.imagenes[0].url) || data.imagen || data.image || data.img || "",
+              imagenes: data.imagenes || [],
               status: data.apadrinado ? "Apadrinado" : null,
               bio: data.historia || data.bio || "",
               necesito: data.necesidades || data.necesito || [],
               superpoderes: mapSuperpowers(data.superpoderes || data.superpowers || {}),
               createdAt: data.createdAt,
               updatedAt: data.updatedAt,
-              // derive adoptado from new `estado` field, fallback to legacy boolean
-              adoptado: (data.estado === 'adoptado') || data.adoptado || false,
-              estado: data.estado || (data.adoptado === true ? 'adoptado' : 'disponible'),
+              adoptado: (estado === 'adoptado') || data.adoptado || false,
+              estado: estado,
             };
           })
+          // 🔹 FILTRO: Solo mostramos gatos que NO estén adoptados
+          .filter((cat) => cat.estado !== "adoptado" && !cat.adoptado);
 
         if (mounted) {
           setAllCats(docs);
@@ -76,34 +83,39 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
     return () => { mounted = false; };
   }, []);
 
+  // Volver a la página 1 cada vez que cambien los filtros o el orden
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters, sortValue]);
+
+  // Filtrado y Ordenación
   const processed = useMemo(() => {
     const maleRe = /(macho|male)/i;
     const femaleRe = /(hembra|female)/i;
     let arr = Array.isArray(allCats) ? allCats.slice() : [];
 
-    // Apply filters
+    // Filtros
     if (filters) {
       const [minAge, maxAge] = filters.ageRange ?? [0, 25];
       const sexo = filters.sexo ?? { macho: false, hembra: false };
-      const debugResults = [];
+
       arr = arr.filter((c) => {
         const a = c.ageValue ?? (typeof c.age === "number" ? c.age : parseInt(String(c.age || ""), 10) || 0);
         let pass = true;
-        let reason = 'ok';
-        if (a < minAge || a > maxAge) { pass = false; reason = `age ${a} out of ${minAge}-${maxAge}`; }
-        else if (sexo.macho && !sexo.hembra) { pass = maleRe.test(String(c.gender || "")); if (!pass) reason = `gender ${c.gender} not macho`; }
-        else if (!sexo.macho && sexo.hembra) { pass = femaleRe.test(String(c.gender || "")); if (!pass) reason = `gender ${c.gender} not hembra`; }
-        debugResults.push({ id: c.id, name: c.name, ageValue: a, gender: c.gender, pass, reason });
+
+        if (a < minAge || a > maxAge) {
+          pass = false;
+        } else if (sexo.macho && !sexo.hembra) {
+          pass = maleRe.test(String(c.gender || ""));
+        } else if (!sexo.macho && sexo.hembra) {
+          pass = femaleRe.test(String(c.gender || ""));
+        }
+
         return pass;
       });
-      try {
-        console.debug('CatGrid: filter debug', JSON.stringify(debugResults, null, 2));
-      } catch (e) {
-        console.debug('CatGrid: filter debug (fallback)');
-      }
     }
 
-    // Apply sort/filter shortcuts
+    // Orden
     if (sortValue === "age_asc") {
       arr.sort((a, b) => (a.ageValue || 0) - (b.ageValue || 0));
     } else if (sortValue === "age_desc") {
@@ -121,29 +133,30 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
     return arr;
   }, [allCats, filters, sortValue]);
 
+  // Cálculo de los elementos visibles según la página actual
+  const shown = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return processed.slice(start, start + pageSize);
+  }, [processed, currentPage, pageSize]);
 
-  const finalProcessed = processed;
-
-  const total = finalProcessed.length;
-  const shown = finalProcessed.slice(0, visible);
-  const hasMore = visible < total;
-  const progress = total > 0 ? Math.round((shown.length / total) * 100) : 0;
+  const handlePageChange = (page, newPageSize) => {
+    setCurrentPage(page);
+    setPageSize(newPageSize);
+    window.scrollTo({ top: 200, behavior: "smooth" });
+  };
 
   return (
     <div className="cat-grid-wrap">
-
-      {/* Grid */}
+      {/* Grid de Gatos */}
       <div className="cat-grid">
         {loading ? (
-          Array.from({ length: Math.min(PAGE_SIZE, 8) }).map((_, i) => (
-            <div key={i} className="cat-skeleton">
-              <div className="cat-skel-img skeleton" />
-              <div className="cat-skel-name skeleton" />
-              <div className="cat-skel-meta skeleton" />
-            </div>
+          Array.from({ length: pageSize }).map((_, i) => (
+            <Card key={i} style={{ borderRadius: 12 }} loading active />
           ))
-        ) : finalProcessed.length === 0 ? (
-          <p>No hay gatos publicados todavía.</p>
+        ) : processed.length === 0 ? (
+          <div style={{ gridColumn: "1 / -1", padding: "40px 0" }}>
+            <Empty description="No se encontraron peludos con estos filtros" />
+          </div>
         ) : (
           shown.map((cat) => (
             <CatCard key={cat.id} cat={cat} />
@@ -151,25 +164,20 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
         )}
       </div>
 
-      {!loading && (
-        <div className="cat-grid-footer">
-          <p className="cat-grid-count">
-            Mostrando {shown.length} de {processed.length} resultados
-          </p>
-          <div className="cat-grid-progress-bar">
-            <div
-              className="cat-grid-progress-fill"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          {hasMore && (
-            <Button onClick={() => setVisible((v) => Math.min(v + PAGE_SIZE, processed.length))}>
-              Mostrar más
-            </Button>
-          )}
+      {/* Paginación de Ant Design */}
+      {!loading && processed.length > 0 && (
+        <div style={{ display: "flex", justifyContent: "center", marginTop: 40, marginBottom: 20 }}>
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={processed.length}
+            onChange={handlePageChange}
+            showSizeChanger
+            pageSizeOptions={["8", "12", "16", "24"]}
+            showTotal={(total, range) => `${range[0]}-${range[1]} de ${total} peludos`}
+          />
         </div>
       )}
-
     </div>
   );
 }

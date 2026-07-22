@@ -1,26 +1,33 @@
-import "./PeludosSort.css";
+import { Dropdown, Menu } from "antd";
+import { CheckOutlined } from "@ant-design/icons";
 import { OPTIONS_FILTER } from "../../../utils/constants";
-import Button from "../../common/Button/Button";
 
-export default function PeludosSort({ isOpen, onClose, value, onChange }) {
+export default function PeludosSort({ value, onChange, children }) {
+  const items = OPTIONS_FILTER.map((opt) => ({
+    key: opt.value,
+    label: (
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16 }}>
+        <span>{opt.label}</span>
+        {value === opt.value && <CheckOutlined style={{ color: "#2e7d32" }} />}
+      </div>
+    ),
+  }));
+
+  const handleMenuClick = ({ key }) => {
+    // Si hace clic en la opción activa, la desmarca (pone en null), de lo contrario aplica la nueva
+    onChange(value === key ? null : key);
+  };
+
   return (
-    <>
-      {isOpen && <div className="psort-overlay" onClick={onClose} />}
-      {isOpen && (
-        <div className="psort-dropdown">
-          {OPTIONS_FILTER.map((opt) => (
-            <Button
-              key={opt.value}
-              variant="sort-option"
-              active={value === opt.value}
-              onClick={() => { onChange(value === opt.value ? null : opt.value); onClose(); }}
-            >
-              {opt.label}
-              {value === opt.value && <span className="psort-check">✓</span>}
-            </Button>
-          ))}
-        </div>
-      )}
-    </>
+    <Dropdown
+      menu={{
+        items,
+        onClick: handleMenuClick,
+        selectedKeys: value ? [value] : [],
+      }}
+      trigger={["click"]}
+    >
+      {children}
+    </Dropdown>
   );
 }

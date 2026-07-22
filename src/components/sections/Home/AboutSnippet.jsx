@@ -1,23 +1,32 @@
 import { Link } from "react-router-dom";
+import { Button } from "antd";
+import { ArrowRightOutlined } from "@ant-design/icons";
 import "./AboutSnippet.css";
-import { Button } from 'antd';
 
 export default function AboutSnippet() {
   return (
-    <div className="about-snippet-wrapper">
+    <section className="about-snippet-wrapper" aria-label="Sección Sobre Nosotros">
 
       {/* Nube blanca saliendo del hero */}
       <div className="cloud-white">
-        {/* Burbujita flotante */}
-        <Button href="/sobre-nosotros" className="about-bubble">
-          Sobre nosotros
-          <span className="about-bubble-arrow">→</span>
-        </Button>
+        {/* Burbujita flotante con navegación fluida React Router */}
+        <Link to="/sobre-nosotros">
+          <Button
+            type="default"
+            shape="round"
+            size="large"
+            className="about-bubble"
+            icon={<ArrowRightOutlined />}
+            iconPosition="end"
+          >
+            Sobre nosotros
+          </Button>
+        </Link>
       </div>
 
       {/* Nube verde que da paso al carrusel */}
       <div className="cloud-green" />
 
-    </div>
+    </section>
   );
 }

@@ -27,8 +27,8 @@ export default function ComoAyudarList() {
         Rellena el formulario marcando la opción "Voluntariado" y te contactaremos.</p>
         <div className="button-container">
           <Button type="default" shape="round" href="/contacto" target="_blank" icon={<ExportOutlined />}>
-            Ir al formulario 
-        </Button>
+            Ir al formulario
+          </Button>
         </div>
       </div>
     },
@@ -70,8 +70,8 @@ export default function ComoAyudarList() {
       children: <div><p>1€ al mes = un montón de amor y croquetas. Tu granito de arena cambia vidas.</p>
         <div className="button-container">
           <Button type="default" shape="round" href="https://www.teaming.net/animaletslallagosta" target="_blank" icon={<ExportOutlined />}>
-          Unirte a Teaming
-        </Button>
+            Unirte a Teaming
+          </Button>
         </div>
       </div>,
     },
@@ -81,7 +81,7 @@ export default function ComoAyudarList() {
       children: <div><p>Tu donación nos permite seguir salvando vidas. Y además, Hacienda te devuelve un porcentaje. Fácil, rápido y con impacto real.</p>
         <div className="button-container">
           <Button type="default" shape="round" href="https://www.migranodearena.org/usuario/asociacion-protectora-de-animales-y-plantas-de-la-llagosta" target="_blank" icon={<ExportOutlined />}>
-          Haz tu donación
+            Haz tu donación
           </Button></div></div>,
     },
     {
@@ -91,7 +91,7 @@ export default function ComoAyudarList() {
         <strong>Nota:</strong> Selecciona "Enviar a familiares y amigos" para evitar comisiones.</p>
         <div className="button-container">
           <Button type="default" shape="round" href="https://www.paypal.com/donate?business=animaletslallagosta%40gmail.com&currency_code=EUR" target="_blank" icon={<ExportOutlined />}>
-          Donar con PayPal
+            Donar con PayPal
           </Button></div></div>,
     },
     {
@@ -116,7 +116,7 @@ export default function ComoAyudarList() {
         <div className="button-container">
           <Button type="default" shape="round" href="https://www.amazon.es/hz/wishlist/ls/27IB6J1N3VF6B" target="_blank" icon={<ExportOutlined />}>
             Ver lista de deseos de Amazon
-        </Button></div>
+          </Button></div>
       </div>,
     },
   ];

@@ -1,26 +1,29 @@
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import "./Testimonials.css";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
-import { Button } from "antd";
+import { Skeleton, Empty } from "antd";
+import "./Testimonials.css";
 
 function Timeline({ items, active, onSelect }) {
   return (
     <div className="testi-timeline">
       <div className="testi-line" />
-      {items.map((t) => (
-        <Button
-          key={t.id}
-          type={active === t.id ? "primary" : "default"} // Cambia el aspecto si está activo
-          onClick={() => onSelect(t.id)}
-          aria-label={t.name}
-          className="testi-node" // Conserva tus estilos CSS para el punto y el texto
-        >
-          <span className="testi-node-dot" />
-          <span className="testi-node-name">{t.name}</span>
-        </Button>
-      ))}
+      {items.map((t) => {
+        const isActive = active === t.id;
+        return (
+          <button
+            key={t.id}
+            type="button"
+            onClick={() => onSelect(t.id)}
+            aria-label={t.name}
+            className={`testi-node ${isActive ? "testi-node--active" : ""}`}
+          >
+            <span className="testi-node-dot" />
+            <span className="testi-node-name">{t.name}</span>
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -31,7 +34,7 @@ export default function Testimonials() {
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Load testimonios from Firestore (collection: 'testimonios')
+  // Cargamos los testimonios desde Firestore
   useEffect(() => {
     let mounted = true;
     async function loadTestimonials() {
@@ -40,14 +43,14 @@ export default function Testimonials() {
         const q = collection(db, "testimonios");
         const snapshot = await getDocs(q);
         const docs = snapshot.docs.map((doc) => {
-          const data = doc.data();
+          const data = doc.data() || {};
           return {
             id: doc.id,
-            name: data.name || data.nombre || "",
             preview: data.preview || data.descripcion || data.texto || data.body || "",
             full: `/testimonios/${doc.id}`,
           };
         });
+
         if (mounted) {
           setTestimonials(docs);
           setActive((current) => current || docs[0]?.id || "");
@@ -65,63 +68,65 @@ export default function Testimonials() {
     };
   }, []);
 
-  // Limit lists: mobile = first 3, desktop = first 5
-  const desktopList = testimonials.slice(0, 5);
-  const current = testimonials.length ? testimonials.find((t) => t.id === active) || testimonials[0] : null;
-  const mobileList = testimonials.slice(0, 3);
-  const activeMobileId = mobileList.some((t) => t.id === active) ? active : mobileList[0]?.id || "";
-  const activeDesktopId = desktopList.some((t) => t.id === active) ? active : desktopList[0]?.id || "";
-
+  // Sincronización con el query param ?testimonio=id
   useEffect(() => {
     const id = searchParams.get("testimonio");
     if (id) {
       setActive(id);
       setTimeout(() => {
         document.getElementById("testimonios")?.scrollIntoView({ behavior: "smooth" });
-      }, 500);
+      }, 300);
     }
   }, [searchParams]);
 
+  const desktopList = testimonials.slice(0, 5);
+  const mobileList = testimonials.slice(0, 3);
+
+  const current = testimonials.find((t) => t.id === active) || testimonials[0];
+
   return (
-    <section className="testi" id="testimonios">
+    <section className="testi" id="testimonios" aria-label="Testimonios de adoptantes">
       <div className="testi-body">
 
         <h2 className="testi-title">Testimonios</h2>
 
-        {loading && testimonials.length === 0 ? (
-          <div className="testi-loading">
-            <div className="testi-timeline-skeleton">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="testi-node-skeleton">
-                  <span className="testi-node-dot skeleton" />
-                  <span className="testi-node-name-skel skeleton" />
-                </div>
-              ))}
-            </div>
-            <div className="testi-preview-skel skeleton" />
+        {loading ? (
+          <div className="testi-loading" style={{ padding: "20px 0" }}>
+            <Skeleton active paragraph={{ rows: 3 }} />
           </div>
+        ) : testimonials.length === 0 ? (
+          <Empty description="No hay testimonios publicados todavía." />
         ) : (
-
           <>
+            {/* Timeline Mobile */}
             <div className="testi-timeline-mobile">
-              <Timeline items={mobileList} active={activeMobileId} onSelect={setActive} />
+              <Timeline items={mobileList} active={active} onSelect={setActive} />
             </div>
 
+            {/* Timeline Desktop */}
             <div className="testi-timeline-desktop">
-              <Timeline items={desktopList} active={activeDesktopId} onSelect={setActive} />
+              <Timeline items={desktopList} active={active} onSelect={setActive} />
             </div>
 
+            {/* Previsualización del testimonio seleccionado */}
             <div className="testi-content" key={active}>
-              {current ? (
-                <Link to={current.full} className="testi-preview">
-                  {current.preview}
+              {current && (
+                <Link to={current.full} className="testi-preview" style={{ textDecoration: "none", color: "inherit" }}>
+                  <blockquote
+                    style={{
+                      margin: 0,
+                      fontStyle: "italic",
+                      fontSize: "1.35rem", // Tamaño más grande y vistoso
+                      lineHeight: "1.6",
+                      fontWeight: 500,
+                    }}
+                  >
+                    "{current.preview}"
+                  </blockquote>
                 </Link>
-              ) : (
-                <p>No hay testimonios publicados todavía.</p>
               )}
             </div>
           </>
-
         )}
 
       </div>
