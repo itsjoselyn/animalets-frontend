@@ -1,5 +1,5 @@
 import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
-import Footer from './Footer';
+import AppFooter from './Footer';
 import { Layout, Menu, Button, Drawer } from 'antd';
 import {
   TeamOutlined,
@@ -89,7 +89,7 @@ export default function MainLayout() {
         <Outlet />
       </Content>
 
-      <Footer />
+      <AppFooter />
     </Layout>
   );
 }
