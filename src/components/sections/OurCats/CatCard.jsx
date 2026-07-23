@@ -75,12 +75,12 @@ export default function CatCard({ cat }) {
           description={
             <div style={{ marginTop: 8, display: "flex", gap: "6px", flexWrap: "wrap" }}>
               {age && (
-                <Tag style={{ color: GREEN_COLOR, borderColor: GREEN_COLOR, background: "#f6ffed", fontWeight: 500 }}>
+                <Tag key={'green'} color={'green'} variant="outlined">
                   {age}
                 </Tag>
               )}
               {gender && (
-                <Tag style={{ color: GREEN_COLOR, borderColor: GREEN_COLOR, background: "#f6ffed", fontWeight: 500 }}>
+                <Tag key={'purple'} color={'purple'} variant="outlined">
                   {gender}
                 </Tag>
               )}
