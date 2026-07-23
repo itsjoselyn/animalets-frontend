@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { EnvironmentOutlined } from "@ant-design/icons";
 import logo from "../../assets/animalets-logo.png";
 import "./Footer.css";
@@ -35,23 +34,25 @@ export default function AppFooter() {
             <p>Montcada i Reixac</p>
           </a>
         </Col>
-        <Col xs={24} md={8}>
 
+        <Col xs={24} md={8}>
           <nav aria-label="Enlaces del pie">
             <ul className="app-footer__nav">
               {NAV_LINKS.map((l) => (
-                <li><a key={l.to} href={l.to}>{l.label}</a></li>
+                <li key={l.to}>
+                  <a href={l.to}>{l.label}</a>
+                </li>
               ))}
             </ul>
-
           </nav>
         </Col>
+
         <Col xs={24} md={8}>
           <nav aria-label="Enlaces de contacto e información de privacidad">
             <ul className="app-footer__nav">
               {SOCIAL_LINKS.map((l) => (
-                <li>
-                  <a key={l.to} href={l.to} target="_blank" >{l.label}</a>
+                <li key={l.to}>
+                  <a href={l.to} target="_blank" rel="noopener noreferrer">{l.label}</a>
                 </li>
               ))}
               <li>
@@ -60,7 +61,8 @@ export default function AppFooter() {
                   style={{ fontSize: "0.82rem" }}
                 >
                   animaletslallagosta@gmail.com
-                </a></li>
+                </a>
+              </li>
             </ul>
           </nav>
         </Col>

@@ -151,7 +151,7 @@ export default function CatGrid({ filters = { ageRange: [0, 25], sexo: { macho: 
       <div className="cat-grid">
         {loading ? (
           Array.from({ length: pageSize }).map((_, i) => (
-            <Card key={i} style={{ borderRadius: 12 }} loading active />
+            <Card key={i} style={{ borderRadius: 12 }} loading />
           ))
         ) : processed.length === 0 ? (
           <div style={{ gridColumn: "1 / -1", padding: "40px 0" }}>

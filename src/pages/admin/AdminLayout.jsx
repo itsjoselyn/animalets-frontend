@@ -87,7 +87,7 @@ export default function AdminLayout() {
                     minHeight: "100vh",
                 }}
             >
-                <Spin size="large" tip="Cargando panel de administración..." />
+                <Spin size="large" description="Cargando panel de administración..." />
             </div>
         );
     }

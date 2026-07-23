@@ -25,7 +25,7 @@ export default function ContactBanner() {
 
         <div className="cbanner-img-block">
           <img
-            src="https://placecats.com/millie_neo/400/500"
+            src="https://res.cloudinary.com/dhb3yos4y/image/upload/v1784816547/DSC_0339_1_wap3pd.jpg"
             alt="Gato en adopción"
             className="cbanner-img"
             loading="lazy"

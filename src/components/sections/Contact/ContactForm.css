@@ -337,10 +337,6 @@
    DESKTOP (1125px+)
 ===================== */
 @media (min-width: 1125px) {
-  .cform-wrap {
-    /* padding: 8px 80px 80px; */
-  }
-
   .cform-title {
     margin-bottom: 36px;
   }

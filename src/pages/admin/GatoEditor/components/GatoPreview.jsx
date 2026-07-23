@@ -9,7 +9,7 @@ export default function GatoPreview({ data, imagenesPreview, selectedPreview, se
                                 key={i} src={img.url} alt={`preview-${i}`}
                                 onClick={() => setSelectedPreview(i)}
                                 style={{
-                                    width: 70, height: 70, objectFit: "cover", borderRadius: 8, cursor: "pointer",
+                                    width: 70, height: 70, objectFit: "contain", borderRadius: 8, cursor: "pointer",
                                     border: i === selectedPreview ? "3px solid #4caf50" : "2px solid #ddd", flexShrink: 0
                                 }}
                             />

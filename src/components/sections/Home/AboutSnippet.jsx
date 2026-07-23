@@ -17,7 +17,7 @@ export default function AboutSnippet() {
             size="large"
             className="about-bubble"
             icon={<ArrowRightOutlined />}
-            iconPosition="end"
+            iconPlacement="end"
           >
             Sobre nosotros
           </Button>

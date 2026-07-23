@@ -141,7 +141,7 @@ export default function CatCarousel() {
 
         <div className="cat-carousel-track">
           {loading ? (
-            <Card style={{ width: 280, borderRadius: 16 }} loading active />
+            <Card style={{ width: 280, borderRadius: 16 }} loading />
           ) : cats.length === 0 ? (
             <div style={{ width: "100%", padding: "20px 0" }}>
               <Empty description="No hay peludos disponibles en este momento." />
@@ -160,13 +160,35 @@ export default function CatCarousel() {
                     border: isActive ? `2px solid ${GREEN_COLOR}` : "1px solid #f0f0f0",
                   }}
                   cover={
-                    <div style={{ height: 260, overflow: "hidden", backgroundColor: "#f5f5f5" }}>
+                    <div style={{ position: "relative", height: 260, overflow: "hidden", backgroundColor: "#f5f5f5" }}>
                       {cat.img ? (
-                        <img
-                          src={optimizeCloudinaryImage(cat.img, { width: 400 })}
-                          alt={cat.name}
-                          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
-                        />
+                        <>
+                          {/* Fondo desenfocado que rellena el hueco */}
+                          <div
+                            style={{
+                              position: "absolute",
+                              inset: 0,
+                              backgroundImage: `url(${optimizeCloudinaryImage(cat.img, { width: 100 })})`,
+                              backgroundSize: "cover",
+                              backgroundPosition: "center",
+                              filter: "blur(20px) brightness(0.9)",
+                              transform: "scale(1.2)",
+                            }}
+                          />
+                          <img
+                            src={optimizeCloudinaryImage(cat.img, { width: 400 })}
+                            alt={cat.name}
+                            style={{
+                              position: "relative",
+                              zIndex: 1,
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "contain",
+                              objectPosition: "center",
+                              display: "block",
+                            }}
+                          />
+                        </>
                       ) : (
                         <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "#bfbfbf" }}>
                           Sin foto

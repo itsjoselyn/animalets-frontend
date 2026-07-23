@@ -29,18 +29,39 @@ export default function CatCard({ cat }) {
         cover={
           <div style={{ position: "relative", height: "260px", overflow: "hidden", background: "#f0f2f5" }}>
             {currentImage ? (
-              <img
-                src={optimizeCloudinaryImage(currentImage, { width: 400 })}
-                alt={name}
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
+              <>
+                {/* Fondo desenfocado que rellena el hueco */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    backgroundImage: `url(${optimizeCloudinaryImage(currentImage, { width: 100 })})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    filter: "blur(20px) brightness(0.9)",
+                    transform: "scale(1.2)",
+                  }}
+                />
+                <img
+                  src={optimizeCloudinaryImage(currentImage, { width: 400 })}
+                  alt={name}
+                  style={{
+                    position: "relative",
+                    zIndex: 1,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                    display: "block",
+                  }}
+                />
+              </>
             ) : (
               <Skeleton.Image active style={{ width: "100%", height: "100%" }} />
             )}
 
             {/* Badge de estado */}
             {status && (
-              <div style={{ position: "absolute", left: 8, top: 8 }}>
+              <div style={{ position: "absolute", left: 8, top: 8, zIndex: 2 }}>
                 <Tag color={getStatusColor(status)} style={{ fontWeight: 600, fontSize: "12px" }}>
                   {status}
                 </Tag>

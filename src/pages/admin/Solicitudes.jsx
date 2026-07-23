@@ -3,8 +3,8 @@ import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore"
 import { db } from "../../firebase/firebaseConfig";
 import "./Solicitudes.css";
 import { TYPE_LABELS, STATUS_LABELS } from "../../utils/constants";
-import { Button, Grid, Select, Popconfirm, message, Card, Typography, Space, Empty } from "antd";
-import { LeftOutlined, DeleteOutlined, CheckOutlined, ExclamationCircleOutlined, MailOutlined } from "@ant-design/icons";
+import { Button, Grid, Select, Popconfirm, message, Typography, Empty } from "antd";
+import { LeftOutlined, DeleteOutlined, CheckOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 
 const { useBreakpoint } = Grid;
 const { Title, Text } = Typography;
@@ -25,7 +25,17 @@ function toDisplayValue(value) {
 }
 
 function getTypeValue(item) {
-    return String(item.tipo || item.tipoSolicitud || item.tipo_solicitud || "otros").toLowerCase();
+    const rawType = item.type || item.tipo || item.tipoSolicitud || item.tipo_solicitud || "otros";
+    const normalized = String(rawType).toLowerCase().trim();
+
+    // Normalizar equivalencias comunes para que nunca caiga en "otros" por un plural/singular o etiqueta diferente
+    if (normalized === "adoptar" || normalized === "adopcion" || normalized === "adopción") return "adoptar";
+    if (normalized === "acogida" || normalized === "casa de acogida") return "acogida";
+    if (normalized === "apadrinar" || normalized === "apadrinamiento") return "apadrinar";
+    if (normalized === "voluntariado") return "voluntariado";
+    if (normalized === "otro" || normalized === "otros" || normalized === "otra consulta") return "otro";
+
+    return normalized;
 }
 
 function getStatusValue(item) {
@@ -40,7 +50,15 @@ function getTimestampMs(value) {
 
 function getFriendlyType(item) {
     const value = getTypeValue(item);
-    return TYPE_LABELS[value] || TYPE_LABELS.otros;
+    const labels = {
+        adoptar: "Adopción",
+        acogida: "Casa de acogida",
+        apadrinar: "Apadrinamiento",
+        voluntariado: "Voluntariado",
+        otro: "Otra consulta",
+        ...TYPE_LABELS
+    };
+    return labels[value] || "Otra consulta";
 }
 
 function getFriendlyStatus(item) {
@@ -50,31 +68,22 @@ function getFriendlyStatus(item) {
 
 function renderExtraFieldLabel(key) {
     const labels = {
-        mensaje: "Mensaje",
-        text: "Mensaje",
-        nota: "Nota",
-        motivo: "Motivo",
-        animal: "Animal",
-        gato: "Gato",
-        nombreGato: "Gato",
-        tipoHogar: "Tipo de hogar",
-        tiempoAcogida: "Tiempo de acogida",
-        experienciaAcogida: "Experiencia en acogida",
-        tieneAnimalesCasa: "Tiene animales en casa",
-        animalesActuales: "Animales actuales",
-        animalesActualesTexto: "Detalles de animales actuales",
-        hayPersonasCasa: "¿Hay más personas en casa?",
-        personasAdoptar: "Edades / Detalles de personas en casa",
-        personasEnCasa: "Número de personas en casa",
-        tieneExperienciaGatos: "Tiene experiencia con gatos",
+        contact: "¿Cómo nos conociste?",
+        type: "Tipo de consulta",
+        phone: "Teléfono",
+        age: "Edad",
+        tieneGatoMente: "¿Tiene un gato en mente?",
+        gatoElegido: "Gato elegido",
         tipoVivienda: "Tipo de vivienda",
-        gatoEnMente: "Gato en mente",
+        animalesCasa: "Animales en casa",
+        personasCasa: "¿Hay más personas en casa?",
+        experienciaGatos: "Experiencia previa con gatos",
+        tiempoAcogida: "Tiempo de acogida",
+        gatoApadrinar: "Gato a apadrinar",
         tipoAportacion: "Tipo de aportación",
-        cantidadAportacion: "Cantidad de aportación",
-        telefono: "Teléfono",
-        edad: "Edad",
-        correo: "Correo",
-        nombre: "Nombre",
+        disponibilidadVoluntariado: "Disponibilidad",
+        tareasVoluntariado: "Tareas de voluntariado",
+        experienciaAnimales: "Experiencia previa con animales",
     };
     return labels[key] || key.replace(/([A-Z])/g, " $1").replace(/_/g, " ").replace(/^./, (c) => c.toUpperCase());
 }
@@ -86,29 +95,91 @@ function renderExtraValue(key, value) {
     return String(value);
 }
 
-function getExtraFields(item) {
+// Orden fijo y estructurado para mostrar los campos adicionales
+const FIELD_ORDER = [
+    // Gato / Adopción
+    "tieneGatoMente",
+    "gatoElegido",
+    "gatoApadrinar",
+    "tipoAportacion",
+    "tiempoAcogida",
+
+    // Vivienda y Convivencia
+    "tipoVivienda",
+    "animalesCasa",
+    "personasCasa",
+
+    // Experiencia
+    "experienciaGatos",
+    "experienciaAnimales",
+
+    // Voluntariado
+    "disponibilidadVoluntariado",
+    "tareasVoluntariado",
+
+    // Otros
+    "contact"
+];
+
+function getCategorizedExtraFields(item) {
     const ignored = new Set([
-        "id", "createdAtValue", "createdAt", "estado", "tipo", "tipoSolicitud",
-        "tipo_solicitud", "nombre", "name", "correo", "email", "telefono",
-        "edad", "mensaje", "text", "preview", "titulo", "title", "descripcion", "body"
+        "id", "createdAtValue", "createdAt", "estado",
+        "tipo", "tipoSolicitud", "tipo_solicitud", "type",
+        "nombre", "name", "correo", "email",
+        "telefono", "phone", "edad", "age",
+        "mensaje", "text", "preview", "titulo", "title", "descripcion", "body",
+        "privacy",
     ]);
 
-    const seenLabels = new Set();
-
-    return Object.entries(item)
+    const validEntries = Object.entries(item)
         .filter(([key, value]) => !ignored.has(key) && value !== null && value !== undefined && value !== "")
         .filter(([, value]) => !(typeof value === "object" && !Array.isArray(value)))
-        .map(([key, value]) => {
-            const label = renderExtraFieldLabel(key);
-            const formattedValue = renderExtraValue(key, value);
-            return { key, label, value: formattedValue };
-        })
-        .filter((field) => field.value !== "")
-        .filter((field) => {
-            if (seenLabels.has(field.label)) return false;
-            seenLabels.add(field.label);
-            return true;
-        });
+        .map(([key, value]) => ({
+            key,
+            label: renderExtraFieldLabel(key),
+            value: renderExtraValue(key, value)
+        }))
+        .filter((field) => field.value !== "");
+
+    // Ordenar según FIELD_ORDER estricto
+    validEntries.sort((a, b) => {
+        const indexA = FIELD_ORDER.indexOf(a.key);
+        const indexB = FIELD_ORDER.indexOf(b.key);
+        if (indexA === -1 && indexB === -1) return 0;
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+        return indexA - indexB;
+    });
+
+    // Agrupar en subsecciones lógicas
+    const catGato = [];
+    const catVivienda = [];
+    const catExperiencia = [];
+    const catVoluntariado = [];
+    const catOtros = [];
+
+    validEntries.forEach((field) => {
+        if (["tieneGatoMente", "gatoElegido", "gatoApadrinar", "tipoAportacion", "tiempoAcogida"].includes(field.key)) {
+            catGato.push(field);
+        } else if (["tipoVivienda", "animalesCasa", "personasCasa"].includes(field.key)) {
+            catVivienda.push(field);
+        } else if (["experienciaGatos", "experienciaAnimales"].includes(field.key)) {
+            catExperiencia.push(field);
+        } else if (["disponibilidadVoluntariado", "tareasVoluntariado"].includes(field.key)) {
+            catVoluntariado.push(field);
+        } else {
+            catOtros.push(field);
+        }
+    });
+
+    const sections = [];
+    if (catGato.length) sections.push({ title: "Sobre la solicitud y el gato", fields: catGato });
+    if (catVivienda.length) sections.push({ title: "Sobre la vivienda y convivencia", fields: catVivienda });
+    if (catExperiencia.length) sections.push({ title: "Sobre la experiencia", fields: catExperiencia });
+    if (catVoluntariado.length) sections.push({ title: "Sobre disponibilidad y tareas", fields: catVoluntariado });
+    if (catOtros.length) sections.push({ title: "Otros datos", fields: catOtros });
+
+    return sections;
 }
 
 export default function AdminSolicitudes() {
@@ -172,8 +243,9 @@ export default function AdminSolicitudes() {
         const infoPersonal = [
             { label: "Nombre", value: visibleSelected.nombre || visibleSelected.name },
             { label: "Correo", value: visibleSelected.correo || visibleSelected.email },
-            { label: "Teléfono", value: visibleSelected.telefono },
-            { label: "Edad", value: visibleSelected.edad },
+            { label: "Teléfono", value: visibleSelected.telefono || visibleSelected.phone },
+            { label: "Edad", value: visibleSelected.edad || visibleSelected.age },
+            { label: "¿Cómo nos conoció?", value: visibleSelected.contact },
         ].filter((field) => field.value !== undefined && field.value !== null && field.value !== "");
 
         const solicitud = [
@@ -181,12 +253,12 @@ export default function AdminSolicitudes() {
             { label: "Mensaje completo", value: visibleSelected.mensaje || visibleSelected.text || visibleSelected.body || "" },
         ].filter((field) => field.value !== undefined && field.value !== null && field.value !== "");
 
-        const extra = getExtraFields(visibleSelected);
+        const extraSections = getCategorizedExtraFields(visibleSelected);
 
         return [
             { title: "Información personal", fields: infoPersonal },
             { title: "Solicitud", fields: solicitud },
-            { title: "Información adicional", fields: extra },
+            ...extraSections,
         ];
     }, [visibleSelected]);
 
@@ -230,7 +302,7 @@ export default function AdminSolicitudes() {
 
             {loading ? <p>Cargando...</p> : (
                 <div className="solicitudes-layout">
-                    {/* Lista: Se oculta en móvil si hay una solicitud seleccionada */}
+                    {/* Lista */}
                     {(!isMobile || !selectedId) && (
                         <section className="solicitudes-list-panel">
                             <div className="solicitudes-filters" style={{ display: "flex", gap: 12, marginBottom: 16 }}>
@@ -256,10 +328,10 @@ export default function AdminSolicitudes() {
                                         options={[
                                             { value: "todos", label: "Todos" },
                                             { value: "acogida", label: "Acogida" },
-                                            { value: "adopcion", label: "Adopción" },
+                                            { value: "adoptar", label: "Adoptar" },
                                             { value: "apadrinar", label: "Apadrinamiento" },
                                             { value: "voluntariado", label: "Voluntariado" },
-                                            { value: "otros", label: "Otros" },
+                                            { value: "otro", label: "Otra consulta" },
                                         ]}
                                     />
                                 </div>
@@ -282,7 +354,7 @@ export default function AdminSolicitudes() {
                                                         <span className="solicitud-card-type">{getFriendlyType(item)}</span>
                                                         <span className={`solicitud-badge solicitud-badge--${status}`}>{getFriendlyStatus(item)}</span>
                                                     </div>
-                                                    <h4 className="solicitud-card-name">{item.nombre || "Sin nombre"}</h4>
+                                                    <h4 className="solicitud-card-name">{item.nombre || item.name || "Sin nombre"}</h4>
                                                     <p className="solicitud-card-email">{item.correo || item.email || "Sin correo"}</p>
                                                     <p className="solicitud-card-date">{formatDate(item.createdAtValue)}</p>
                                                 </div>
@@ -328,7 +400,7 @@ export default function AdminSolicitudes() {
                         </section>
                     )}
 
-                    {/* Detalle: Se oculta en móvil si NO hay ninguna solicitud seleccionada */}
+                    {/* Detalle */}
                     {(!isMobile || selectedId) && (
                         <aside className="solicitudes-detail-panel">
                             {isMobile && selectedId && (

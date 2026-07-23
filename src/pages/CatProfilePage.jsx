@@ -133,6 +133,9 @@ export default function CatProfilePage() {
   const images = cat.images || [];
   const currentImage = images.length > 0 ? images[index % images.length] : null;
 
+  // URLs en alta resolución para el modal ampliado, en el mismo orden que "images"
+  const previewItems = images.map((img) => optimizeCloudinaryImage(img, { width: 1200 }));
+
   const prev = (e) => {
     e?.stopPropagation();
     if (!images.length) return;
@@ -160,22 +163,34 @@ export default function CatProfilePage() {
 
       <div className="catprofile-body">
         {/* ================= IMAGEN Y GALERÍA CON ANTD ================= */}
-        <div className="catprofile-img-wrap" style={{ position: "relative" }}>
+        <div className="catprofile-img-wrap">
           {currentImage ? (
-            <Image
-              src={optimizeCloudinaryImage(currentImage, { width: 800 })}
-              alt={cat.name}
-              className="catprofile-img"
-              style={{ width: "100%", borderRadius: 12, objectFit: "cover" }}
-              preview={{
-                src: optimizeCloudinaryImage(currentImage, { width: 1200 }),
-              }}
-            />
+            <>
+              <div
+                className="catprofile-img-bg"
+                style={{
+                  backgroundImage: `url(${optimizeCloudinaryImage(currentImage, { width: 100 })})`,
+                }}
+              />
+              <Image.PreviewGroup
+                items={previewItems}
+                preview={{
+                  current: index,
+                  onChange: (newIndex) => setIndex(newIndex),
+                }}
+              >
+                <Image
+                  src={optimizeCloudinaryImage(currentImage, { width: 800 })}
+                  alt={cat.name}
+                  className="catprofile-img"
+                />
+              </Image.PreviewGroup>
+            </>
           ) : (
             <Skeleton.Image active style={{ width: "100%", height: 300 }} />
           )}
 
-          {/* Carrusel rápido para la foto activa */}
+          {/* Carrusel rápido para la foto activa (fuera del modal) */}
           {images.length > 1 && (
             <>
               <Button

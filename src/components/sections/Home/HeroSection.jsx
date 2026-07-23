@@ -40,7 +40,7 @@ export default function HeroSection() {
         {/* Centro: imagen + hook debajo */}
         <div className="hero-center">
           <img
-            src="https://placecats.com/500/600"
+            src="https://res.cloudinary.com/dhb3yos4y/image/upload/v1784814756/DSC_0264_1_w2y6ps.jpg"
             alt="Gato en adopción"
             className="hero-cat-img"
             loading="eager"
