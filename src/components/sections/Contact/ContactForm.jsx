@@ -23,164 +23,183 @@ const TYPE_OF_INQUIRY_OPTIONS = [
   { label: 'Otra consulta', value: 'otro' },
 ];
 
+const ADOPTION_BASE_FIELDS = [
+  {
+    name: 'housingType',
+    label: '¿Qué tipo de vivienda tienes?',
+    options: [
+      { label: 'Piso', value: 'Piso' },
+      { label: 'Casa', value: 'Casa' }
+    ],
+    mode: 'default',
+    required: true
+  },
+  {
+    name: 'petsAtHome',
+    label: '¿Tienes animales en casa?',
+    options: [
+      { label: 'Perro', value: 'Perro' },
+      { label: 'Gato', value: 'Gato' },
+      { label: 'Otros', value: 'Otros' },
+      { label: 'No', value: 'No' }
+    ],
+    mode: 'default',
+    required: true
+  },
+  {
+    name: 'peopleAtHome',
+    label: '¿Hay más personas en casa?',
+    options: [{ label: 'Sí', value: 'Sí' }, { label: 'No', value: 'No' }],
+    mode: 'default',
+    required: true
+  },
+  {
+    name: 'catExperience',
+    label: '¿Tienes experiencia previa con gatos?',
+    options: [{ label: 'Sí', value: 'Sí' }, { label: 'No', value: 'No' }],
+    mode: 'default',
+    required: true
+  },
+];
+
+const FOSTER_FIELDS = [
+  ...ADOPTION_BASE_FIELDS,
+  {
+    name: 'fosterDuration',
+    label: '¿Cuánto tiempo puedes acoger?',
+    options: [{ label: 'Temporal', value: 'Temporal' }, { label: 'Indefinida', value: 'Indefinida' }],
+    mode: 'default',
+    required: true
+  }
+];
+
+const SPONSOR_FIELDS = [
+  {
+    name: 'contributionType',
+    label: 'Tipo de aportación',
+    options: [{ label: '10€/mes', value: '10€/mes' }, { label: 'Otra cantidad', value: 'Otra cantidad' }],
+    mode: 'default',
+    required: true
+  }
+];
+
+const VOLUNTEER_FIELDS = [
+  {
+    name: 'volunteerAvailability',
+    label: '¿Cuál sería tu disponibilidad?',
+    options: [
+      { label: 'Mañana', value: 'Mañana' },
+      { label: 'Tarde', value: 'Tarde' },
+      { label: 'Fin de semana', value: 'Fin de semana' }
+    ],
+    mode: 'multiple',
+    required: true
+  },
+  {
+    name: 'volunteerTasks',
+    label: '¿Qué tareas te gustaría realizar?',
+    options: [
+      { label: 'Limpieza', value: 'Limpieza' },
+      { label: 'Alimentación', value: 'Alimentación' },
+      { label: 'Medicación', value: 'Medicación' },
+      { label: 'Fotos', value: 'Fotos' },
+      { label: 'Socialización', value: 'Socialización' },
+      { label: 'Otros', value: 'Otros' }
+    ],
+    mode: 'multiple',
+    required: true
+  },
+  {
+    name: 'animalExperience',
+    label: '¿Tienes experiencia previa con animales?',
+    options: [{ label: 'Sí', value: 'Sí' }, { label: 'No', value: 'No' }],
+    mode: 'default',
+    required: true
+  }
+];
+
 export default function ContactForm() {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submittable, setSubmittable] = useState(false);
-  const [gatosOptions, setGatosOptions] = useState([]);
+  const [catsOptions, setCatsOptions] = useState([]);
 
-  const values = Form.useWatch([], form);
-  const tipo = Form.useWatch('type', form);
+  const formValues = Form.useWatch([], form);
+  const inquiryType = Form.useWatch('type', form);
 
-  // Cargar la lista de gatos desde Firestore y poner "No lo sé" el primero
+  // Cargar la lista de gatos desde Firestore solo al montar el componente (y solo si se necesita)
   useEffect(() => {
-    const fetchGatos = async () => {
+    const fetchCats = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "gatos"));
-        const listaGatos = querySnapshot.docs.map((docSnap) => {
+        const catsList = querySnapshot.docs.map((docSnap) => {
           const catData = docSnap.data();
           return {
             label: catData.nombre || 'Sin nombre',
-            value: catData.nombre || docSnap.id,
+            value: docSnap.id,
           };
         });
 
-        setGatosOptions([{ label: 'No lo sé', value: 'No lo sé' }, ...listaGatos]);
+        setCatsOptions([{ label: 'No lo sé', value: 'No lo sé' }, ...catsList]);
       } catch (err) {
         console.error("Error al cargar los gatos:", err);
-        setGatosOptions([{ label: 'No lo sé', value: 'No lo sé' }]);
+        setCatsOptions([{ label: 'No lo sé', value: 'No lo sé' }]);
       }
     };
 
-    fetchGatos();
+    fetchCats();
   }, []);
 
-  // Definir campos dinámicos según el tipo de consulta
+  // Definir campos dinámicos según el tipo de consulta seleccionada usando puras constantes
   const getFieldsByType = (selectedType) => {
-    const gatoField = {
-      name: 'gatoElegido',
-      label: '¿En qué gato estás interesado?',
-      options: gatosOptions,
-      mode: 'default',
-      required: true // Obligatorio en todas las opciones dinámicas
-    };
-
-    const restOfAdoptionFields = [
-      {
-        name: 'tipoVivienda',
-        label: '¿Qué tipo de vivienda tienes?',
-        options: [
-          { label: 'Piso', value: 'Piso' },
-          { label: 'Casa', value: 'Casa' }
-        ],
-        mode: 'default',
-        required: true
-      },
-      {
-        name: 'animalesCasa',
-        label: '¿Tienes animales en casa?',
-        options: [
-          { label: 'Perro', value: 'Perro' },
-          { label: 'Gato', value: 'Gato' },
-          { label: 'Otros', value: 'Otros' },
-          { label: 'No', value: 'No' }
-        ],
-        mode: 'default',
-        required: true
-      },
-      {
-        name: 'personasCasa',
-        label: '¿Hay más personas en casa?',
-        options: [{ label: 'Sí', value: 'Sí' }, { label: 'No', value: 'No' }],
-        mode: 'default',
-        required: true
-      },
-      {
-        name: 'experienciaGatos',
-        label: '¿Tienes experiencia previa con gatos?',
-        options: [{ label: 'Sí', value: 'Sí' }, { label: 'No', value: 'No' }],
-        mode: 'default',
-        required: true
-      },
-    ];
-
     if (selectedType === 'adoptar') {
-      return [gatoField, ...restOfAdoptionFields];
+      return [
+        {
+          name: 'selectedCat',
+          label: '¿En qué gato estás interesado?',
+          options: catsOptions,
+          mode: 'default',
+          required: true
+        },
+        ...ADOPTION_BASE_FIELDS
+      ];
     }
 
     if (selectedType === 'acogida') {
       return [
-        gatoField,
-        ...restOfAdoptionFields,
         {
-          name: 'tiempoAcogida',
-          label: '¿Cuánto tiempo puedes acoger?',
-          options: [{ label: 'Temporal', value: 'Temporal' }, { label: 'Indefinida', value: 'Indefinida' }],
+          name: 'selectedCat',
+          label: '¿En qué gato estás interesado?',
+          options: catsOptions,
           mode: 'default',
           required: true
-        }
+        },
+        ...FOSTER_FIELDS
       ];
     }
 
     if (selectedType === 'apadrinar') {
       return [
         {
-          ...gatoField,
+          name: 'selectedCat',
           label: '¿A qué gato te gustaría apadrinar?',
-          required: true // Obligatorio también aquí
-        },
-        {
-          name: 'tipoAportacion',
-          label: 'Tipo de aportación',
-          options: [{ label: '10€/mes', value: '10€/mes' }, { label: 'Otra cantidad', value: 'Otra cantidad' }],
+          options: catsOptions,
           mode: 'default',
           required: true
-        }
+        },
+        ...SPONSOR_FIELDS
       ];
     }
 
     if (selectedType === 'voluntariado') {
-      return [
-        {
-          name: 'disponibilidadVoluntariado',
-          label: '¿Cuál sería tu disponibilidad?',
-          options: [
-            { label: 'Mañana', value: 'Mañana' },
-            { label: 'Tarde', value: 'Tarde' },
-            { label: 'Fin de semana', value: 'Fin de semana' }
-          ],
-          mode: 'multiple',
-          required: true
-        },
-        {
-          name: 'tareasVoluntariado',
-          label: '¿Qué tareas te gustaría realizar?',
-          options: [
-            { label: 'Limpieza', value: 'Limpieza' },
-            { label: 'Alimentación', value: 'Alimentación' },
-            { label: 'Medicación', value: 'Medicación' },
-            { label: 'Fotos', value: 'Fotos' },
-            { label: 'Socialización', value: 'Socialización' },
-            { label: 'Otros', value: 'Otros' }
-          ],
-          mode: 'multiple',
-          required: true
-        },
-        {
-          name: 'experienciaAnimales',
-          label: '¿Tienes experiencia previa con animales?',
-          options: [{ label: 'Sí', value: 'Sí' }, { label: 'No', value: 'No' }],
-          mode: 'default',
-          required: true
-        }
-      ];
+      return VOLUNTEER_FIELDS;
     }
 
     return [];
   };
 
-  const campos = getFieldsByType(tipo);
+  const dynamicFields = getFieldsByType(inquiryType);
 
   const openPrivacyModal = (e) => {
     e.preventDefault();
@@ -192,11 +211,11 @@ export default function ContactForm() {
     setIsModalOpen(false);
   };
 
-  const onFinish = async (formValues) => {
+  const onFinish = async (values) => {
     setLoading(true);
     try {
       const cleanValues = Object.fromEntries(
-        Object.entries(formValues).filter(([_, v]) => v !== undefined && v !== "" && !(Array.isArray(v) && v.length === 0))
+        Object.entries(values).filter(([_, v]) => v !== undefined && v !== "" && !(Array.isArray(v) && v.length === 0))
       );
 
       await addDoc(collection(db, "contactRequests"), {
@@ -219,7 +238,7 @@ export default function ContactForm() {
       .validateFields({ validateOnly: true })
       .then(() => setSubmittable(true))
       .catch(() => setSubmittable(false));
-  }, [form, values]);
+  }, [form, formValues]);
 
   return (
     <section className="cform-wrap">
@@ -227,9 +246,9 @@ export default function ContactForm() {
         form={form}
         layout='vertical'
         initialValues={{
-          tipoVivienda: undefined,
-          tareasVoluntariado: [],
-          disponibilidadVoluntariado: []
+          housingType: undefined,
+          volunteerTasks: [],
+          volunteerAvailability: []
         }}
         style={{ padding: '1.5rem 2rem', border: '1px solid #4caf50', borderRadius: '16px', backgroundColor: '#f9fdf9' }}
         onFinish={onFinish}
@@ -237,30 +256,30 @@ export default function ContactForm() {
       >
         <Row gutter={[16, 16]} align="middle">
           <Col xs={24} md={12}>
-            <Form.Item label="Nombre" name="name" rules={[{ required: true, message: 'Introduce tu nombre' }]} style={{ marginBottom: 0 }}>
+            <Form.Item label="Nombre" name="name" rules={[{ required: true, message: 'Introduce tu nombre' }]}>
               <Input placeholder="Introduce tu nombre" />
             </Form.Item>
           </Col>
           <Col xs={24} md={12}>
-            <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email', message: 'Introduce un email válido' }]} style={{ marginBottom: 0 }}>
+            <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email', message: 'Introduce un email válido' }]}>
               <Input placeholder="Introduce tu email" />
             </Form.Item>
           </Col>
         </Row>
 
-        <Row gutter={[16, 16]} align="middle" style={{ marginTop: 16 }}>
+        <Row gutter={[16, 16]} align="middle">
           <Col xs={24} md={8}>
-            <Form.Item label="Teléfono" name="phone" style={{ marginBottom: 0 }}>
+            <Form.Item label="Teléfono" name="phone">
               <Input placeholder="Introduce tu teléfono" />
             </Form.Item>
           </Col>
           <Col xs={24} md={6}>
-            <Form.Item label="Edad" name="age" style={{ marginBottom: 0 }}>
+            <Form.Item label="Edad" name="age">
               <Input placeholder="Introduce tu edad" />
             </Form.Item>
           </Col>
           <Col xs={24} md={10}>
-            <Form.Item name="contact" label="¿Cómo nos conociste?" style={{ marginBottom: 0 }}>
+            <Form.Item name="contact" label="¿Cómo nos conociste?">
               <Select
                 allowClear
                 placeholder="Elige una opción"
@@ -270,57 +289,50 @@ export default function ContactForm() {
           </Col>
         </Row>
 
-        <div style={{ marginTop: 16 }}>
-          <Form.Item name="type" label="¿Cuál es tu consulta?" rules={[{ required: true, message: 'Selecciona una opción' }]} style={{ marginBottom: 0 }}>
-            <Select
-              allowClear
-              placeholder="Elige una opción"
-              options={TYPE_OF_INQUIRY_OPTIONS}
-            />
-          </Form.Item>
-        </div>
+        <Form.Item name="type" label="¿Cuál es tu consulta?" rules={[{ required: true, message: 'Selecciona una opción' }]}>
+          <Select
+            allowClear
+            placeholder="Elige una opción"
+            options={TYPE_OF_INQUIRY_OPTIONS}
+          />
+        </Form.Item>
 
-        <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
-          {campos.map((campo) => (
-            <Col xs={24} md={8} key={campo.name}>
+        <Row gutter={[16, 16]}>
+          {dynamicFields.map((field) => (
+            <Col xs={24} md={8} key={field.name}>
               <Form.Item
-                name={campo.name}
-                label={campo.label}
-                rules={[{ required: campo.required, message: 'Selecciona una opción' }]}
-                style={{ marginBottom: 0 }}
+                name={field.name}
+                label={field.label}
+                rules={[{ required: field.required, message: 'Selecciona una opción' }]}
               >
                 <Select
-                  allowClear={!campo.required}
-                  mode={campo.mode === 'multiple' ? 'multiple' : undefined}
+                  allowClear={!field.required}
+                  mode={field.mode === 'multiple' ? 'multiple' : undefined}
                   placeholder="Selecciona"
-                  options={campo.options}
+                  options={field.options}
                 />
               </Form.Item>
             </Col>
           ))}
         </Row>
 
-        <div style={{ marginTop: 16 }}>
-          <Form.Item
-            label="Mensaje"
-            name="mensaje"
-            rules={tipo === 'otro' ? [{ required: true, message: 'Escribe un mensaje' }] : []}
-            style={{ marginBottom: 16 }}
-          >
-            <TextArea rows={4} placeholder={tipo === 'otro' ? "Escribe tu mensaje aquí... (Obligatorio)" : "Escribe tu mensaje aquí... (Opcional)"} />
-          </Form.Item>
-        </div>
+        <Form.Item
+          label="Mensaje"
+          name="message"
+          rules={inquiryType === 'otro' ? [{ required: true, message: 'Escribe un mensaje' }] : []}
+        >
+          <TextArea rows={4} placeholder={inquiryType === 'otro' ? "Escribe tu mensaje aquí... (Obligatorio)" : "Escribe tu mensaje aquí... (Opcional)"} />
+        </Form.Item>
 
         <Form.Item
           name="privacy"
           valuePropName="checked"
           rules={[{ validator: (_, value) => value ? Promise.resolve() : Promise.reject(new Error('Debe aceptar la política de privacidad')) }]}
-          style={{ marginBottom: 16 }}
         >
           <Checkbox>He leído y acepto la <a href="#privacidad" onClick={openPrivacyModal}>política de privacidad</a></Checkbox>
         </Form.Item>
 
-        <Form.Item style={{ marginBottom: 0 }}>
+        <Form.Item>
           <Button
             type="primary"
             disabled={!submittable}

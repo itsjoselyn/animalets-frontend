@@ -28,7 +28,6 @@ function getTypeValue(item) {
     const rawType = item.type || item.tipo || item.tipoSolicitud || item.tipo_solicitud || "otros";
     const normalized = String(rawType).toLowerCase().trim();
 
-    // Normalizar equivalencias comunes para que nunca caiga en "otros" por un plural/singular o etiqueta diferente
     if (normalized === "adoptar" || normalized === "adopcion" || normalized === "adopción") return "adoptar";
     if (normalized === "acogida" || normalized === "casa de acogida") return "acogida";
     if (normalized === "apadrinar" || normalized === "apadrinamiento") return "apadrinar";
@@ -72,18 +71,16 @@ function renderExtraFieldLabel(key) {
         type: "Tipo de consulta",
         phone: "Teléfono",
         age: "Edad",
-        tieneGatoMente: "¿Tiene un gato en mente?",
-        gatoElegido: "Gato elegido",
-        tipoVivienda: "Tipo de vivienda",
-        animalesCasa: "Animales en casa",
-        personasCasa: "¿Hay más personas en casa?",
-        experienciaGatos: "Experiencia previa con gatos",
-        tiempoAcogida: "Tiempo de acogida",
-        gatoApadrinar: "Gato a apadrinar",
-        tipoAportacion: "Tipo de aportación",
-        disponibilidadVoluntariado: "Disponibilidad",
-        tareasVoluntariado: "Tareas de voluntariado",
-        experienciaAnimales: "Experiencia previa con animales",
+        selectedCat: "Gato interesado / elegido",
+        housingType: "Tipo de vivienda",
+        petsAtHome: "Animales en casa",
+        peopleAtHome: "¿Hay más personas en casa?",
+        catExperience: "Experiencia previa con gatos",
+        fosterDuration: "Tiempo de acogida",
+        contributionType: "Tipo de aportación",
+        volunteerAvailability: "Disponibilidad",
+        volunteerTasks: "Tareas de voluntariado",
+        animalExperience: "Experiencia previa con animales",
     };
     return labels[key] || key.replace(/([A-Z])/g, " $1").replace(/_/g, " ").replace(/^./, (c) => c.toUpperCase());
 }
@@ -95,29 +92,18 @@ function renderExtraValue(key, value) {
     return String(value);
 }
 
-// Orden fijo y estructurado para mostrar los campos adicionales
+// Orden estricto basado en las nuevas variables en inglés del formulario
 const FIELD_ORDER = [
-    // Gato / Adopción
-    "tieneGatoMente",
-    "gatoElegido",
-    "gatoApadrinar",
-    "tipoAportacion",
-    "tiempoAcogida",
-
-    // Vivienda y Convivencia
-    "tipoVivienda",
-    "animalesCasa",
-    "personasCasa",
-
-    // Experiencia
-    "experienciaGatos",
-    "experienciaAnimales",
-
-    // Voluntariado
-    "disponibilidadVoluntariado",
-    "tareasVoluntariado",
-
-    // Otros
+    "selectedCat",
+    "contributionType",
+    "fosterDuration",
+    "housingType",
+    "petsAtHome",
+    "peopleAtHome",
+    "catExperience",
+    "animalExperience",
+    "volunteerAvailability",
+    "volunteerTasks",
     "contact"
 ];
 
@@ -141,7 +127,6 @@ function getCategorizedExtraFields(item) {
         }))
         .filter((field) => field.value !== "");
 
-    // Ordenar según FIELD_ORDER estricto
     validEntries.sort((a, b) => {
         const indexA = FIELD_ORDER.indexOf(a.key);
         const indexB = FIELD_ORDER.indexOf(b.key);
@@ -151,7 +136,6 @@ function getCategorizedExtraFields(item) {
         return indexA - indexB;
     });
 
-    // Agrupar en subsecciones lógicas
     const catGato = [];
     const catVivienda = [];
     const catExperiencia = [];
@@ -159,13 +143,13 @@ function getCategorizedExtraFields(item) {
     const catOtros = [];
 
     validEntries.forEach((field) => {
-        if (["tieneGatoMente", "gatoElegido", "gatoApadrinar", "tipoAportacion", "tiempoAcogida"].includes(field.key)) {
+        if (["selectedCat", "contributionType", "fosterDuration"].includes(field.key)) {
             catGato.push(field);
-        } else if (["tipoVivienda", "animalesCasa", "personasCasa"].includes(field.key)) {
+        } else if (["housingType", "petsAtHome", "peopleAtHome"].includes(field.key)) {
             catVivienda.push(field);
-        } else if (["experienciaGatos", "experienciaAnimales"].includes(field.key)) {
+        } else if (["catExperience", "animalExperience"].includes(field.key)) {
             catExperiencia.push(field);
-        } else if (["disponibilidadVoluntariado", "tareasVoluntariado"].includes(field.key)) {
+        } else if (["volunteerAvailability", "volunteerTasks"].includes(field.key)) {
             catVoluntariado.push(field);
         } else {
             catOtros.push(field);
@@ -250,7 +234,7 @@ export default function AdminSolicitudes() {
 
         const solicitud = [
             { label: "Tipo de solicitud", value: getFriendlyType(visibleSelected) },
-            { label: "Mensaje completo", value: visibleSelected.mensaje || visibleSelected.text || visibleSelected.body || "" },
+            { label: "Mensaje completo", value: visibleSelected.message || visibleSelected.mensaje || visibleSelected.text || visibleSelected.body || "" },
         ].filter((field) => field.value !== undefined && field.value !== null && field.value !== "");
 
         const extraSections = getCategorizedExtraFields(visibleSelected);
