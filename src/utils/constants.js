@@ -26,7 +26,7 @@ export const CARDS = [
         num: "03",
         title: "Gatera vs cemento",
         text: "2021: obras desahucian 50 gatos. ADIF construye gatera para 42 en semilibertad, reubicación.",
-        img: "https://placecats.com/bella/400/500",
+        img: "https://res.cloudinary.com/dhb3yos4y/image/upload/v1784817088/DSC_0259_1_kg6pa7.jpg",
     },
 ];
 

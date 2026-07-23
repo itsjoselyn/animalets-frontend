@@ -326,6 +326,18 @@
   z-index: 2;
 }
 
+/* Forzar que todas las etiquetas de los Form.Item tengan espacio para 2 líneas */
+.ant-form-item-row .ant-form-item-label>label {
+  height: 44px;
+  /* Altura fija equivalente a dos líneas de texto */
+  display: flex;
+  align-items: flex-end;
+  /* Alinea el texto de la etiqueta hacia abajo para que quede uniforme */
+  white-space: normal !important;
+  /* Permite que el texto salte de línea correctamente */
+  text-align: left;
+}
+
 .cform-privacy-iframe {
   width: 100%;
   height: 80vh;

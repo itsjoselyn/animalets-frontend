@@ -32,9 +32,8 @@ export default function ContactForm() {
 
   const values = Form.useWatch([], form);
   const tipo = Form.useWatch('type', form);
-  const tieneGatoMente = Form.useWatch('tieneGatoMente', form);
 
-  // Cargar la lista de gatos desde Firestore
+  // Cargar la lista de gatos desde Firestore y poner "No lo sé" el primero
   useEffect(() => {
     const fetchGatos = async () => {
       try {
@@ -46,36 +45,26 @@ export default function ContactForm() {
             value: catData.nombre || docSnap.id,
           };
         });
-        setGatosOptions(listaGatos);
+
+        setGatosOptions([{ label: 'No lo sé', value: 'No lo sé' }, ...listaGatos]);
       } catch (err) {
         console.error("Error al cargar los gatos:", err);
+        setGatosOptions([{ label: 'No lo sé', value: 'No lo sé' }]);
       }
     };
 
     fetchGatos();
   }, []);
 
-  // Definir campos dinámicos según el tipo de consulta seleccionado
+  // Definir campos dinámicos según el tipo de consulta
   const getFieldsByType = (selectedType) => {
-    const adoptionBaseFields = [
-      {
-        name: 'tieneGatoMente',
-        label: '¿Tienes ya un gato en mente?',
-        options: [{ label: 'Sí', value: 'Sí' }, { label: 'No', value: 'No' }],
-        mode: 'default',
-        required: true
-      },
-    ];
-
-    if (tieneGatoMente === 'Sí') {
-      adoptionBaseFields.push({
-        name: 'gatoElegido',
-        label: 'Selecciona el gato',
-        options: gatosOptions,
-        mode: 'default',
-        required: true
-      });
-    }
+    const gatoField = {
+      name: 'gatoElegido',
+      label: '¿En qué gato estás interesado?',
+      options: gatosOptions,
+      mode: 'default',
+      required: true // Obligatorio en todas las opciones dinámicas
+    };
 
     const restOfAdoptionFields = [
       {
@@ -83,11 +72,9 @@ export default function ContactForm() {
         label: '¿Qué tipo de vivienda tienes?',
         options: [
           { label: 'Piso', value: 'Piso' },
-          { label: 'Casa', value: 'Casa' },
-          { label: 'Con terraza', value: 'Con terraza' },
-          { label: 'Con patio', value: 'Con patio' }
+          { label: 'Casa', value: 'Casa' }
         ],
-        mode: 'multiple',
+        mode: 'default',
         required: true
       },
       {
@@ -119,12 +106,12 @@ export default function ContactForm() {
     ];
 
     if (selectedType === 'adoptar') {
-      return [...adoptionBaseFields, ...restOfAdoptionFields];
+      return [gatoField, ...restOfAdoptionFields];
     }
 
     if (selectedType === 'acogida') {
       return [
-        ...adoptionBaseFields,
+        gatoField,
         ...restOfAdoptionFields,
         {
           name: 'tiempoAcogida',
@@ -139,11 +126,9 @@ export default function ContactForm() {
     if (selectedType === 'apadrinar') {
       return [
         {
-          name: 'gatoApadrinar',
-          label: 'Gato a apadrinar (Opcional)',
-          options: gatosOptions,
-          mode: 'default',
-          required: false
+          ...gatoField,
+          label: '¿A qué gato te gustaría apadrinar?',
+          required: true // Obligatorio también aquí
         },
         {
           name: 'tipoAportacion',
@@ -202,7 +187,6 @@ export default function ContactForm() {
     setIsModalOpen(true);
   };
 
-  // Al hacer clic en aceptar en el modal, marcamos el checkbox como true
   const handleAcceptPrivacy = () => {
     form.setFieldsValue({ privacy: true });
     setIsModalOpen(false);
@@ -243,7 +227,7 @@ export default function ContactForm() {
         form={form}
         layout='vertical'
         initialValues={{
-          tipoVivienda: [],
+          tipoVivienda: undefined,
           tareasVoluntariado: [],
           disponibilidadVoluntariado: []
         }}
@@ -251,31 +235,32 @@ export default function ContactForm() {
         onFinish={onFinish}
         requiredMark="optional"
       >
-        <Row gutter={[16, 0]}>
+        <Row gutter={[16, 16]} align="middle">
           <Col xs={24} md={12}>
-            <Form.Item label="Nombre" name="name" rules={[{ required: true, message: 'Introduce tu nombre' }]}>
+            <Form.Item label="Nombre" name="name" rules={[{ required: true, message: 'Introduce tu nombre' }]} style={{ marginBottom: 0 }}>
               <Input placeholder="Introduce tu nombre" />
             </Form.Item>
           </Col>
           <Col xs={24} md={12}>
-            <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email', message: 'Introduce un email válido' }]}>
+            <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email', message: 'Introduce un email válido' }]} style={{ marginBottom: 0 }}>
               <Input placeholder="Introduce tu email" />
             </Form.Item>
           </Col>
         </Row>
-        <Row gutter={[16, 0]}>
+
+        <Row gutter={[16, 16]} align="middle" style={{ marginTop: 16 }}>
           <Col xs={24} md={8}>
-            <Form.Item label="Teléfono" name="phone">
+            <Form.Item label="Teléfono" name="phone" style={{ marginBottom: 0 }}>
               <Input placeholder="Introduce tu teléfono" />
             </Form.Item>
           </Col>
           <Col xs={24} md={6}>
-            <Form.Item label="Edad" name="age">
+            <Form.Item label="Edad" name="age" style={{ marginBottom: 0 }}>
               <Input placeholder="Introduce tu edad" />
             </Form.Item>
           </Col>
           <Col xs={24} md={10}>
-            <Form.Item name="contact" label="¿Cómo nos conociste?">
+            <Form.Item name="contact" label="¿Cómo nos conociste?" style={{ marginBottom: 0 }}>
               <Select
                 allowClear
                 placeholder="Elige una opción"
@@ -285,21 +270,24 @@ export default function ContactForm() {
           </Col>
         </Row>
 
-        <Form.Item name="type" label="¿Cuál es tu consulta?" rules={[{ required: true, message: 'Selecciona una opción' }]}>
-          <Select
-            allowClear
-            placeholder="Elige una opción"
-            options={TYPE_OF_INQUIRY_OPTIONS}
-          />
-        </Form.Item>
+        <div style={{ marginTop: 16 }}>
+          <Form.Item name="type" label="¿Cuál es tu consulta?" rules={[{ required: true, message: 'Selecciona una opción' }]} style={{ marginBottom: 0 }}>
+            <Select
+              allowClear
+              placeholder="Elige una opción"
+              options={TYPE_OF_INQUIRY_OPTIONS}
+            />
+          </Form.Item>
+        </div>
 
-        <Row gutter={[16, 0]}>
+        <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
           {campos.map((campo) => (
             <Col xs={24} md={8} key={campo.name}>
               <Form.Item
                 name={campo.name}
                 label={campo.label}
                 rules={[{ required: campo.required, message: 'Selecciona una opción' }]}
+                style={{ marginBottom: 0 }}
               >
                 <Select
                   allowClear={!campo.required}
@@ -312,23 +300,27 @@ export default function ContactForm() {
           ))}
         </Row>
 
-        <Form.Item
-          label="Mensaje"
-          name="mensaje"
-          rules={tipo === 'otro' ? [{ required: true, message: 'Escribe un mensaje' }] : []}
-        >
-          <TextArea rows={4} placeholder={tipo === 'otro' ? "Escribe tu mensaje aquí... (Obligatorio)" : "Escribe tu mensaje aquí... (Opcional)"} />
-        </Form.Item>
+        <div style={{ marginTop: 16 }}>
+          <Form.Item
+            label="Mensaje"
+            name="mensaje"
+            rules={tipo === 'otro' ? [{ required: true, message: 'Escribe un mensaje' }] : []}
+            style={{ marginBottom: 16 }}
+          >
+            <TextArea rows={4} placeholder={tipo === 'otro' ? "Escribe tu mensaje aquí... (Obligatorio)" : "Escribe tu mensaje aquí... (Opcional)"} />
+          </Form.Item>
+        </div>
 
         <Form.Item
           name="privacy"
           valuePropName="checked"
           rules={[{ validator: (_, value) => value ? Promise.resolve() : Promise.reject(new Error('Debe aceptar la política de privacidad')) }]}
+          style={{ marginBottom: 16 }}
         >
           <Checkbox>He leído y acepto la <a href="#privacidad" onClick={openPrivacyModal}>política de privacidad</a></Checkbox>
         </Form.Item>
 
-        <Form.Item>
+        <Form.Item style={{ marginBottom: 0 }}>
           <Button
             type="primary"
             disabled={!submittable}
