@@ -326,11 +326,6 @@ export default function ContactForm() {
             disabled={!submittable}
             htmlType="submit"
             loading={loading}
-            style={{
-              backgroundColor: submittable ? "#2e7d32" : "#d9d9d9",
-              borderColor: submittable ? "#2e7d32" : "#d9d9d9",
-              color: submittable ? "#fff" : "rgba(0, 0, 0, 0.25)"
-            }}
           >
             Enviar
           </Button>
