@@ -321,7 +321,7 @@ export default function ContactForm() {
           name="message"
           rules={inquiryType === 'otro' ? [{ required: true, message: 'Escribe un mensaje' }] : []}
         >
-          <TextArea rows={4} placeholder={inquiryType === 'otro' ? "Escribe tu mensaje aquí... (Obligatorio)" : "Escribe tu mensaje aquí... (Opcional)"} />
+          <TextArea rows={4} placeholder={"Escribe tu mensaje aquí..."} />
         </Form.Item>
 
         <Form.Item
