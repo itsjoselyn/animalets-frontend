@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import "./AboutMission.css";
 import { optimizeCloudinaryImage } from '../../../lib/optimizeCloudinaryImage';
 import { CARDS } from "../../../utils/constants";
-import Button from "../../common/Button/Button";
+import { Button } from "antd";
 
 
 
@@ -16,10 +16,19 @@ function Card({ card, active, onDotClick, showDots }) {
             {CARDS.map((_, i) => (
               <Button
                 key={i}
-                variant="dot"
-                active={i === active}
+                shape="circle"                  /* 1. Lo hace redondo */
+                size="small"                   /* 2. Tamaño pequeño para tipo 'dot' */
+                type={i === active ? "primary" : "default"}  /* 3. Cambia de color si está activo */
                 onClick={() => onDotClick(i)}
                 aria-label={`Ver ${CARDS[i].title}`}
+                style={{
+                  width: i === active ? 24 : 10, /* Opcional: Si quieres efecto de alargado al estar activo */
+                  height: 10,
+                  padding: 0,
+                  minWidth: 'auto',
+                  borderRadius: 5,
+                  transition: 'all 0.3s ease'
+                }}
               />
             ))}
           </div>

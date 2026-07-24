@@ -7,8 +7,8 @@ export const NAV_LINKS = [
 ];
 
 export const SOCIAL_LINKS = [
-  { label: "Política de privacidad", to: "/privacidad", external: false },
-  { label: "Instagram", href: "https://instagram.com/animaletslallagosta", external: true },
-  { label: "Facebook", href: "https://facebook.com/animaletslallagosta", external: true },
-  { label: "TikTok", href: "https://tiktok.com/@animaletslallagosta", external: true },
+  { label: "Política de privacidad", to: "/privacidad", icon: 'mail' },
+  { label: "Instagram", to: "https://www.instagram.com/animalets_la_llagosta?igsh=NTc1a2RudDV2dG5l&utm_source=qr", icon: 'instagram' },
+  { label: "Facebook", to: "https://www.facebook.com/animalets.lallagosta.5/", icon: 'facebook' },
+  { label: "TikTok", to: "https://www.tiktok.com/@animalets_la_llagosta", icon: null },
 ];

@@ -10,7 +10,9 @@
 }
 
 .gato-editor-preview {
-    position: relative
+    position: relative;
+    margin-top: 0;
+    height: fit-content;
 }
 
 @media(max-width:900px) {

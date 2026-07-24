@@ -1,20 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import BlogCard from "./BlogCard";
 import "./BlogGrid.css";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import { formatBlogDate, getFirestoreTimestampMs, normalizeBlogImages } from "./blogUtils";
 import { PAGE_SIZE } from "../../../utils/constants";
-import Button from "../../common/Button/Button";
-
-
+import { Pagination, Empty, Card } from "antd";
 
 export default function BlogGrid() {
-  const [visible, setVisible] = useState(PAGE_SIZE);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(PAGE_SIZE);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Load blog posts from Firestore collection 'blog'
+  // Cargar posts del blog desde Firestore
   useEffect(() => {
     let mounted = true;
     async function loadPosts() {
@@ -30,7 +29,7 @@ export default function BlogGrid() {
             id: doc.id,
             title: data.titulo || data.title || "",
             img: images[0] || "",
-            imagenes: images.map(url => ({ url })),
+            imagenes: images.map((url) => ({ url })),
             body: data.descripcion || data.body || data.text || "",
             createdAt: data.createdAt,
             updatedAt: data.updatedAt,
@@ -39,6 +38,7 @@ export default function BlogGrid() {
           };
         });
 
+        // Ordenar del más reciente al más antiguo
         docs.sort((a, b) => b.sortTime - a.sortTime);
 
         if (mounted) {
@@ -58,50 +58,50 @@ export default function BlogGrid() {
     };
   }, []);
 
-  const total = posts.length;
-  const shown = posts.slice(0, visible);
-  const hasMore = visible < total;
-  const progress = total > 0 ? Math.round((shown.length / total) * 100) : 0;
+  // Artículos a mostrar en la página actual
+  const shown = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return posts.slice(start, start + pageSize);
+  }, [posts, currentPage, pageSize]);
+
+  // Manejador del cambio de página
+  const handlePageChange = (page, newPageSize) => {
+    setCurrentPage(page);
+    setPageSize(newPageSize);
+    // Scroll suave hacia arriba
+    window.scrollTo({ top: 200, behavior: "smooth" });
+  };
 
   return (
     <div className="blog-grid-wrap">
+      {/* Rejilla de Noticias */}
       <div className="blog-grid">
         {loading ? (
-          // Loading skeletons
-          Array.from({ length: Math.min(PAGE_SIZE, 6) }).map((_, i) => (
-            <div key={i} className="blog-skeleton">
-              <div className="blog-skeleton-top">
-                <div className="blog-skeleton-date skeleton" />
-                <div className="blog-skeleton-img skeleton" />
-              </div>
-              <div className="blog-skeleton-title skeleton" />
-            </div>
+          // Skeleton loader oficial usando Card de Antd
+          Array.from({ length: pageSize }).map((_, i) => (
+            <Card key={i} style={{ borderRadius: 12 }} loading active />
           ))
         ) : posts.length === 0 ? (
-          <p>No hay noticias publicadas todavía.</p>
+          <div style={{ gridColumn: "1 / -1", padding: "40px 0" }}>
+            <Empty description="No hay noticias publicadas todavía." />
+          </div>
         ) : (
-          shown.map((post) => (
-            <BlogCard key={post.id} post={post} />
-          ))
+          shown.map((post) => <BlogCard key={post.id} post={post} />)
         )}
       </div>
 
-      {!loading && (
-        <div className="blog-grid-footer">
-          <p className="blog-grid-count">
-            Mostrando {shown.length} de {posts.length} resultados
-          </p>
-          <div className="blog-grid-progress-bar">
-            <div
-              className="blog-grid-progress-fill"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          {hasMore && (
-            <Button variant="more-blog" onClick={() => setVisible((v) => Math.min(v + PAGE_SIZE, posts.length))}>
-              Mostrar más
-            </Button>
-          )}
+      {/* Paginación de Ant Design */}
+      {!loading && posts.length > 0 && (
+        <div style={{ display: "flex", justifyContent: "center", marginTop: 40, marginBottom: 20 }}>
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={posts.length}
+            onChange={handlePageChange}
+            showSizeChanger
+            pageSizeOptions={["6", "9", "12", "18"]}
+            showTotal={(total, range) => `${range[0]}-${range[1]} de ${total} artículos`}
+          />
         </div>
       )}
     </div>

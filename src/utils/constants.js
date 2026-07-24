@@ -12,7 +12,7 @@ export const CARDS = [
         num: "01",
         title: "Nacimos del abandono",
         text: "En 1996, huertos vacíos dejaron gatos solos bajo la lluvia. Un grupo de vecinos levantó refugios improvisados.",
-        img: "https://placecats.com/neo/400/500",
+        img: "https://res.cloudinary.com/dhb3yos4y/image/upload/v1784883476/animalets_bnavou.jpg",
     },
     {
         id: 2,
@@ -26,7 +26,7 @@ export const CARDS = [
         num: "03",
         title: "Gatera vs cemento",
         text: "2021: obras desahucian 50 gatos. ADIF construye gatera para 42 en semilibertad, reubicación.",
-        img: "https://placecats.com/bella/400/500",
+        img: "https://res.cloudinary.com/dhb3yos4y/image/upload/v1784817088/DSC_0259_1_kg6pa7.jpg",
     },
 ];
 
@@ -115,10 +115,10 @@ export const STEPS = [
 ];
 
 export const OPTIONS = [
-    { id: 1, title: "Voluntariado", link: "/como-ayudar/voluntariado", img: "https://placecats.com/neo/300/400" },
-    { id: 2, title: "Apadrinar un Gato", link: "/como-ayudar/apadrinar", img: "https://placecats.com/millie/300/400" },
-    { id: 3, title: "Hacerse Socio", link: "/como-ayudar/socio", img: "https://placecats.com/bella/300/400" },
-    { id: 4, title: "Casa de Acogida", link: "/como-ayudar/acogida", img: "https://placecats.com/neo_2/300/400" },
+    { id: 1, title: "Voluntariado", link: "/como-ayudar", img: "https://res.cloudinary.com/dhb3yos4y/image/upload/v1784815676/DSC_0213_1_c6yqfo.jpg" },
+    { id: 2, title: "Apadrinar un Gato", link: "/como-ayudar", img: "https://res.cloudinary.com/dhb3yos4y/image/upload/v1784816230/DSC_0325_1_murwwa.jpg" },
+    { id: 3, title: "Hacerse Socio", link: "/como-ayudar", img: "https://res.cloudinary.com/dhb3yos4y/image/upload/v1784816409/DSC_0266_1_cebshp.jpg" },
+    { id: 4, title: "Casa de Acogida", link: "/como-ayudar", img: "https://res.cloudinary.com/dhb3yos4y/image/upload/v1784816476/DSC_0307_1_d1hq2c.jpg" },
 ];
 
 
@@ -159,11 +159,9 @@ export const TYPE_LABELS = {
 export const STATUS_LABELS = {
     nuevo: "Nuevo",
     leido: "Leído",
-    proceso: "En proceso",
-    cerrado: "Cerrado",
 };
 
-export const STATUS_OPTIONS = ["todas", "nuevo", "leido", "proceso", "cerrado"];
+export const STATUS_OPTIONS = ["todas", "nuevo", "leido"];
 export const TYPE_OPTIONS = ["todos", "acogida", "adopcion", "apadrinar", "voluntariado", "otros"];
 
 export const EMPTY_TESTIMONY = {

@@ -1,16 +1,15 @@
 import { useEffect, useRef, useState } from "react";
+import { ArrowDownOutlined } from "@ant-design/icons";
 import "./AboutIntro.css";
-import { YOUTUBE_ID, TEXT, COUNT } from "../../../utils/constants";
-import { textR } from "../../../utils/constants";
+import { YOUTUBE_ID, TEXT, COUNT, textR } from "../../../utils/constants";
 
+const GREEN_COLOR = "#2e7d32";
 
 function randomBalls() {
   return Array.from({ length: COUNT }, (_, i) => ({
     id: i,
     size: 16 + Math.random() * 36,
     left: 2 + Math.random() * 96,
-    // finalTop en % del componente entero (hero + video juntos)
-    // las ponemos en la mitad superior para que no tapen el video
     finalTop: 8 + Math.random() * 55,
     delay: i * 0.08,
   }));
@@ -22,33 +21,45 @@ export default function AboutIntro() {
   const sectionRef = useRef(null);
   const [rotation, setRotation] = useState(0);
 
-  // Aterrizaje de bolitas
+  // Aterrizaje suave de bolitas
   useEffect(() => {
     const last = (COUNT - 1) * 0.08 + 0.7;
     const t = setTimeout(() => setLanded(true), (last + 0.1) * 1000);
     return () => clearTimeout(t);
   }, []);
 
-  // Rotación del texto con scroll
+  // Rotación optimizada del texto con scroll usando requestAnimationFrame
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      if (!sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      const windowH = window.innerHeight;
-      // empieza a rotar cuando la sección está al 150% del viewport (antes de entrar)
-      const progress = 1 - (rect.top - windowH * -0.25) / windowH;
-      setRotation(progress * 360);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (sectionRef.current) {
+            const rect = sectionRef.current.getBoundingClientRect();
+            const windowH = window.innerHeight;
+            const progress = 1 - (rect.top - windowH * -0.25) / windowH;
+            setRotation(progress * 360);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-
   return (
-    <section className="about-intro" ref={sectionRef}>
-
-      {/* Bolitas que caen */}
+    <section
+      className="about-intro"
+      ref={sectionRef}
+      aria-label="Introducción sobre Animalets la Llagosta"
+    >
+      {/* Bolitas decorativas que caen */}
       {balls.map((b) => (
         <div
           key={b.id}
@@ -60,14 +71,19 @@ export default function AboutIntro() {
             '--final-top': `${b.finalTop}%`,
             animationDelay: `${b.delay}s`,
           }}
+          aria-hidden="true"
         />
       ))}
 
-      {/* ---- BLOQUE TEXTO ---- */}
+      {/* BLOQUE DE TEXTO */}
       <div className="about-intro-content">
         <p className="about-intro-label">Sobre nosotros</p>
-        <h1 className="about-intro-title">¿Qué es Animalets<br />la Llagosta?</h1>
-        <div className="about-intro-arrow">↓</div>
+        <h1 className="about-intro-title">
+          ¿Qué es Animalets<br />la Llagosta?
+        </h1>
+        <div className="about-intro-arrow" style={{ margin: "12px 0" }}>
+          <ArrowDownOutlined style={{ fontSize: "1.4rem", color: GREEN_COLOR }} />
+        </div>
         <p className="about-intro-text">
           Animalets la Llagosta es una asociación sin ánimo de lucro dedicada al rescate,
           cuidado y adopción responsable de gatos abandonados o maltratados en la zona de
@@ -76,17 +92,17 @@ export default function AboutIntro() {
         </p>
       </div>
 
-      {/* ---- VÍDEO ---- */}
+      {/* BLOQUE DE VÍDEO */}
       <div className="about-intro-video-wrap">
-
-        {/* Círculo de fondo del anillo (verde más oscuro) */}
+        {/* Círculo de fondo del anillo */}
         <div className="about-intro-ring-bg" />
 
-        {/* SVG texto rotante */}
+        {/* SVG con texto rotante */}
         <svg
           className="about-intro-svg"
           viewBox="0 0 340 340"
           style={{ transform: `rotate(${rotation}deg)` }}
+          aria-hidden="true"
         >
           <defs>
             <path
@@ -97,26 +113,26 @@ export default function AboutIntro() {
           <text
             fontFamily="'Lilita One', sans-serif"
             fontSize="13.5"
-            fill="#2e7d32"
+            fill={GREEN_COLOR}
             letterSpacing="4"
           >
             <textPath href="#tc">{TEXT}</textPath>
           </text>
         </svg>
 
-        {/* Círculo vídeo */}
+        {/* Círculo con Iframe de Vídeo */}
         <div className="about-intro-circle">
           <iframe
             className="about-intro-iframe"
             src={`https://www.youtube.com/embed/${YOUTUBE_ID}?controls=1&rel=0&modestbranding=1`}
-            title="Animalets la Llagosta"
+            title="Vídeo de presentación de Animalets la Llagosta"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
           />
         </div>
-
       </div>
-
     </section>
   );
 }

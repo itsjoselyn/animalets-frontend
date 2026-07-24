@@ -1,10 +1,19 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./CatProfilePage.css";
 import { optimizeCloudinaryImage } from "../lib/optimizeCloudinaryImage";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
-import Button from "../components/common/Button/Button";
+import { Button, Image, Tag, Skeleton, Result } from "antd";
+import {
+  ArrowLeftOutlined,
+  LeftOutlined,
+  RightOutlined,
+  HeartOutlined,
+  HomeOutlined,
+} from "@ant-design/icons";
+
+const GREEN_COLOR = "#2e7d32";
 
 function formatAge(value) {
   if (value === null || value === undefined || value === "") return "";
@@ -35,7 +44,6 @@ export default function CatProfilePage() {
   const [cat, setCat] = useState(null);
   const [loading, setLoading] = useState(true);
   const [index, setIndex] = useState(0);
-  const [open, setOpen] = useState(false); // 🔥 MODAL
 
   useEffect(() => {
     let mounted = true;
@@ -45,11 +53,7 @@ export default function CatProfilePage() {
 
       try {
         const ref = doc(db, "gatos", id);
-
         const snap = await getDoc(ref);
-
-
-
 
         if (!snap.exists()) {
           if (mounted) setCat(null);
@@ -97,33 +101,40 @@ export default function CatProfilePage() {
     loadCat();
   }, [id]);
 
-  useEffect(() => {
-    setIndex(0);
-  }, [cat?.id]);
-
   if (loading) {
     return (
-      <div className="catprofile">
-        <div className="catprofile-img-wrap">
-          <div className="skeleton" style={{ width: "100%", height: "100%" }} />
-        </div>
+      <div className="catprofile" style={{ padding: "24px 0" }}>
+        <Skeleton active avatar paragraph={{ rows: 8 }} />
       </div>
     );
   }
 
   if (!cat || cat.adoptado) {
     return (
-      <div className="catprofile-notfound">
-        <p>Gato no encontrado.</p>
-        <Button onClick={() => navigate("/nuestros-peludos")}>Volver</Button>
+      <div style={{ padding: "40px 0" }}>
+        <Result
+          status="404"
+          title="Peludo no encontrado"
+          subTitle="El gato que estás buscando ya ha sido adoptado o no existe."
+          extra={
+            <Button
+              type="primary"
+              onClick={() => navigate("/nuestros-peludos")}
+              style={{ backgroundColor: GREEN_COLOR, borderColor: GREEN_COLOR }}
+            >
+              Volver al listado
+            </Button>
+          }
+        />
       </div>
     );
   }
 
   const images = cat.images || [];
+  const currentImage = images.length > 0 ? images[index % images.length] : null;
 
-  const currentImage =
-    images.length > 0 ? images[index % images.length] : null;
+  // URLs en alta resolución para el modal ampliado, en el mismo orden que "images"
+  const previewItems = images.map((img) => optimizeCloudinaryImage(img, { width: 1200 }));
 
   const prev = (e) => {
     e?.stopPropagation();
@@ -139,125 +150,150 @@ export default function CatProfilePage() {
 
   return (
     <div className="catprofile">
-
-      <Button variant="close-profile" onClick={() => navigate("/nuestros-peludos")}>✕</Button>
-
-      {/* ================= IMAGEN ================= */}
-      <div className="catprofile-img-wrap" style={{ position: "relative" }}>
-        {currentImage ? (
-          <img
-            src={optimizeCloudinaryImage(currentImage)}
-            alt={cat.name}
-            className="catprofile-img"
-            style={{ cursor: "zoom-in" }}
-            onClick={() => setOpen(true)} // 🔥 OPEN MODAL
-          />
-        ) : (
-          <div className="skeleton" style={{ width: "100%", height: "100%" }} />
-        )}
-
-        {images.length > 1 && (
-          <>
-            <Button onClick={prev} style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", zIndex: 2, background: "transparent", border: "none", fontSize: 24, cursor: "pointer" }}>◀</Button>
-
-            <Button onClick={next} style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", zIndex: 2, background: "transparent", border: "none", fontSize: 24, cursor: "pointer" }}>▶</Button>
-          </>
-        )}
+      {/* Botón Volver */}
+      <div style={{ marginBottom: 16 }}>
+        <Button
+          type="text"
+          icon={<ArrowLeftOutlined />}
+          onClick={() => navigate("/nuestros-peludos")}
+        >
+          Volver a nuestros peludos
+        </Button>
       </div>
 
-      {/* ================= MODAL ================= */}
-      {open && currentImage && (
-        <div
-          onClick={() => setOpen(false)}
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.85)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 9999,
-          }}
-        >
-          <div onClick={(e) => e.stopPropagation()} style={{ position: "relative" }}>
-            <img
-              src={optimizeCloudinaryImage(currentImage, {
-                width: 1800,
-                height: 1350,
-              })} alt={cat.name}
-              style={{
-                maxWidth: "95vw",
-                maxHeight: "90vh",
-                borderRadius: 12,
-                objectFit: "contain",
-              }}
-            />
-
-            {images.length > 1 && (
-              <>
-                <Button onClick={prev} style={{ position: "absolute", left: -50, top: "50%", fontSize: 30, color: "#fff", background: "transparent", border: "none", cursor: "pointer" }}>◀</Button>
-
-                <Button onClick={next} style={{ position: "absolute", right: -50, top: "50%", fontSize: 30, color: "#fff", background: "transparent", border: "none", cursor: "pointer" }}>▶</Button>
-
-                <Button onClick={() => setOpen(false)} style={{ position: "absolute", top: -40, right: 0, fontSize: 26, color: "#fff", background: "transparent", border: "none", cursor: "pointer" }}>✕</Button>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* ================= CONTENIDO ================= */}
       <div className="catprofile-body">
+        {/* ================= IMAGEN Y GALERÍA CON ANTD ================= */}
+        <div className="catprofile-img-wrap">
+          {currentImage ? (
+            <>
+              <div
+                className="catprofile-img-bg"
+                style={{
+                  backgroundImage: `url(${optimizeCloudinaryImage(currentImage, { width: 100 })})`,
+                }}
+              />
+              <Image.PreviewGroup
+                items={previewItems}
+                preview={{
+                  current: index,
+                  onChange: (newIndex) => setIndex(newIndex),
+                }}
+              >
+                <Image
+                  src={optimizeCloudinaryImage(currentImage, { width: 800 })}
+                  alt={cat.name}
+                  className="catprofile-img"
+                />
+              </Image.PreviewGroup>
+            </>
+          ) : (
+            <Skeleton.Image active style={{ width: "100%", height: 300 }} />
+          )}
 
-        <div className="catprofile-hero">
-          <h1 className="catprofile-name">{cat.name}</h1>
-          <div className="catprofile-meta">
-            <span>{cat.age}</span>
-            <span>{cat.gender}</span>
+          {/* Carrusel rápido para la foto activa (fuera del modal) */}
+          {images.length > 1 && (
+            <>
+              <Button
+                shape="circle"
+                icon={<LeftOutlined />}
+                onClick={prev}
+                style={{
+                  position: "absolute",
+                  left: 12,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  zIndex: 2,
+                  background: "rgba(255,255,255,0.85)",
+                  border: "none",
+                }}
+              />
+
+              <Button
+                shape="circle"
+                icon={<RightOutlined />}
+                onClick={next}
+                style={{
+                  position: "absolute",
+                  right: 12,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  zIndex: 2,
+                  background: "rgba(255,255,255,0.85)",
+                  border: "none",
+                }}
+              />
+            </>
+          )}
+        </div>
+
+        {/* Datos Principales */}
+        <div className="catprofile-hero" style={{ marginTop: 20 }}>
+          <h1 className="catprofile-name" style={{ marginBottom: 8 }}>
+            {cat.name}
+          </h1>
+          <div className="catprofile-meta" style={{ display: "flex", gap: 8 }}>
+            {cat.age && <Tag color="green">{cat.age}</Tag>}
+            {cat.gender && <Tag color="magenta">{cat.gender}</Tag>}
           </div>
         </div>
 
-        <p className="catprofile-bio">{cat.bio}</p>
+        {/* Biografía / Historia */}
+        <p className="catprofile-bio" style={{ fontSize: "1.05rem", lineHeight: 1.6, margin: "20px 0" }}>
+          {cat.bio}
+        </p>
 
-        <div className="catprofile-section">
-          <h2 className="catprofile-section-title">Lo que necesito</h2>
-          <ul className="catprofile-list">
-            {cat.necesito.map((item, i) => (
-              <li key={i} className="catprofile-list-item">
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
+        {/* Necesidades */}
+        {cat.necesito.length > 0 && (
+          <div className="catprofile-section">
+            <h2 className="catprofile-section-title">Lo que necesito</h2>
+            <ul className="catprofile-list">
+              {cat.necesito.map((item, i) => (
+                <li key={i} className="catprofile-list-item">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
+        {/* Superpoderes */}
         <div className="catprofile-section">
           <h2 className="catprofile-section-title">Mis superpoderes</h2>
           <ul className="catprofile-powers">
             {cat.superpoderes.map((s, i) => (
               <li key={i} className="catprofile-power">
-                <span className="catprofile-power-label">{s.label}:</span>{" "}
-                {s.value}
+                <span className="catprofile-power-label" style={{ fontWeight: 600 }}>
+                  {s.label}:
+                </span>{" "}
+                {s.value || "No especificado"}
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="catprofile-ctas">
-          <a
-            className="catprofile-btn catprofile-btn--adopt"
-            href={`/contacto`}
-          >
-            Adóptame
-          </a>
+        {/* Llamadas a la Acción (CTAs) */}
+        <div
+          className="catprofile-ctas"
+          style={{ display: "flex", gap: 16, marginTop: 32, flexWrap: "wrap" }}
+        >
+          <Link to="/contacto" style={{ flex: 1, minWidth: 140 }}>
+            <Button
+              type="primary"
+              size="large"
+              block
+              icon={<HeartOutlined />}
+              style={{ backgroundColor: GREEN_COLOR, borderColor: GREEN_COLOR }}
+            >
+              Adóptame
+            </Button>
+          </Link>
 
-          <a
-            className="catprofile-btn catprofile-btn--foster"
-            href={`/contacto`}
-          >
-            Acógeme
-          </a>
+          <Link to="/contacto" style={{ flex: 1, minWidth: 140 }}>
+            <Button size="large" block icon={<HomeOutlined />}>
+              Acógeme
+            </Button>
+          </Link>
         </div>
-
       </div>
     </div>
   );

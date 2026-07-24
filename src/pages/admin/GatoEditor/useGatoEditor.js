@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { doc, getDoc, collection, addDoc, setDoc, updateDoc, deleteDoc, arrayUnion, deleteField } from 'firebase/firestore';
+import { doc, getDoc, collection, addDoc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from "../../../firebase/firebaseConfig";
 import { uploadImageToCloudinary } from "../../../lib/uploadImageToCloudinary";
 import { compressForUpload } from '../../../lib/imageUtils';
@@ -41,7 +41,7 @@ export function useGatoEditor(id) {
                         historia: docData.historia || docData.bio || '',
                         estado: resolvedEstado,
                         apadrinado: !!docData.apadrinado,
-                        adoptado: resolvedEstado === 'adoptado' || !!docData.adoptado,
+                        adoptado: resolvedEstado === 'adoptado',
                         necesidades: Array.isArray(docData.necesidades) ? docData.necesidades : (docData.necesito ? [docData.necesito] : []),
                         imagenes: Array.isArray(docData.imagenes) ? docData.imagenes : (docData.imagen ? [{ url: docData.imagen, path: null }] : []),
                         superpoderes: docData.superpoderes || docData.superpowers || { nivelMimos: '', habilidadEspecial: '', estadoActual: '' },
@@ -79,7 +79,7 @@ export function useGatoEditor(id) {
     };
 
     const handleDeleteImage = async (imgEntry) => {
-        if (!confirm('Borrar esta imagen?')) return;
+        if (!confirm('¿Borrar esta imagen?')) return;
         try {
             setLoading(true);
             const next = imagenesPreview.filter(img => img.url !== imgEntry.url);
@@ -110,6 +110,14 @@ export function useGatoEditor(id) {
         try {
             setLoading(true);
             const payload = prepareCatPayload(data, isNew);
+
+            // Sincronización explícita del estado y el booleano adoptado
+            const currentEstado = data.estado || 'disponible';
+            const isAdopted = currentEstado === 'adoptado';
+
+            payload.estado = currentEstado;
+            payload.adoptado = isAdopted;
+
             const uploadedImages = [];
             let createdRef = null;
 
@@ -118,6 +126,7 @@ export function useGatoEditor(id) {
                 createdRef = await addDoc(col, payload);
             }
 
+            // Procesar imágenes locales nuevas
             for (const img of imagenesPreview) {
                 if (!img.file) {
                     uploadedImages.push({ url: img.url });
@@ -134,20 +143,33 @@ export function useGatoEditor(id) {
 
             if (!isNew) {
                 const dref = doc(db, 'gatos', id);
-                if (uploadedImages.length > 0) {
-                    await updateDoc(dref, { imagenes: arrayUnion(...uploadedImages) });
-                }
-                const { imagenes, ...payloadWithoutImagenes } = payload;
-                await setDoc(dref, { ...payloadWithoutImagenes, adoptado: deleteField() }, { merge: true });
+                const finalImages = uploadedImages.length > 0 ? uploadedImages : (payload.imagenes || []);
+
+                const updateData = {
+                    ...payload,
+                    imagenes: finalImages,
+                    estado: currentEstado,
+                    adoptado: isAdopted
+                };
+
+                await setDoc(dref, updateData, { merge: true });
             } else if (isNew && createdRef) {
-                const normalizedExisting = Array.isArray(payload.imagenes) ? payload.imagenes.map(it => typeof it === 'string' ? { url: it } : { url: it?.url }) : [];
+                const normalizedExisting = Array.isArray(payload.imagenes)
+                    ? payload.imagenes.map(it => typeof it === 'string' ? { url: it } : { url: it?.url })
+                    : [];
+
                 payload.imagenes = normalizedExisting.concat(uploadedImages);
-                await setDoc(doc(db, 'gatos', createdRef.id), { imagenes: payload.imagenes }, { merge: true });
+                await setDoc(doc(db, 'gatos', createdRef.id), {
+                    ...payload,
+                    imagenes: payload.imagenes,
+                    estado: currentEstado,
+                    adoptado: isAdopted
+                }, { merge: true });
             }
 
             navigate('/admin/gatos');
         } catch (err) {
-            console.error(err);
+            console.error('Error guardando el gato:', err);
             alert('Error guardando');
         } finally {
             setLoading(false);
