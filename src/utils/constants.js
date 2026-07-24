@@ -12,7 +12,7 @@ export const CARDS = [
         num: "01",
         title: "Nacimos del abandono",
         text: "En 1996, huertos vacíos dejaron gatos solos bajo la lluvia. Un grupo de vecinos levantó refugios improvisados.",
-        img: "https://placecats.com/neo/400/500",
+        img: "https://res.cloudinary.com/dhb3yos4y/image/upload/v1784883476/animalets_bnavou.jpg",
     },
     {
         id: 2,

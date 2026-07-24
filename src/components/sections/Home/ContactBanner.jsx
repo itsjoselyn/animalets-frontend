@@ -42,7 +42,7 @@ export default function ContactBanner() {
       <div className="cbanner-bottom">
         <p className="cbanner-find">Encuéntranos en</p>
         <a
-          href="https://instagram.com/animaletslallagosta"
+          href="https://www.instagram.com/animalets_la_llagosta?igsh=NTc1a2RudDV2dG5l&utm_source=qr"
           target="_blank"
           rel="noopener noreferrer"
           className="cbanner-handle"
