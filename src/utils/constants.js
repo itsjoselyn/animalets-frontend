@@ -19,7 +19,7 @@ export const CARDS = [
         num: "02",
         title: "Colonias con corazón",
         text: "200 gatos callejeros en la Llagosta: alimentadores dan su tiempo diario. 6 cathotels los cobijan del frío y protegen su comida.",
-        img: "https://placecats.com/millie/400/500",
+        img: "https://res.cloudinary.com/dhb3yos4y/image/upload/v1785225691/DSC_0018_1_stgzvm.jpg",
     },
     {
         id: 3,

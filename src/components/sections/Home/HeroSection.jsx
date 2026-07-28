@@ -17,7 +17,7 @@ export default function HeroSection() {
         <h1 className="hero-title">Encuentra a tu compañero ideal</h1>
         <div className="hero-cat-wrapper">
           <img
-            src="https://placecats.com/500/600"
+            src="https://res.cloudinary.com/dhb3yos4y/image/upload/v1784814756/DSC_0264_1_w2y6ps.jpg"
             alt="Gato en adopción"
             className="hero-cat-img"
             loading="eager"
