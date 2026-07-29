@@ -123,8 +123,7 @@ export default function AboutIntro() {
         {/* Círculo con Iframe de Vídeo */}
         <div className="about-intro-circle">
           <iframe
-            className="about-intro-iframe"
-            src={`https://www.youtube.com/embed/${YOUTUBE_ID}?controls=1&rel=0&modestbranding=1`}
+            src="https://www.youtube.com/embed/ZoDFIFlgSf0?controls=1&rel=0&modestbranding=1"
             title="Vídeo de presentación de Animalets la Llagosta"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
