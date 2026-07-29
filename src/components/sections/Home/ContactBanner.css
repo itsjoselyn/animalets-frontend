@@ -42,23 +42,25 @@
 
 /* ---- MID: textos laterales + imagen ---- */
 .cbanner-mid {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: clamp(5px, 2vw, 40px);
 }
 
 .cbanner-mid-text {
   display: flex;
   flex-direction: column;
   font-family: 'DM Sans', sans-serif;
-  font-size: 11px;
+  font-size: clamp(8px, 1.1vw, 14px);
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: clamp(0.05em, 0.12vw, 0.12em);
   text-transform: uppercase;
   color: #222;
-  line-height: 1.5;
-  flex-shrink: 0;
+  line-height: 1.4;
+  flex: 0 1 clamp(42px, 5vw, 70px);
+  min-width: 0;
 }
 
 .cbanner-mid-text:first-child {
@@ -71,9 +73,9 @@
 
 /* ---- IMAGEN ---- */
 .cbanner-img-block {
-  flex-shrink: 0;
-  width: 52vw;
-  max-width: 260px;
+  flex: 0 1 clamp(150px, 52vw, 360px);
+  width: clamp(150px, 52vw, 360px);
+  min-width: 0;
 }
 
 .cbanner-img {
@@ -112,8 +114,68 @@
 }
 
 /* =====================
+   MÓVIL
+===================== */
+
+@media (max-width: 600px) {
+  .cbanner {
+    padding: 50px 12px 0;
+  }
+
+  .cbanner-top {
+    margin-bottom: 40px;
+  }
+
+  .cbanner-mid {
+    gap: clamp(3px, 1.5vw, 8px);
+  }
+
+  .cbanner-mid-text {
+    font-size: clamp(7px, 2.2vw, 9px);
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+    flex: 0 1 clamp(38px, 12vw, 50px);
+  }
+
+  .cbanner-img-block {
+    flex: 0 1 clamp(145px, 50vw, 210px);
+    width: clamp(145px, 50vw, 210px);
+  }
+
+  .cbanner-bottom {
+    padding: 28px 0 42px;
+  }
+}
+
+/* =====================
+   MÓVILES PEQUEÑOS
+===================== */
+
+@media (max-width: 380px) {
+  .cbanner {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .cbanner-mid {
+    gap: 3px;
+  }
+
+  .cbanner-mid-text {
+    font-size: 7px;
+    flex-basis: 36px;
+  }
+
+  .cbanner-img-block {
+    width: 145px;
+    flex-basis: 145px;
+  }
+}
+
+/* =====================
    DESKTOP (1125px+)
 ===================== */
+
 @media (min-width: 1125px) {
   .cbanner {
     padding: 80px 80px 0;

@@ -23,7 +23,7 @@ export default function ContactCloud() {
           <InstagramFilled /></span>
         <div className="ccloud-text">
           <span>Instagram:</span>
-          <a href="https://instagram.com/animaletslallagosta" className="ccloud-email">
+          <a href="https://instagram.com/animalets_la_llagosta" className="ccloud-email">
             @animaletslallagosta
           </a>
         </div>
@@ -33,7 +33,7 @@ export default function ContactCloud() {
           <FacebookFilled /></span>
         <div className="ccloud-text">
           <span>Facebook:</span>
-          <a href="https://facebook.com/animaletslallagosta" className="ccloud-email">
+          <a href="https://facebook.com/animalets.lallagosta.5" className="ccloud-email">
             @animaletslallagosta
           </a>
         </div>
